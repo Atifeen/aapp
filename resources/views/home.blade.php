@@ -226,7 +226,7 @@
                             <i class="bi bi-collection text-success" style="font-size: 3rem;"></i>
                             <h5 class="mt-3 mb-2">Manage Questions</h5>
                             <p class="text-muted">Add or edit questions</p>
-                            <button class="btn btn-success">Manage</button>
+                            <button class="btn btn-success" onclick="window.location='{{ route('questions.index') }}'">Manage</button>
                         </div>
                     </div>
                 </div>

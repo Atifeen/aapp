@@ -2,50 +2,39 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\QuestionController;
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
 |
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
+| Here you can register web routes for your application.
 |
 */
 
 // Redirect root to login page
-Route::get('/', function () {
-    return redirect()->route('login');
-});
+Route::get('/', fn() => redirect()->route('login'));
 
 // Guest routes (only accessible when NOT logged in)
 Route::middleware('guest')->group(function () {
-    // Show registration form
+    // Registration
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-    
-    // Handle registration submission
     Route::post('/register', [AuthController::class, 'register']);
-    
-    // Show login form
+
+    // Login
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-    
-    // Handle login submission
     Route::post('/login', [AuthController::class, 'login']);
 });
 
 // Protected routes (only accessible when logged in)
 Route::middleware('auth')->group(function () {
     // Dashboard/Home page
-    Route::get('/home', function () {
-        return view('home');
-    })->name('home');
-    
-    // Handle logout
+    Route::get('/home', fn() => view('home'))->name('home');
+
+    // Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    
-    // You can add more protected routes here later
-    // Example:
-    // Route::get('/exams', [ExamController::class, 'index'])->name('exams.index');
-    // Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
+
+    // Questions management - full CRUD handled inside controller
+    Route::resource('questions', QuestionController::class);
 });
