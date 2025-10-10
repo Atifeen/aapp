@@ -31,12 +31,14 @@ class QuestionController extends Controller
             $query->where('source_type', 'like', '%' . $request->source_type . '%');
         }
 
-        $questions = $query->get();
-    $subjects = \App\Models\Subject::all();
-    $chapters = \App\Models\Chapter::all();
-    $boards = \App\Models\Board::all();
-    $universities = \App\Models\University::all();
-    return view('questions.index', compact('questions', 'subjects', 'chapters', 'boards', 'universities'));
+        // Add pagination with 10 questions per page
+        $questions = $query->latest()->paginate(10)->withQueryString();
+        
+        $subjects = \App\Models\Subject::all();
+        $chapters = \App\Models\Chapter::all();
+        $boards = \App\Models\Board::all();
+        $universities = \App\Models\University::all();
+        return view('questions.index', compact('questions', 'subjects', 'chapters', 'boards', 'universities'));
     }
 
 

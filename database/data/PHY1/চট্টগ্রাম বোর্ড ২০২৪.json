@@ -1,0 +1,266 @@
+[
+  {
+    "question": "স্প্রিং ধ্রুবক বিশিষ্ট একটি স্প্রিং এর মুক্ত প্রান্তের x পরিমাণ সরণ ঘটালে সঞ্চিত বিভব শক্তির পরিমাণ কত?",
+    "image": null,
+    "options": [
+      " \\( \\mathrm{U}=\\frac{1}{2} \\mathrm{kx} \\)  ",
+      " \\( \\mathrm{U}=\\mathrm{kx} \\) ",
+      " \\( \\mathrm{U}=\\frac{1}{2} \\mathrm{kx}^{2} \\) ",
+      " \\( \\mathrm{U}=\\mathrm{kx}^{2} \\) "
+    ],
+    "answer": null
+  },
+  {
+    "question": "G-এর মান কোনটি ?",
+    "image": null,
+    "options": [
+      " \\( 8.854 \\times 10^{-6} \\mathrm{Nm}^{2} \\mathrm{~kg}^{-2} \\) ",
+      " \\( 1.256 \\times 10^{-7} \\mathrm{Nm}^{2} \\mathrm{~kg}^{-2} \\) ",
+      " \\( 6.673 \\times 10^{-8} \\mathrm{Nm}^{2} \\mathrm{~kg}^{-2} \\) ",
+      " \\( 6.673 \\times 10^{-11} \\mathrm{Nm}^{2} \\mathrm{~kg}^{-2} \\) "
+    ],
+    "answer": null
+  },
+  {
+    "question": "সরণ দোলকের জন্য L বনাম T \\(^2\\)  লেখচিত্র নিচের কোনটি",
+    "image": null,
+    "options": [
+      "",
+      "",
+      "",
+      ""
+    ],
+    "answer": null
+  },
+  {
+    "question": "সরল দোল গতিসম্পন্ন একটি কণার সরণ- \\( Y=0.5 \\sin 4 \\pi t \\)  মিটার  \\( (\\mathrm{m}) \\) .কণাটির স্পন্দনের পর্যায়কাল কত?",
+    "image": null,
+    "options": [
+      "0.5 s",
+      "1 s",
+      "2 s",
+      "4 s"
+    ],
+    "answer": null
+  },
+  {
+    "question": "একটি গাড়ির নিরাপদে বাঁক নেওয়ার শর্ত হলো—",
+    "image": null,
+    "options": [
+      "  v ≤ (tanθ rg)1/2",
+      "v ≤ (tanθ rg)",
+      "v > tanθ rg",
+      "   \\( v > \\left ( \\tan{θ} \\cdot r g \\right )^{\\frac{1}{2}} \\)   "
+    ],
+    "answer": null
+  },
+  {
+    "question": "\\(\\overrightarrow{B}\\)  এর উপর  \\(\\overrightarrow{A}\\)  এর লম্ব অভিক্ষেপ কোনটি?",
+    "image": null,
+    "options": [
+      " \\( B \\cos \\theta \\) ",
+      " \\( B \\sin \\theta \\) ",
+      " \\( A \\cos \\theta \\) ",
+      " \\( A \\sin \\theta \\) "
+    ],
+    "answer": null
+  },
+  {
+    "question": "কোনো স্থানের সম্পৃক্ত বাষ্পচাপ, F এবং অসম্পৃক্ত বাষ্পচাপ,  \\(f=\\frac{F}{3}\\)  হলে আপেক্ষিক আর্দ্রতা কত হবে?",
+    "image": null,
+    "options": [
+      " \\( \\frac{1}{3} \\) ",
+      " \\( \\frac{2}{3} \\) ",
+      " \\( \\frac{1}{2} \\) ",
+      " \\( \\frac{1}{5} \\)  "
+    ],
+    "answer": null
+  },
+  {
+    "question": "চাঁদের ভর M এবং ব্যাসার্ধ R হলে চাঁদের পৃষ্ঠে  \\(\\frac{g}{G}\\)  হবে-",
+    "image": null,
+    "options": [
+      " \\( \\frac{M}{R} \\) ",
+      " \\( \\frac{R}{M} \\) ",
+      " \\( \\frac{M}{R^{2}} \\) ",
+      " \\( \\frac{R^{2}}{M} \\) "
+    ],
+    "answer": null
+  },
+  {
+    "question": "সরল দোল গতিসম্পন্ন একটি কণার সরণ- \\( Y=0.5 \\sin 4 \\pi t \\)  মিটার  \\( (\\mathrm{m}) \\) .উক্ত সরল দোলরত কণার-i. কম্পাংক = 2Hzii. বেগ  \\( =2 \\pi \\cos 4 \\pi t \\mathrm{~ms}^{-} \\) iii. ত্বরণ  \\( =4 \\pi^{2} \\sin 4 \\pi t \\mathrm{~ms}^{-2} \\) নিচের কোনটি সঠিক?",
+    "image": null,
+    "options": [
+      "i ও ii",
+      "i ও iii",
+      "ii ও iii",
+      "i, ii ও iii"
+    ],
+    "answer": null
+  },
+  {
+    "question": "একটি চাকার ভর 10 kg এবং চক্রগতির ব্যাসার্ধ 0.5m। টর্কপ্রয়োগ করে চাকাটিতে  \\(2rads^{-2}\\)  কৌণিক ত্বরণ সৃষ্টি করা হয়।কত মানের টর্ক প্রয়োগ করা হয়েছিল?",
+    "image": null,
+    "options": [
+      "100 Nm",
+      "50 Nm",
+      "5 Nm",
+      "0.5 Nm"
+    ],
+    "answer": null
+  },
+  {
+    "question": "বল ও সরণের মধ্যবর্তী কোণ  \\(\\alpha\\)  হলে ধনাত্মক কাজের শর্ত কোনটি?",
+    "image": null,
+    "options": [
+      " \\( 0^{\\circ} \\leq \\alpha<90^{\\circ} \\) ",
+      " \\( 0^{\\circ}<\\alpha<90^{\\circ} \\) ",
+      " \\( 0^{\\circ} \\leq \\alpha \\leq 180^{\\circ} \\) ",
+      " \\( 0^{\\circ}<\\alpha \\leq 180^{\\circ} \\) "
+    ],
+    "answer": null
+  },
+  {
+    "question": "কোনো পদার্থের পঁয়সনের অনুপাতের বিস্তৃতি কত?",
+    "image": null,
+    "options": [
+      "0 থেকে 1",
+      "0.5 থেকে 1",
+      "-1 থেকে ০.5",
+      "-1 থেকে 1"
+    ],
+    "answer": null
+  },
+  {
+    "question": "একটি গবেষণায় ধরে নেয়া হলো আদর্শ গ্যাস সমীকরণ নিম্নরূপ  \\( P V=\\frac{1}{3} m n v_{g}^{2} \\)  \\( v_{g} \\)  সম্পর্কে লেখা যায়-i.  \\( \\mathrm{v}_{\\mathrm{g}}(\\mathrm{rms}) \\propto \\sqrt{\\mathrm{M}} \\) ii.  \\( \\quad V_{g}(\\mathrm{rms}) \\propto \\sqrt{\\mathrm{P}} \\) iii.  \\( \\quad v_{g}(\\mathrm{rms}) \\propto \\sqrt{T} \\) নিচের কোনটি সঠিক ?",
+    "image": null,
+    "options": [
+      "i ও ii",
+      "i ও iii",
+      "ii ও iii",
+      " i, ii ও iii"
+    ],
+    "answer": null
+  },
+  {
+    "question": "এক বিন্দুতে ক্রিয়াশীল  \\(\\overrightarrow{P}\\)  ও  \\(\\overrightarrow{P}\\)  এর ঋণ ভেক্টরের লব্ধির মান কত?",
+    "image": null,
+    "options": [
+      "0",
+      "1",
+      " \\(\\sqrt{2}\\)  P",
+      "2P"
+    ],
+    "answer": null
+  },
+  {
+    "question": "পার্কিং কক্ষপথে আবর্তনরত কৃত্রিম উপগ্রহের আবর্তন কাল কত?",
+    "image": null,
+    "options": [
+      "2h",
+      "24h",
+      "30d",
+      "365d"
+    ],
+    "answer": null
+  },
+  {
+    "question": "একটি দোলক ঘড়িকে পাহাড়ের চূড়ায় নিয়ে গেলে-i. সময় হারাবেii. দ্রুত চলবেiii. দোলনকাল বৃদ্ধি পাবেনিচের কোনটি সঠিক?",
+    "image": null,
+    "options": [
+      "i ও ii",
+      "i ও iii",
+      "ii ও iii",
+      "i, ii ও ii"
+    ],
+    "answer": null
+  },
+  {
+    "question": "পৃথিবীতে কোনো বস্তুর মুক্তিবেগ-i.  \\( \\mathrm{v}_{\\mathrm{c}}=\\sqrt{2 \\mathrm{gR}} \\) ii.  \\( \\mathrm{v}_{c}=\\sqrt{\\frac{8}{3} \\pi G \\rho R^{2}} \\) iii.  \\( \\mathrm{v}_{\\mathrm{e}}=\\sqrt{\\frac{2 \\mathrm{GM}}{\\mathrm{R}}} \\) নিচের কোনটি সঠিক?",
+    "image": null,
+    "options": [
+      "i ও ii",
+      "i ও iii",
+      "ii ও iii",
+      "i, ii ও iii"
+    ],
+    "answer": null
+  },
+  {
+    "question": "স্প্রিং এর বল ধ্রুবকের একক কোনটি?",
+    "image": null,
+    "options": [
+      " \\( \\mathrm{Nm}^{-2} \\) ",
+      " \\( \\mathrm{Nm}^{-1} \\) ",
+      " \\(Nm\\) ",
+      " \\( \\mathrm{Nm}^{2} \\) "
+    ],
+    "answer": null
+  },
+  {
+    "question": "একটি ভেক্টর X অক্ষের সাথে 30 \\(\\degree\\)  কোণে ক্রিয়াশীল। Y অক্ষ বরাবর উপাংশের মান 3 একক হলে X অক্ষ বরাবর উপাংশের মান কত?",
+    "image": null,
+    "options": [
+      " \\(\\sqrt{3}\\)  একক",
+      "0 একক",
+      " \\(3\\sqrt{3}\\)  একক",
+      "6 একক"
+    ],
+    "answer": null
+  },
+  {
+    "question": "কৌণিক ভরবেগের পরিবর্তনের হার নিচের কোনটির সমান?",
+    "image": null,
+    "options": [
+      "টর্কের",
+      "বলের",
+      "জড়তার ভ্রামকের",
+      "কৌণিক ত্বরণের"
+    ],
+    "answer": null
+  },
+  {
+    "question": "টর্কের মাত্রা কোনটি?",
+    "image": null,
+    "options": [
+      "ML2T2",
+      "ML2T-2",
+      "M2LT-2",
+      "ML-2T2"
+    ],
+    "answer": null
+  },
+  {
+    "question": "আয়তন গুণাংকের বিপরীত রাশি-",
+    "image": null,
+    "options": [
+      "ইয়ং এর গুণাংক",
+      "অসংনম্যতা",
+      "সংনম্যতা",
+      "দৃঢ়তার গুণাংক"
+    ],
+    "answer": null
+  },
+  {
+    "question": "একটি গবেষণায় ধরে নেয়া হলো আদর্শ গ্যাস সমীকরণ নিম্নরূপ  \\( P V=\\frac{1}{3} m n v_{g}^{2} \\) ‘PV’ রাশিটি নির্দেশ করে-",
+    "image": null,
+    "options": [
+      "ভরবেগ",
+      "ক্ষমতা",
+      "বল",
+      "শক্তি"
+    ],
+    "answer": null
+  },
+  {
+    "question": "একটি চাকার ভর 10 kg এবং চক্রগতির ব্যাসার্ধ 0.5m। টর্কপ্রয়োগ করে চাকাটিতে  \\(2rad.s^{-2}\\)  কৌণিক ধরন সৃষ্টি করা হয়।চাকাটির জড়তার ভ্রামক কত?",
+    "image": null,
+    "options": [
+      " \\( 0.25 \\mathrm{~kgm}^{2} \\) ",
+      " \\( 2.5 \\mathrm{~kgm}^{2} \\) ",
+      " \\( 25 \\mathrm{~kgm}^{2} \\) ",
+      " \\( 50 ~\\mathrm{kgm}^{2} \\) "
+    ],
+    "answer": null
+  }
+]

@@ -36,13 +36,13 @@ class ExamController extends Controller
             'exam_type' => ['required', Rule::in(['board', 'university', 'custom'])],
             'institution_name' => 'required_if:exam_type,university|nullable|string|max:255',
             'year' => 'required_if:exam_type,university|nullable|integer|min:1900|max:' . (date('Y') + 1),
-            'subject_id' => 'required|exists:subjects,id',
-            'chapter_id' => 'required_if:exam_type,custom|nullable|exists:chapters,id',
+            'subject_id' => 'required_unless:exam_type,custom|nullable|exists:subjects,id',
+            'chapter_id' => 'nullable|exists:chapters,id',
             'start_time' => 'required_if:is_rated,1|nullable|date',
             'duration' => 'required|integer|min:1',
             'is_rated' => 'boolean',
             'difficulty_level' => 'required_if:is_rated,1|nullable|integer|min:1|max:4',
-            'custom_criteria' => 'required_if:exam_type,custom|nullable|array'
+            'custom_criteria' => 'nullable|array'
         ]);
 
         // Process custom criteria
@@ -108,25 +108,40 @@ class ExamController extends Controller
 
     public function selectQuestions(Request $request, Exam $exam)
     {
-        $questions = Question::where('subject_id', $exam->subject_id)
+        $query = Question::where('subject_id', $exam->subject_id)
             ->when($exam->chapter_id, function($query) use ($exam) {
                 return $query->where('chapter_id', $exam->chapter_id);
-            })
-            ->when($request->filled('source_type'), function($query) use ($request) {
-                return $query->where('source_type', $request->source_type);
-            })
-            ->when($request->filled('year'), function($query) use ($request) {
-                return $query->where('year', $request->year);
-            })
-            ->with(['subject', 'chapter'])
-            ->paginate(15);
+            });
 
-        // Get all unique source types and years for filters
-        $sourceTypes = Question::distinct('source_type')->whereNotNull('source_type')->pluck('source_type');
-        $years = Question::distinct('year')->whereNotNull('year')->orderByDesc('year')->pluck('year');
-        $subjects = Subject::orderBy('name')->get();
+        // Apply filters
+        if ($request->filled('question_text')) {
+            $query->where('question_text', 'like', '%' . $request->question_text . '%');
+        }
+        if ($request->filled('subject_id')) {
+            $query->where('subject_id', $request->subject_id);
+        }
+        if ($request->filled('chapter_id')) {
+            $query->where('chapter_id', $request->chapter_id);
+        }
+        if ($request->filled('year')) {
+            $query->where('year', $request->year);
+        }
+        if ($request->filled('source_name')) {
+            $query->where('source_name', 'like', '%' . $request->source_name . '%');
+        }
+        if ($request->filled('source_type')) {
+            $query->where('source_type', 'like', '%' . $request->source_type . '%');
+        }
 
-        return view('exams.select-questions', compact('exam', 'questions', 'sourceTypes', 'years', 'subjects'));
+        $questions = $query->with(['subject', 'chapter'])->paginate(15);
+
+        // Get data for filters
+        $subjects = \App\Models\Subject::all();
+        $chapters = \App\Models\Chapter::all();
+        $boards = \App\Models\Board::all();
+        $universities = \App\Models\University::all();
+
+        return view('exams.select-questions', compact('exam', 'questions', 'subjects', 'chapters', 'boards', 'universities'));
     }
 
     public function attachQuestions(Request $request, Exam $exam)

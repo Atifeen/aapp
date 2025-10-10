@@ -109,7 +109,7 @@
                 <div class="mb-3">
                     <label for="subject_id" class="form-label">Subject</label>
                     <select class="form-select @error('subject_id') is-invalid @enderror" id="subject_id" name="subject_id">
-                        <option value="">Select Subject</option>
+                        <option value="">Select Subject (Optional for custom exams)</option>
                         @foreach($subjects as $subject)
                             <option value="{{ $subject->id }}">{{ $subject->name }} ({{ $subject->class }})</option>
                         @endforeach
@@ -119,7 +119,7 @@
                 <div class="mb-3">
                     <label for="chapter_id" class="form-label">Chapter</label>
                     <select class="form-select @error('chapter_id') is-invalid @enderror" id="chapter_id" name="chapter_id" disabled>
-                        <option value="">Select Chapter</option>
+                        <option value="">Select Chapter (Optional for custom exams)</option>
                     </select>
                 </div>
 
@@ -134,7 +134,10 @@
 
                 <div class="mb-3">
                     <label for="duration" class="form-label">Duration (minutes)</label>
-                    <input type="number" class="form-control" id="duration" name="duration" min="1">
+                    <input type="number" class="form-control @error('duration') is-invalid @enderror" id="duration" name="duration" value="{{ old('duration') }}" min="1" required>
+                    @error('duration')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <div class="mt-4">
@@ -183,22 +186,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Handle exam type change
     examType.addEventListener('change', function() {
+        const subjectField = document.getElementById('subject_id');
+        const chapterField = document.getElementById('chapter_id');
+        
         if (this.value === 'custom') {
             institutionFields.style.display = 'none';
             customFields.style.display = 'block';
-            chapterSelect.required = true;
+            // Make subject and chapter optional for custom exams
+            subjectField.required = false;
+            chapterField.required = false;
         } else if (this.value === 'university') {
             institutionFields.style.display = 'block';
             customFields.style.display = 'none';
-            chapterSelect.required = false;
+            // Make subject and chapter required for university exams
+            subjectField.required = true;
+            chapterField.required = false;
         } else if (this.value === 'board') {
             institutionFields.style.display = 'none';
             customFields.style.display = 'none';
-            chapterSelect.required = false;
+            // Make subject required for board exams
+            subjectField.required = true;
+            chapterField.required = false;
         } else {
             institutionFields.style.display = 'none';
             customFields.style.display = 'none';
-            chapterSelect.required = false;
+            subjectField.required = false;
+            chapterField.required = false;
         }
     });
 

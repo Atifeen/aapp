@@ -50,6 +50,32 @@
         font-weight: 600;
         color: #495057;
     }
+    .question-image {
+        transition: all 0.3s ease;
+        background: #f8f9fa;
+        padding: 10px;
+        border-radius: 8px;
+        text-align: center;
+    }
+    .question-image img {
+        transition: transform 0.3s ease;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .question-image img:hover {
+        transform: scale(1.02);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .image-controls {
+        gap: 8px;
+    }
+    .btn-image-control {
+        border-radius: 20px;
+        font-size: 0.85rem;
+        padding: 0.4rem 0.8rem;
+    }
+        color: #495057;
+    }
     .table td {
         border: none;
         border-bottom: 1px solid #dee2e6;
@@ -71,6 +97,93 @@
     .question-card:hover {
         box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         border-color: #667eea;
+    }
+    
+    /* Custom Pagination Styles */
+    .pagination-wrapper {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        padding: 1rem 1.5rem;
+        margin: 2rem 0;
+    }
+    
+    .pagination {
+        margin: 0;
+        gap: 0.25rem;
+    }
+    
+    .pagination .page-item .page-link {
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        color: #495057;
+        font-weight: 500;
+        padding: 0.375rem 0.5rem;
+        margin: 0 0.15rem;
+        transition: all 0.3s ease;
+        background: white;
+        min-width: 35px;
+        height: 35px;
+        text-align: center;
+        font-size: 0.875rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .pagination .page-item .page-link:hover {
+        border-color: #667eea;
+        background-color: #667eea;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+    }
+    
+    .pagination .page-item.active .page-link {
+        background-color: #667eea;
+        border-color: #667eea;
+        color: white;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        transform: translateY(-1px);
+    }
+    
+    .pagination .page-item.disabled .page-link {
+        background-color: #f8f9fa;
+        border-color: #dee2e6;
+        color: #6c757d;
+        cursor: not-allowed;
+    }
+    
+    .pagination .page-item:first-child .page-link,
+    .pagination .page-item:last-child .page-link {
+        padding: 0.375rem 0.75rem;
+        font-weight: 600;
+        min-width: auto;
+    }
+    
+    /* Fix for pagination arrow icons */
+    .pagination .page-link svg {
+        width: 14px;
+        height: 14px;
+        vertical-align: middle;
+    }
+    
+    .pagination .page-link {
+        line-height: 1;
+    }
+    
+    /* Ensure consistent button heights */
+    .pagination .page-item .page-link,
+    .pagination .page-item:first-child .page-link,
+    .pagination .page-item:last-child .page-link {
+        height: 35px;
+        box-sizing: border-box;
+    }
+    
+    .pagination-info {
+        color: #6c757d;
+        font-size: 0.85rem;
+        margin-bottom: 0.75rem;
     }
     .option-item {
         font-size: 0.9rem;
@@ -239,10 +352,21 @@
                         <div class="question-text mb-3">
                             <p class="mb-2 fw-semibold">{!! $question->question_text !!}</p>
                             @if($question->image)
-                                <div class="mb-2">
-                                    <a href="{{ $question->image }}" target="_blank" class="btn btn-sm btn-outline-info">
-                                        <i class="bi bi-image me-1"></i>View Image
-                                    </a>
+                                <div class="mb-3">
+                                    <div class="d-flex image-controls align-items-center mb-2">
+                                        <a href="{{ $question->image }}" target="_blank" class="btn btn-sm btn-outline-info btn-image-control">
+                                            <i class="bi bi-image me-1"></i>View Full Size
+                                        </a>
+                                        <button class="btn btn-sm btn-outline-secondary btn-image-control" onclick="toggleImage('img-{{ $question->id }}')">
+                                            <i class="bi bi-eye me-1"></i>Show Image
+                                        </button>
+                                    </div>
+                                    <div id="img-{{ $question->id }}" class="question-image" style="display: none;">
+                                        <img src="{{ $question->image }}" alt="Question Image" 
+                                             class="img-fluid rounded border shadow-sm" 
+                                             style="max-width: 100%; max-height: 300px; object-fit: contain;"
+                                             loading="lazy">
+                                    </div>
                                 </div>
                             @endif
                         </div>
@@ -421,6 +545,22 @@
             </div>
         </div>
     </div>
+
+    <!-- Pagination Links -->
+    @if($questions->hasPages())
+        <div class="pagination-wrapper">
+            <div class="pagination-info text-center">
+                <small>
+                    Showing <strong>{{ $questions->firstItem() }}</strong> to <strong>{{ $questions->lastItem() }}</strong> 
+                    of <strong>{{ $questions->total() }}</strong> questions
+                    (Page <strong>{{ $questions->currentPage() }}</strong> of <strong>{{ $questions->lastPage() }}</strong>)
+                </small>
+            </div>
+            <div class="d-flex justify-content-center">
+                {{ $questions->links() }}
+            </div>
+        </div>
+    @endif
 
     @if($questions->isEmpty())
         <div class="text-center py-5">
@@ -645,6 +785,20 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }, 3000);
 });
+
+// Toggle image display function
+function toggleImage(imageId) {
+    const imageDiv = document.getElementById(imageId);
+    const button = document.querySelector(`button[onclick="toggleImage('${imageId}')"]`);
+    
+    if (imageDiv.style.display === 'none') {
+        imageDiv.style.display = 'block';
+        button.innerHTML = '<i class="bi bi-eye-slash me-1"></i>Hide Image';
+    } else {
+        imageDiv.style.display = 'none';
+        button.innerHTML = '<i class="bi bi-eye me-1"></i>Show Image';
+    }
+}
 </script>
 </body>
 </html
