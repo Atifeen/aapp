@@ -1,53 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - AAPP</title>
-    
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .navbar {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .welcome-card {
-            background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
-            color: white;
-            border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 30px;
-        }
-        .dashboard-card {
-            border-radius: 15px;
-            border: none;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            transition: transform 0.3s;
-        }
-        .dashboard-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-        }
-        .stat-icon {
-            font-size: 3rem;
-            opacity: 0.3;
-            position: absolute;
-            right: 20px;
-            top: 20px;
-        }
-    </style>
-</head>
-<body>
+@extends('layouts.dashboard')
+
+@section('content')
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark mb-4">
         <div class="container-fluid">
             <a class="navbar-brand fw-bold" href="#">
                 <i class="bi bi-mortarboard-fill me-2"></i>AAPP
@@ -89,7 +44,7 @@
     </nav>
 
     <!-- Main Content -->
-    <div class="container mt-4">
+    <div class="container py-4">
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 <i class="bi bi-check-circle-fill me-2"></i>
@@ -97,6 +52,209 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
+
+        <!-- User Stats Section -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="welcome-card">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <h2 class="mb-1">Welcome, {{ auth()->user()->name }}!</h2>
+                            <p class="mb-0">Keep practicing to improve your rating</p>
+                        </div>
+                        <div class="col-md-6 text-md-end">
+                            <h3 class="mb-1">Rating: {{ auth()->user()->rating }}</h3>
+                            <p class="mb-0">Rank: #{{ auth()->user()->rank }} | Max Rating: {{ auth()->user()->max_rating }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card dashboard-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Solved</h5>
+                        <p class="card-text display-6">{{ auth()->user()->total_solved }}</p>
+                        <i class="bi bi-check-circle stat-icon text-success"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card dashboard-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Rating Change</h5>
+                        @php
+                            $ratingChanges = auth()->user()->rating_history ?? [];
+                            $lastChange = end($ratingChanges) ? end($ratingChanges)['change'] : 0;
+                        @endphp
+                        <p class="card-text display-6 {{ $lastChange >= 0 ? 'text-success' : 'text-danger' }}">
+                            {{ $lastChange >= 0 ? '+' : '' }}{{ $lastChange }}
+                        </p>
+                        <i class="bi bi-graph-up stat-icon {{ $lastChange >= 0 ? 'text-success' : 'text-danger' }}"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card dashboard-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Contests Participated</h5>
+                        <p class="card-text display-6">{{ auth()->user()->attempts()->whereHas('exam', function($q) { $q->where('is_rated', true); })->count() }}</p>
+                        <i class="bi bi-trophy stat-icon text-warning"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card dashboard-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Success Rate</h5>
+                        @php
+                            $attempts = auth()->user()->attempts;
+                            $successRate = $attempts->count() > 0 
+                                ? round(($attempts->sum('correct_ans') / $attempts->sum('total_ques')) * 100, 1)
+                                : 0;
+                        @endphp
+                        <p class="card-text display-6">{{ $successRate }}%</p>
+                        <i class="bi bi-bar-chart stat-icon text-primary"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upcoming Rated Contests -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card dashboard-card">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">Upcoming Rated Contests</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Contest Name</th>
+                                        <th>Start Time</th>
+                                        <th>Duration</th>
+                                        <th>Difficulty</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php
+                                        $upcomingContests = \App\Models\Exam::where('is_rated', true)
+                                            ->where('start_time', '>', now())
+                                            ->orderBy('start_time')
+                                            ->take(5)
+                                            ->get();
+                                    @endphp
+                                    @forelse($upcomingContests as $contest)
+                                        <tr>
+                                            <td>{{ $contest->name }}</td>
+                                            <td>{{ $contest->start_time->format('Y-m-d H:i') }}</td>
+                                            <td>{{ $contest->duration }} mins</td>
+                                            <td>
+                                                @switch($contest->difficulty_level)
+                                                    @case(1)
+                                                        <span class="badge bg-success">Easy</span>
+                                                        @break
+                                                    @case(2)
+                                                        <span class="badge bg-warning">Medium</span>
+                                                        @break
+                                                    @case(3)
+                                                        <span class="badge bg-danger">Hard</span>
+                                                        @break
+                                                    @default
+                                                        <span class="badge bg-dark">Expert</span>
+                                                @endswitch
+                                            </td>
+                                            <td>
+                                                <a href="#" class="btn btn-sm btn-outline-primary">Register</a>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="5" class="text-center">No upcoming contests</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Practice Exams -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card dashboard-card">
+                    <div class="card-header bg-success text-white">
+                        <h4 class="mb-0">Board Exam Practice</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group">
+                            @php
+                                $boardExams = \App\Models\Exam::where('exam_type', 'board')
+                                    ->latest()
+                                    ->take(5)
+                                    ->get();
+                            @endphp
+                            @forelse($boardExams as $exam)
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">{{ $exam->name }}</h5>
+                                        <small>{{ $exam->institution_name }} {{ $exam->year }}</small>
+                                    </div>
+                                    <p class="mb-1">Questions: {{ $exam->questions->count() }}</p>
+                                </a>
+                            @empty
+                                <div class="text-center py-3">No board exams available</div>
+                            @endforelse
+                        </div>
+                        <div class="text-center mt-3">
+                            <a href="#" class="btn btn-outline-success">View All Board Exams</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card dashboard-card">
+                    <div class="card-header bg-info text-white">
+                        <h4 class="mb-0">University Exam Practice</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group">
+                            @php
+                                $universityExams = \App\Models\Exam::where('exam_type', 'university')
+                                    ->latest()
+                                    ->take(5)
+                                    ->get();
+                            @endphp
+                            @forelse($universityExams as $exam)
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">{{ $exam->name }}</h5>
+                                        <small>{{ $exam->institution_name }} {{ $exam->year }}</small>
+                                    </div>
+                                    <p class="mb-1">Questions: {{ $exam->questions->count() }}</p>
+                                </a>
+                            @empty
+                                <div class="text-center py-3">No university exams available</div>
+                            @endforelse
+                        </div>
+                        <div class="text-center mt-3">
+                            <a href="#" class="btn btn-outline-info">View All University Exams</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Actions -->
+        @if(auth()->user()->role === 'admin')
 
         <!-- Welcome Card -->
         <div class="welcome-card">
@@ -215,7 +373,7 @@
                             <i class="bi bi-plus-circle text-primary" style="font-size: 3rem;"></i>
                             <h5 class="mt-3 mb-2">Create Exam</h5>
                             <p class="text-muted">Add a new exam</p>
-                            <button class="btn btn-primary">Create</button>
+                            <a href="{{ route('exams.create') }}" class="btn btn-primary">Create</a>
                         </div>
                     </div>
                 </div>
@@ -244,8 +402,38 @@
             @endif
         </div>
     </div>
+@endif
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+@endsection
+
+@push('scripts')
+<script>
+    // Initialize tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+
+    // Initialize countdowns for contests
+    function updateContestCountdowns() {
+        document.querySelectorAll('[data-countdown]').forEach(el => {
+            const target = new Date(el.getAttribute('data-countdown')).getTime();
+            const now = new Date().getTime();
+            const diff = target - now;
+
+            if (diff > 0) {
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                el.innerHTML = `${days}d ${hours}h ${minutes}m`;
+            } else {
+                el.innerHTML = 'Started';
+            }
+        });
+    }
+
+    // Update countdowns every minute
+    setInterval(updateContestCountdowns, 60000);
+    updateContestCountdowns();
+</script>
+@endpush

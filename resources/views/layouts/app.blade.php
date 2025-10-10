@@ -16,9 +16,15 @@
         body {
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding-top: 56px; /* For fixed navbar */
+        }
+        
+        /* Login/Register pages */
+        .auth-page body {
             display: flex;
             align-items: center;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding-top: 0;
         }
         .auth-card {
             background: white;
@@ -65,7 +71,9 @@
     
     @yield('styles')
 </head>
-<body>
+<body class="{{ !auth()->check() ? 'auth-page' : '' }}">
+    @include('layouts.nav')
+    
     <div class="container">
         @yield('content')
     </div>

@@ -56,7 +56,7 @@
                     </div>
 
                     <!-- Password -->
-                    <div class="mb-3">
+                    <div class="mb-4">
                         <label for="password" class="form-label">
                             <i class="bi bi-lock me-1"></i>Password
                         </label>
@@ -69,28 +69,6 @@
                         @error('password')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
-                    </div>
-
-                    <!-- Role Selection -->
-                    <div class="mb-4">
-                        <label for="role" class="form-label">
-                            <i class="bi bi-person-badge me-1"></i>Login As
-                        </label>
-                        <select class="form-select @error('role') is-invalid @enderror" 
-                                id="role" 
-                                name="role" 
-                                required>
-                            <option value="" selected disabled>Select your role</option>
-                            <option value="student" {{ old('role') == 'student' ? 'selected' : '' }}>Student</option>
-                            <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
-                        </select>
-                        @error('role')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                        <small class="form-text text-muted">
-                            <i class="bi bi-info-circle me-1"></i>
-                            Select the correct role to access your dashboard
-                        </small>
                     </div>
 
                     <!-- Remember Me -->

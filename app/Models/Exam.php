@@ -7,7 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 class Exam extends Model
 {
     protected $fillable = [
-        'name', 'subject_id', 'chapter_id', 'start_time', 'end_time'
+        'title', 'subject_id', 'chapter_id', 'start_time', 'end_time',
+        'exam_type', 'institution_name', 'year', 'custom_criteria',
+        'duration', 'is_rated', 'difficulty_level'
+    ];
+
+    protected $casts = [
+        'custom_criteria' => 'array',
+        'start_time' => 'datetime',
+        'end_time' => 'datetime',
+        'is_rated' => 'boolean'
     ];
 
     // Relationships

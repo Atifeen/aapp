@@ -9,7 +9,8 @@ class Question extends Model
     protected $fillable = [
         'question_text', 'subject_id', 'chapter_id',
         'option_a', 'option_b', 'option_c', 'option_d',
-        'correct_option', 'source_name', 'source_type', 'year'
+        'correct_option', 'source_name', 'source_type', 'year',
+        'image' // newly added field
     ];
 
     // Relationships
@@ -31,5 +32,16 @@ class Question extends Model
     public function examAnswers()
     {
         return $this->hasMany(ExamAnswer::class);
+    }
+    // Accessor for options array
+    public function getOptionsAttribute()
+    {
+        $options = [];
+        foreach (['option_a', 'option_b', 'option_c', 'option_d'] as $key) {
+            if (!empty($this->$key)) {
+                $options[] = $this->$key;
+            }
+        }
+        return $options;
     }
 }

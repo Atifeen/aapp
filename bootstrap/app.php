@@ -11,8 +11,14 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        // Middleware Aliases
+        $middleware->alias([
+            'auth'  => \Illuminate\Auth\Middleware\Authenticate::class,
+            'guest' => \Illuminate\Auth\Middleware\RedirectIfAuthenticated::class,
+            'admin' => \App\Http\Middleware\AdminMiddleware::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
-    })->create();
+    })
+    ->create();

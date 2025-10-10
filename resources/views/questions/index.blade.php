@@ -6,93 +6,382 @@
 <title>Manage Questions - AAPP</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+    .main-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+        border-radius: 0 0 15px 15px;
+    }
+    .filter-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        border: none;
+    }
+    .table-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        border: none;
+        overflow: hidden;
+    }
+    .btn-custom {
+        border-radius: 25px;
+        padding: 0.5rem 1.5rem;
+        font-weight: 500;
+    }
+    .form-control, .form-select {
+        border-radius: 10px;
+        border: 2px solid #e9ecef;
+        transition: all 0.3s ease;
+    }
+    .form-control:focus, .form-select:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+    .table th {
+        background-color: #f8f9fa;
+        border: none;
+        font-weight: 600;
+        color: #495057;
+    }
+    .table td {
+        border: none;
+        border-bottom: 1px solid #dee2e6;
+        vertical-align: middle;
+    }
+    .options-display {
+        background-color: #f8f9fa;
+        padding: 8px;
+        border-radius: 6px;
+        border-left: 3px solid #dee2e6;
+    }
+    .question-card {
+        background: white;
+        border: 1px solid #e9ecef;
+        border-radius: 10px;
+        padding: 1rem;
+        transition: all 0.3s ease;
+    }
+    .question-card:hover {
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        border-color: #667eea;
+    }
+    .option-item {
+        font-size: 0.9rem;
+        line-height: 1.4;
+        transition: all 0.3s ease;
+    }
+    .question-meta .badge {
+        font-size: 0.75rem;
+    }
+</style>
 </head>
 <body>
-<div class="container mt-5">
-    <h2 class="mb-4">Questions Management</h2>
+<div class="main-header">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="mb-1"><i class="bi bi-question-circle me-3"></i>Questions Management</h1>
+                <p class="mb-0">Manage and organize exam questions efficiently</p>
+            </div>
+            <span class="badge badge-custom bg-light text-dark">
+                <i class="bi bi-list-check me-2"></i>{{ $questions->count() }} question{{ $questions->count() !== 1 ? 's' : '' }} found
+            </span>
+        </div>
+    </div>
+</div>
 
-    <!-- Messages -->
+<div class="container">
+    <!-- Success/Error Messages -->
     @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show">
-            {{ session('success') }}
+        <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert" style="border-radius: 15px; border: none;">
+            <i class="bi bi-check-circle me-2"></i>{{ session('success') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     @endif
     @if(session('error'))
-        <div class="alert alert-danger alert-dismissible fade show">
-            {{ session('error') }}
+        <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert" style="border-radius: 15px; border: none;">
+            <i class="bi bi-exclamation-triangle me-2"></i>{{ session('error') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     @endif
 
+    <!-- Filter Form -->
+    <div class="card filter-card mb-4">
+        <div class="card-header bg-transparent border-0 pt-4">
+            <h5 class="card-title mb-0"><i class="bi bi-funnel me-2"></i>Filter Questions</h5>
+        </div>
+        <div class="card-body">
+            <form method="GET" class="row g-3">
+                <div class="col-md-4">
+                    <label for="question_text" class="form-label fw-semibold">Question Text</label>
+                    <input type="text" name="question_text" id="question_text" class="form-control" placeholder="Search in question text..." value="{{ request('question_text') }}">
+                </div>
+                <div class="col-md-2">
+                    <label for="subject_id" class="form-label fw-semibold">Subject</label>
+                    <select name="subject_id" id="subject_id" class="form-select">
+                        <option value="">All Subjects</option>
+                        @foreach($subjects as $subject)
+                            <option value="{{ $subject->id }}" @if(request('subject_id') == $subject->id) selected @endif>{{ $subject->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="chapter_id" class="form-label fw-semibold">Chapter</label>
+                    <select name="chapter_id" id="chapter_id" class="form-select">
+                        <option value="">All Chapters</option>
+                        @foreach($chapters as $chapter)
+                            <option value="{{ $chapter->id }}" @if(request('chapter_id') == $chapter->id) selected @endif>{{ $chapter->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="year" class="form-label fw-semibold">Year</label>
+                    <input type="number" name="year" id="year" class="form-control" placeholder="e.g., 2023" value="{{ request('year') }}">
+                </div>
+                <div class="col-md-2">
+                    <label for="source_type" class="form-label fw-semibold">Source Type</label>
+                    <select name="source_type" id="source_type" class="form-select">
+                        <option value="">All Types</option>
+                        <option value="board" @if(request('source_type') == 'board') selected @endif>Board</option>
+                        <option value="university" @if(request('source_type') == 'university') selected @endif>University</option>
+                        <option value="custom" @if(request('source_type') == 'custom') selected @endif>Custom</option>
+                    </select>
+                </div>
+                <div class="col-md-3" id="sourceNameBoard" style="display:none;">
+                    <label for="source_name_board" class="form-label fw-semibold">Board Name</label>
+                    <select name="source_name" id="source_name_board" class="form-select">
+                        <option value="">All Boards</option>
+                        @foreach($boards as $board)
+                            <option value="{{ $board->name }}" @if(request('source_name') == $board->name) selected @endif>{{ $board->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-3" id="sourceNameUniversity" style="display:none;">
+                    <label for="source_name_university" class="form-label fw-semibold">University Name</label>
+                    <select name="source_name" id="source_name_university" class="form-select">
+                        <option value="">All Universities</option>
+                        @foreach($universities as $university)
+                            <option value="{{ $university->name }}" @if(request('source_name') == $university->name) selected @endif>{{ $university->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-3" id="sourceNameCustom" style="display:none;">
+                    <label for="source_name_custom" class="form-label fw-semibold">Custom Source Name</label>
+                    <input type="text" name="source_name" id="source_name_custom" class="form-control" placeholder="Enter source name..." value="{{ request('source_name') }}">
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary btn-custom me-2">
+                        <i class="bi bi-search me-2"></i>Apply Filters
+                    </button>
+                    <a href="{{ route('questions.index') }}" class="btn btn-outline-secondary btn-custom">
+                        <i class="bi bi-arrow-clockwise me-2"></i>Clear All
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Add Question Button -->
-    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addQuestionModal">
-        <i class="bi bi-plus-circle"></i> Add Question
-    </button>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h5 class="mb-0 text-muted"><i class="bi bi-table me-2"></i>Questions Table</h5>
+        <button class="btn btn-success btn-custom" data-bs-toggle="modal" data-bs-target="#addQuestionModal">
+            <i class="bi bi-plus-circle me-2"></i>Add New Question
+        </button>
+    </div>
 
     <!-- Questions Table -->
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Question</th>
-                <th>Options (A-D)</th>
-                <th>Correct</th>
-                <th>Source</th>
-                <th>Year</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($questions as $q)
-            <tr>
-                <td>{{ $q->id }}</td>
-                <td>{{ $q->question_text }}</td>
-                <td>
-                    A: {{ $q->option_a }}<br>
-                    B: {{ $q->option_b }}<br>
-                    C: {{ $q->option_c }}<br>
-                    D: {{ $q->option_d }}
+    <div class="card table-card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th class="px-4 py-3">Question & Details</th>
+                            <th class="px-4 py-3">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            @foreach($questions as $question)
+            <tr class="border-0">
+                <td class="px-4 py-4">
+                    <div class="question-card">
+                        <!-- Question Header -->
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div class="question-header">
+                                <span class="badge bg-primary me-2">#{{ $question->id }}</span>
+                                <strong class="text-primary">Question {{ $loop->iteration }}</strong>
+                            </div>
+                            <div class="question-meta d-flex flex-wrap gap-1">
+                                @if($question->subject)
+                                    <span class="badge bg-info">{{ $question->subject->class }}</span>
+                                    <span class="badge bg-secondary">{{ $question->subject->name }}</span>
+                                @endif
+                                @if($question->chapter)
+                                    <span class="badge bg-light text-dark">{{ $question->chapter->name }}</span>
+                                @endif
+                                @if($question->source_type)
+                                    <span class="badge bg-warning text-dark">{{ ucfirst($question->source_type) }}</span>
+                                @endif
+                                @if($question->year)
+                                    <span class="badge bg-dark">{{ $question->year }}</span>
+                                @endif
+                            </div>
+                        </div>
+                        
+                        <!-- Question Text -->
+                        <div class="question-text mb-3">
+                            <p class="mb-2 fw-semibold">{!! $question->question_text !!}</p>
+                            @if($question->image)
+                                <div class="mb-2">
+                                    <a href="{{ $question->image }}" target="_blank" class="btn btn-sm btn-outline-info">
+                                        <i class="bi bi-image me-1"></i>View Image
+                                    </a>
+                                </div>
+                            @endif
+                        </div>
+                        
+                        <!-- Options with Correct Answer Highlighted -->
+                        <div class="options-display">
+                            <div class="row g-2">
+                                @php
+                                    $options = ['a' => $question->option_a, 'b' => $question->option_b, 'c' => $question->option_c, 'd' => $question->option_d];
+                                    $correctOption = strtolower($question->correct_option);
+                                @endphp
+                                @foreach($options as $key => $option)
+                                    <div class="col-md-6">
+                                        <div class="option-item p-2 rounded border @if($correctOption === $key) bg-success text-white border-success @else bg-light @endif">
+                                            <strong>{{ $key }})</strong> {!! $option !!}
+                                            @if($correctOption === $key)
+                                                <i class="bi bi-check-circle-fill ms-2"></i>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        
+                        <!-- Additional Info -->
+                        @if($question->source_name)
+                            <div class="mt-2">
+                                <small class="text-muted">
+                                    <i class="bi bi-building me-1"></i>Source: {{ $question->source_name }}
+                                </small>
+                            </div>
+                        @endif
+                    </div>
                 </td>
-                <td>{{ $q->correct_option }}</td>
-                <td>{{ $q->source_name ?? '-' }} / {{ $q->source_type ?? '-' }}</td>
-                <td>{{ $q->year ?? '-' }}</td>
-                <td>
-                    <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal{{ $q->id }}">
-                        <i class="bi bi-pencil-square"></i>
-                    </button>
-                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $q->id }}">
-                        <i class="bi bi-trash"></i>
-                    </button>
+                <td class="px-4 py-4 text-center">
+                    <div class="btn-group-vertical" role="group">
+                        <button class="btn btn-sm btn-outline-warning mb-1" data-bs-toggle="modal" data-bs-target="#editModal{{ $question->id }}" title="Edit">
+                            <i class="bi bi-pencil me-1"></i>Edit
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $question->id }}" title="Delete">
+                            <i class="bi bi-trash me-1"></i>Delete
+                        </button>
+                    </div>
                 </td>
             </tr>
 
             <!-- Edit Modal -->
-            <div class="modal fade" id="editModal{{ $q->id }}" tabindex="-1" aria-hidden="true">
+            <div class="modal fade" id="editModal{{ $question->id }}" tabindex="-1">
                 <div class="modal-dialog">
-                    <form method="POST" action="{{ route('questions.update', $q->id) }}">
+                    <form method="POST" action="{{ route('questions.update', $question->id) }}">
                         @csrf
                         @method('PUT')
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">Edit Question #{{ $q->id }}</h5>
+                                <h5 class="modal-title">Edit Question #{{ $question->id }}</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
                             <div class="modal-body">
-                                <input type="text" name="question_text" class="form-control mb-2" value="{{ $q->question_text }}" placeholder="Question" required>
-                                <input type="text" name="option_a" class="form-control mb-2" value="{{ $q->option_a }}" placeholder="Option A" required>
-                                <input type="text" name="option_b" class="form-control mb-2" value="{{ $q->option_b }}" placeholder="Option B" required>
-                                <input type="text" name="option_c" class="form-control mb-2" value="{{ $q->option_c }}" placeholder="Option C" required>
-                                <input type="text" name="option_d" class="form-control mb-2" value="{{ $q->option_d }}" placeholder="Option D" required>
-                                <select name="correct_option" class="form-control mb-2" required>
-                                    <option value="A" {{ $q->correct_option=='A'?'selected':'' }}>A</option>
-                                    <option value="B" {{ $q->correct_option=='B'?'selected':'' }}>B</option>
-                                    <option value="C" {{ $q->correct_option=='C'?'selected':'' }}>C</option>
-                                    <option value="D" {{ $q->correct_option=='D'?'selected':'' }}>D</option>
-                                </select>
-                                <input type="text" name="source_name" class="form-control mb-2" value="{{ $q->source_name }}" placeholder="Source Name (Optional)">
-                                <input type="text" name="source_type" class="form-control mb-2" value="{{ $q->source_type }}" placeholder="Source Type (Optional)">
-                                <input type="number" name="year" class="form-control" value="{{ $q->year }}" placeholder="Year (Optional)">
+                                <div class="mb-3">
+                                    <label>Question Text</label>
+                                    <textarea name="question_text" class="form-control" rows="3" required>{{ $question->question_text }}</textarea>
+                                    <small class="text-muted">Use \( \) for inline math, \[ \] for display math</small>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label>Image URL (optional)</label>
+                                    <input type="text" name="image" class="form-control" value="{{ $question->image }}">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label>Option A</label>
+                                    <textarea name="option_a" class="form-control" rows="2" required>{{ $question->option_a }}</textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Option B</label>
+                                    <textarea name="option_b" class="form-control" rows="2" required>{{ $question->option_b }}</textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Option C</label>
+                                    <textarea name="option_c" class="form-control" rows="2" required>{{ $question->option_c }}</textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Option D</label>
+                                    <textarea name="option_d" class="form-control" rows="2" required>{{ $question->option_d }}</textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Correct Option</label>
+                                    <select name="correct_option" class="form-control" required>
+                                        <option value="A" {{ $question->correct_option=='A'?'selected':'' }}>A</option>
+                                        <option value="B" {{ $question->correct_option=='B'?'selected':'' }}>B</option>
+                                        <option value="C" {{ $question->correct_option=='C'?'selected':'' }}>C</option>
+                                        <option value="D" {{ $question->correct_option=='D'?'selected':'' }}>D</option>
+                                    </select>
+                                </div>
+
+                                <!-- Optional Class -->
+                                <div class="mb-3">
+                                    <label>Class (Optional)</label>
+                                    <select name="class" class="form-control edit-class">
+                                        <option value="">-- Select Class --</option>
+                                        <option value="SSC" {{ $question->subject && $question->subject->class=='SSC'?'selected':'' }}>SSC</option>
+                                        <option value="HSC" {{ $question->subject && $question->subject->class=='HSC'?'selected':'' }}>HSC</option>
+                                    </select>
+                                </div>
+
+                                <!-- Optional Subject -->
+                                <div class="mb-3">
+                                    <label>Subject (Optional)</label>
+                                    <select name="subject_id" class="form-control edit-subject">
+                                        <option value="">-- Select Subject --</option>
+                                        @if($question->subject)
+                                            <option value="{{ $question->subject->id }}" selected>{{ $question->subject->name }}</option>
+                                        @endif
+                                    </select>
+                                </div>
+
+                                <!-- Optional Chapter -->
+                                <div class="mb-3">
+                                    <label>Chapter (Optional)</label>
+                                    <select name="chapter_id" class="form-control edit-chapter">
+                                        <option value="">-- Select Chapter --</option>
+                                        @if($question->chapter)
+                                            <option value="{{ $question->chapter->id }}" selected>{{ $question->chapter->name }}</option>
+                                        @endif
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label>Source Name</label>
+                                    <input type="text" name="source_name" class="form-control" value="{{ $question->source_name }}">
+                                </div>
+                                <div class="mb-3">
+                                    <label>Source Type</label>
+                                    <input type="text" name="source_type" class="form-control" value="{{ $question->source_type }}">
+                                </div>
+                                <div class="mb-3">
+                                    <label>Year</label>
+                                    <input type="number" name="year" class="form-control" value="{{ $question->year }}">
+                                </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -104,14 +393,14 @@
             </div>
 
             <!-- Delete Modal -->
-            <div class="modal fade" id="deleteModal{{ $q->id }}" tabindex="-1" aria-hidden="true">
+            <div class="modal fade" id="deleteModal{{ $question->id }}" tabindex="-1">
                 <div class="modal-dialog">
-                    <form method="POST" action="{{ route('questions.destroy', $q->id) }}">
+                    <form method="POST" action="{{ route('questions.destroy', $question->id) }}">
                         @csrf
                         @method('DELETE')
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">Delete Question #{{ $q->id }}</h5>
+                                <h5 class="modal-title">Delete Question #{{ $question->id }}</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
                             <div class="modal-body">
@@ -127,12 +416,23 @@
             </div>
 
             @endforeach
-        </tbody>
-    </table>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    @if($questions->isEmpty())
+        <div class="text-center py-5">
+            <i class="bi bi-inbox" style="font-size: 3rem; color: #dee2e6;"></i>
+            <h5 class="text-muted mt-3">No questions found</h5>
+            <p class="text-muted">Try adjusting your filters or add some questions to get started.</p>
+        </div>
+    @endif
 </div>
 
 <!-- Add Question Modal -->
-<div class="modal fade" id="addQuestionModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="addQuestionModal" tabindex="-1">
     <div class="modal-dialog">
         <form method="POST" action="{{ route('questions.store') }}">
             @csrf
@@ -142,20 +442,82 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <input type="text" name="question_text" class="form-control mb-2" placeholder="Question" required>
-                    <input type="text" name="option_a" class="form-control mb-2" placeholder="Option A" required>
-                    <input type="text" name="option_b" class="form-control mb-2" placeholder="Option B" required>
-                    <input type="text" name="option_c" class="form-control mb-2" placeholder="Option C" required>
-                    <input type="text" name="option_d" class="form-control mb-2" placeholder="Option D" required>
-                    <select name="correct_option" class="form-control mb-2" required>
-                        <option value="A">A</option>
-                        <option value="B">B</option>
-                        <option value="C">C</option>
-                        <option value="D">D</option>
-                    </select>
-                    <input type="text" name="source_name" class="form-control mb-2" placeholder="Source Name (Optional)">
-                    <input type="text" name="source_type" class="form-control mb-2" placeholder="Source Type (Optional)">
-                    <input type="number" name="year" class="form-control" placeholder="Year (Optional)">
+                    <div class="mb-3">
+                        <label>Question Text</label>
+                        <textarea name="question_text" class="form-control" rows="3" required></textarea>
+                        <small class="text-muted">Use \( \) for inline math: \( x^2 \), use \[ \] for display math: \[ \frac{a}{b} \]</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Image URL (optional)</label>
+                        <input type="text" name="image" class="form-control" value="">
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Option A</label>
+                        <textarea name="option_a" class="form-control" rows="2" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label>Option B</label>
+                        <textarea name="option_b" class="form-control" rows="2" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label>Option C</label>
+                        <textarea name="option_c" class="form-control" rows="2" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label>Option D</label>
+                        <textarea name="option_d" class="form-control" rows="2" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label>Correct Option</label>
+                        <select name="correct_option" class="form-control" required>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                        </select>
+                    </div>
+
+                    <!-- Optional Class -->
+                    <div class="mb-3">
+                        <label>Class (Optional)</label>
+                        <select name="class" class="form-control add-class">
+                            <option value="">-- Select Class --</option>
+                            <option value="SSC">SSC</option>
+                            <option value="HSC">HSC</option>
+                        </select>
+                    </div>
+
+                    <!-- Optional Subject -->
+                    <div class="mb-3">
+                        <label>Subject (Optional)</label>
+                        <select name="subject_id" class="form-control add-subject">
+                            <option value="">-- Select Subject --</option>
+                        </select>
+                    </div>
+
+                    <!-- Optional Chapter -->
+                    <div class="mb-3">
+                        <label>Chapter (Optional)</label>
+                        <select name="chapter_id" class="form-control add-chapter">
+                            <option value="">-- Select Chapter --</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Source Name</label>
+                        <input type="text" name="source_name" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label>Source Type</label>
+                        <input type="text" name="source_type" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label>Year</label>
+                        <input type="number" name="year" class="form-control">
+                    </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -166,18 +528,123 @@
     </div>
 </div>
 
+<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Auto-close alerts -->
+<!-- MathJax Configuration -->
 <script>
-    setTimeout(() => {
-        const alerts = document.querySelectorAll('.alert');
-        alerts.forEach(alert => {
+// Show/hide source name fields based on source type
+document.addEventListener('DOMContentLoaded', function() {
+    function toggleSourceName() {
+        var type = document.getElementById('source_type').value;
+        // Disable all source_name fields
+        document.getElementById('source_name_board').disabled = true;
+        document.getElementById('source_name_university').disabled = true;
+        document.getElementById('source_name_custom').disabled = true;
+        // Hide all
+        document.getElementById('sourceNameBoard').style.display = 'none';
+        document.getElementById('sourceNameUniversity').style.display = 'none';
+        document.getElementById('sourceNameCustom').style.display = 'none';
+        // Enable and show the selected one
+        if(type === 'board') {
+            document.getElementById('sourceNameBoard').style.display = '';
+            document.getElementById('source_name_board').disabled = false;
+        } else if(type === 'university') {
+            document.getElementById('sourceNameUniversity').style.display = '';
+            document.getElementById('source_name_university').disabled = false;
+        } else if(type === 'custom') {
+            document.getElementById('sourceNameCustom').style.display = '';
+            document.getElementById('source_name_custom').disabled = false;
+        }
+    }
+    document.getElementById('source_type').addEventListener('change', toggleSourceName);
+    toggleSourceName();
+});
+MathJax = {
+  tex: {
+    inlineMath: [['\\(', '\\)']],
+    displayMath: [['\\[', '\\]']]
+  },
+  startup: {
+    ready: () => {
+      MathJax.startup.defaultReady();
+      MathJax.startup.promise.then(() => {
+        console.log('MathJax loaded and ready');
+      });
+    }
+  }
+};
+</script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- Dynamic Class -> Subject -> Chapter -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    function setupDynamicDropdown(formSelector, classSelector, subjectSelector, chapterSelector) {
+        const form = document.querySelector(formSelector);
+        if(!form) return;
+
+        const classSelect = form.querySelector(classSelector);
+        const subjectSelect = form.querySelector(subjectSelector);
+        const chapterSelect = form.querySelector(chapterSelector);
+
+        if(classSelect){
+            classSelect.addEventListener('change', function(){
+                subjectSelect.innerHTML = '<option value="">-- Select Subject --</option>';
+                chapterSelect.innerHTML = '<option value="">-- Select Chapter --</option>';
+                const classVal = this.value;
+                if(classVal){
+                    fetch(`/questions/get-subjects?class=${classVal}`)
+                    .then(res=>res.json())
+                    .then(data=>{
+                        data.forEach(sub=>{
+                            const opt = document.createElement('option');
+                            opt.value = sub.id;
+                            opt.text = sub.name;
+                            subjectSelect.appendChild(opt);
+                        });
+                    });
+                }
+            });
+        }
+
+        if(subjectSelect){
+            subjectSelect.addEventListener('change', function(){
+                chapterSelect.innerHTML = '<option value="">-- Select Chapter --</option>';
+                const subjectVal = this.value;
+                if(subjectVal){
+                    fetch(`/questions/get-chapters?subject_id=${subjectVal}`)
+                    .then(res=>res.json())
+                    .then(data=>{
+                        data.forEach(chap=>{
+                            const opt = document.createElement('option');
+                            opt.value = chap.id;
+                            opt.text = chap.name;
+                            chapterSelect.appendChild(opt);
+                        });
+                    });
+                }
+            });
+        }
+    }
+
+    // Setup for Add Question Modal
+    setupDynamicDropdown('#addQuestionModal', '.add-class', '.add-subject', '.add-chapter');
+
+    // Setup for each Edit Question Modal
+    @foreach($questions as $question)
+        setupDynamicDropdown('#editModal{{ $question->id }}', '.edit-class', '.edit-subject', '.edit-chapter');
+    @endforeach
+
+    // Auto hide alerts
+    setTimeout(()=>{
+        document.querySelectorAll('.alert').forEach(alert=>{
             const bsAlert = new bootstrap.Alert(alert);
             bsAlert.close();
         });
     }, 3000);
+});
 </script>
-
 </body>
-</html>
+</html
