@@ -2,12 +2,58 @@
 
 @section('content')
 <div class="container">
-    <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h3 class="card-title">Exams</h3>
-            <a href="{{ route('exams.create') }}" class="btn btn-primary">Create New Exam</a>
+    @if(isset($stats) && !empty($stats))
+        <!-- Stats Section -->
+        <div class="row g-3 mb-4" style="margin-top: 2rem;">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm" style="background-color: #334155;">
+                    <div class="card-body text-center py-4">
+                        <h6 class="text-white mb-2 opacity-75">Total Exams</h6>
+                        <h1 class="mb-0 text-white fw-bold">{{ $stats['total'] ?? 0 }}</h1>
+                    </div>
+                </div>
+            </div>
+            
+            @if($filterType === 'custom')
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm" style="background-color: #334155;">
+                        <div class="card-body text-center py-4">
+                            <h6 class="text-white mb-2 opacity-75">Active Now</h6>
+                            <h1 class="mb-0 text-white fw-bold">{{ $stats['active'] ?? 0 }}</h1>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm" style="background-color: #334155;">
+                        <div class="card-body text-center py-4">
+                            <h6 class="text-white mb-2 opacity-75">Upcoming</h6>
+                            <h1 class="mb-0 text-white fw-bold">{{ $stats['upcoming'] ?? 0 }}</h1>
+                        </div>
+                    </div>
+                </div>
+            @endif
         </div>
-        <div class="card-body">
+    @endif
+
+    <div class="card shadow-sm" style="background-color: #1e293b; border: none;">
+        <div class="card-header d-flex justify-content-between align-items-center py-3 px-4" style="background-color: #334155; border: none;">
+            <h3 class="card-title text-white mb-0 fw-bold">
+                @if($filterType === 'board')
+                    <i class="bi bi-mortarboard me-2"></i>Board Exams
+                @elseif($filterType === 'university')
+                    <i class="bi bi-building me-2"></i>University Exams
+                @elseif($filterType === 'custom')
+                    <i class="bi bi-gear me-2"></i>Custom Exams (Contests)
+                @else
+                    <i class="bi bi-folder2-open me-2"></i>All Exams
+                @endif
+            </h3>
+            <a href="{{ route('exams.create') }}" class="btn btn-success">
+                <i class="bi bi-plus-circle me-1"></i>Create New Exam
+            </a>
+        </div>
+        <div class="card-body" style="background-color: #1e293b;">
             @if(session('success'))
                 <div class="alert alert-success">
                     {{ session('success') }}
@@ -15,22 +61,22 @@
             @endif
 
             <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
+                <table class="table table-hover mb-0" style="color: #e2e8f0; background-color: #1e293b;">
+                    <thead style="background-color: #334155; border-color: #475569;">
                         <tr>
-                            <th>Name</th>
-                            <th>Type</th>
-                            <th>Subject</th>
-                            <th>Chapter</th>
-                            <th>Start Time</th>
-                            <th>Duration</th>
-                            <th>Status</th>
-                            <th>Actions</th>
+                            <th class="text-white">Name</th>
+                            <th class="text-white">Type</th>
+                            <th class="text-white">Subject</th>
+                            <th class="text-white">Chapter</th>
+                            <th class="text-white">Start Time</th>
+                            <th class="text-white">Duration</th>
+                            <th class="text-white">Status</th>
+                            <th class="text-white">Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody style="border-color: #475569; background-color: #1e293b;">
                         @foreach($exams as $exam)
-                            <tr>
+                            <tr style="border-color: #475569; background-color: #1e293b;" class="hover-row">
                                 <td>{{ $exam->title }}</td>
                                 <td>
                                     {{ ucfirst($exam->exam_type) }}
@@ -64,10 +110,10 @@
                                 </td>
                                 <td>
                                     <div class="btn-group" role="group">
-                                        <a href="{{ route('exams.show', $exam) }}" class="btn btn-sm btn-info me-1" title="View Exam">
+                                        <a href="{{ route('exams.show', $exam) }}" class="btn btn-sm btn-success me-1" title="View Exam">
                                             <i class="bi bi-eye"></i> View
                                         </a>
-                                        <a href="{{ route('exams.edit', $exam) }}" class="btn btn-sm btn-warning me-1" title="Edit Exam">
+                                        <a href="{{ route('exams.edit', $exam) }}" class="btn btn-sm btn-success me-1" title="Edit Exam">
                                             <i class="bi bi-pencil"></i> Edit
                                         </a>
                                         <form action="{{ route('exams.destroy', $exam) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this exam? This action cannot be undone.');" style="display:inline-block; margin-left:4px;">
@@ -91,4 +137,41 @@
         </div>
     </div>
 </div>
+
+<style>
+    .hover-row {
+        transition: background-color 0.2s ease;
+        background-color: #1e293b !important;
+    }
+    .hover-row:hover {
+        background-color: #2d3748 !important;
+    }
+    .hover-row td {
+        background-color: transparent !important;
+        color: #e2e8f0 !important;
+    }
+    .table > :not(caption) > * > * {
+        border-color: #475569 !important;
+        background-color: #1e293b;
+    }
+    .table-responsive {
+        background-color: #1e293b;
+    }
+    .btn-success {
+        background-color: #15803d !important;
+        border-color: #15803d !important;
+        box-shadow: none !important;
+    }
+    .btn-success:hover {
+        background-color: #166534 !important;
+        border-color: #166534 !important;
+        box-shadow: none !important;
+    }
+    .btn-success:focus, .btn-success:active {
+        background-color: #166534 !important;
+        border-color: #166534 !important;
+        box-shadow: none !important;
+    }
+</style>
+
 @endsection

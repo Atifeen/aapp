@@ -109,9 +109,9 @@
                 <div class="mb-3">
                     <label for="class_filter" class="form-label">Filter by Class</label>
                     <select class="form-select" id="class_filter">
-                        <option value="" {{ $selectedClass == '' ? 'selected' : '' }}>All Classes</option>
-                        <option value="SSC" {{ $selectedClass == 'SSC' ? 'selected' : '' }}>SSC</option>
-                        <option value="HSC" {{ $selectedClass == 'HSC' ? 'selected' : '' }}>HSC</option>
+                        <option value="" {{ ($selectedClass ?? '') == '' ? 'selected' : '' }}>All Classes</option>
+                        <option value="SSC" {{ ($selectedClass ?? '') == 'SSC' ? 'selected' : '' }}>SSC</option>
+                        <option value="HSC" {{ ($selectedClass ?? '') == 'HSC' ? 'selected' : '' }}>HSC</option>
                     </select>
                     <div class="form-text">Filter subjects by class for easier selection</div>
                 </div>
@@ -161,7 +161,6 @@
     </div>
 </div>
 
-@push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const examType = document.getElementById('exam_type');
@@ -284,10 +283,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // Handle class filtering for subjects (server-side filtering)
     const classFilterElement = document.getElementById('class_filter');
     
+    console.log('Class filter element:', classFilterElement);
+    
     if (classFilterElement) {
         classFilterElement.addEventListener('change', function() {
             const selectedClass = this.value;
             const currentUrl = new URL(window.location.href);
+            
+            console.log('Selected class:', selectedClass);
+            console.log('Current URL before:', currentUrl.toString());
             
             if (selectedClass) {
                 currentUrl.searchParams.set('class', selectedClass);
@@ -295,12 +299,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 currentUrl.searchParams.delete('class');
             }
             
+            console.log('Current URL after:', currentUrl.toString());
+            
             // Reload page with class filter
             window.location.href = currentUrl.toString();
         });
     }
 });
 </script>
-@endpush
 
 @endsection

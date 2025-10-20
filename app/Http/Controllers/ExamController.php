@@ -33,7 +33,28 @@ class ExamController extends Controller
         $exams = $query->paginate(10)->withQueryString();
 
         $filterType = request()->get('exam_type');
-        return view('exams.index', compact('exams', 'filterType'));
+        
+        // Calculate stats based on filter type
+        $stats = [];
+        if ($filterType) {
+            $baseQuery = Exam::where('exam_type', $filterType);
+            
+            $stats['total'] = $baseQuery->count();
+            
+            // For custom exams (contests), show additional stats
+            if ($filterType === 'custom') {
+                $stats['active'] = (clone $baseQuery)
+                    ->where('start_time', '<=', now())
+                    ->where('end_time', '>', now())
+                    ->count();
+                    
+                $stats['upcoming'] = (clone $baseQuery)
+                    ->where('start_time', '>', now())
+                    ->count();
+            }
+        }
+        
+        return view('exams.index', compact('exams', 'filterType', 'stats'));
     }
 
     public function create(Request $request)
@@ -43,10 +64,13 @@ class ExamController extends Controller
         
         if ($request->filled('class')) {
             $query->where('class', $request->class);
+            \Log::info('Filtering subjects by class: ' . $request->class);
         }
         
         $subjects = $query->get();
         $selectedClass = $request->input('class', '');
+        
+        \Log::info('Total subjects: ' . $subjects->count() . ', Selected class: ' . $selectedClass);
         
         return view('exams.create', compact('subjects', 'selectedClass'));
     }

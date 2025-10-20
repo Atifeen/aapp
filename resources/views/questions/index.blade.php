@@ -8,25 +8,26 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 <style>
     body {
-        background-color: #f8f9fa;
+        background-color: #0f172a;
     }
     .main-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background-color: #1e293b;
         color: white;
-        padding: 2rem 0;
+        padding: 1.5rem 0;
         margin-bottom: 2rem;
-        border-radius: 0 0 15px 15px;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
     .filter-card {
-        background: white;
+        background: #1e293b;
         border-radius: 15px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         border: none;
     }
     .table-card {
-        background: white;
+        background: #1e293b;
         border-radius: 15px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         border: none;
         overflow: hidden;
     }
@@ -37,22 +38,33 @@
     }
     .form-control, .form-select {
         border-radius: 10px;
-        border: 2px solid #e9ecef;
+        border: 2px solid #475569;
+        background-color: #334155;
+        color: #e2e8f0;
         transition: all 0.3s ease;
     }
     .form-control:focus, .form-select:focus {
-        border-color: #667eea;
-        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        border-color: #15803d;
+        box-shadow: 0 0 0 0.2rem rgba(21, 128, 61, 0.25);
+        background-color: #334155;
+        color: #e2e8f0;
+    }
+    .form-control::placeholder {
+        color: #94a3b8;
+    }
+    .form-select option {
+        background-color: #334155;
+        color: #e2e8f0;
     }
     .table th {
-        background-color: #f8f9fa;
+        background-color: #334155;
         border: none;
         font-weight: 600;
-        color: #495057;
+        color: #e2e8f0;
     }
     .question-image {
         transition: all 0.3s ease;
-        background: #f8f9fa;
+        background: #334155;
         padding: 10px;
         border-radius: 8px;
         text-align: center;
@@ -60,11 +72,11 @@
     .question-image img {
         transition: transform 0.3s ease;
         border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     }
     .question-image img:hover {
         transform: scale(1.02);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.4);
     }
     .image-controls {
         gap: 8px;
@@ -74,36 +86,42 @@
         font-size: 0.85rem;
         padding: 0.4rem 0.8rem;
     }
-        color: #495057;
     }
     .table td {
         border: none;
-        border-bottom: 1px solid #dee2e6;
+        border-bottom: 1px solid #475569;
         vertical-align: middle;
+        color: #e2e8f0;
+        background-color: #1e293b;
+    }
+    .table tbody tr:hover {
+        background-color: #2d3748;
     }
     .options-display {
-        background-color: #f8f9fa;
+        background-color: #334155;
         padding: 8px;
         border-radius: 6px;
-        border-left: 3px solid #dee2e6;
+        border-left: 3px solid #15803d;
+        color: #e2e8f0;
     }
     .question-card {
-        background: white;
-        border: 1px solid #e9ecef;
+        background: #1e293b;
+        border: 1px solid #475569;
         border-radius: 10px;
         padding: 1rem;
         transition: all 0.3s ease;
+        color: #e2e8f0;
     }
     .question-card:hover {
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        border-color: #667eea;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        border-color: #15803d;
     }
     
     /* Custom Pagination Styles */
     .pagination-wrapper {
-        background: white;
+        background: #1e293b;
         border-radius: 15px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         padding: 1rem 1.5rem;
         margin: 2rem 0;
     }
@@ -132,25 +150,25 @@
     }
     
     .pagination .page-item .page-link:hover {
-        border-color: #667eea;
-        background-color: #667eea;
+        border-color: #15803d;
+        background-color: #15803d;
         color: white;
         transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        box-shadow: 0 4px 8px rgba(21, 128, 61, 0.3);
     }
     
     .pagination .page-item.active .page-link {
-        background-color: #667eea;
-        border-color: #667eea;
+        background-color: #15803d;
+        border-color: #15803d;
         color: white;
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        box-shadow: 0 4px 12px rgba(21, 128, 61, 0.4);
         transform: translateY(-1px);
     }
     
     .pagination .page-item.disabled .page-link {
-        background-color: #f8f9fa;
-        border-color: #dee2e6;
-        color: #6c757d;
+        background-color: #334155;
+        border-color: #475569;
+        color: #64748b;
         cursor: not-allowed;
     }
     
@@ -159,10 +177,16 @@
         padding: 0.375rem 0.75rem;
         font-weight: 600;
         min-width: auto;
+        background-color: #334155;
+        border-color: #475569;
+        color: #e2e8f0;
     }
     
     .pagination .page-link {
         line-height: 1;
+        background-color: #334155;
+        border-color: #475569;
+        color: #e2e8f0;
     }
     
     /* Ensure consistent button heights */
@@ -174,7 +198,7 @@
     }
     
     .pagination-info {
-        color: #6c757d;
+        color: #94a3b8;
         font-size: 0.85rem;
         margin-bottom: 0.75rem;
     }
@@ -182,28 +206,98 @@
         font-size: 0.9rem;
         line-height: 1.4;
         transition: all 0.3s ease;
+        color: #e2e8f0;
     }
     .question-meta .badge {
         font-size: 0.75rem;
     }
+    
+    /* Button Styles */
+    .btn-primary, .btn-success {
+        background-color: #15803d !important;
+        border-color: #15803d !important;
+        box-shadow: none !important;
+    }
+    .btn-primary:hover, .btn-success:hover {
+        background-color: #166534 !important;
+        border-color: #166534 !important;
+        box-shadow: none !important;
+    }
+    .btn-primary:focus, .btn-primary:active,
+    .btn-success:focus, .btn-success:active {
+        background-color: #166534 !important;
+        border-color: #166534 !important;
+        box-shadow: none !important;
+    }
+    
+    /* Alert Styles */
+    .alert-success {
+        background-color: #15803d;
+        border-color: #15803d;
+        color: white;
+    }
+    .alert-danger {
+        background-color: #dc2626;
+        border-color: #dc2626;
+        color: white;
+    }
+    
+    /* Badge Styles */
+    .badge-custom {
+        background-color: #334155 !important;
+        color: #e2e8f0 !important;
+    }
+    
+    /* Card Header */
+    .card-header {
+        color: #e2e8f0;
+    }
+    
+    /* Override any white backgrounds */
+    .table, .table tbody, .table tbody tr, .table tbody tr td {
+        background-color: #1e293b !important;
+        color: #e2e8f0 !important;
+    }
+    
+    .table thead tr th {
+        background-color: #334155 !important;
+    }
+    
+    /* Options specific styling */
+    .option-item, .options-display div, .options-display p {
+        background-color: transparent !important;
+        color: #e2e8f0 !important;
+    }
+    
+    /* Ensure all text is visible */
+    p, span, div, small, label {
+        color: #e2e8f0;
+    }
+    
+    .text-muted {
+        color: #94a3b8 !important;
+    }
+    
+    .fw-semibold, .form-label {
+        color: #e2e8f0 !important;
+    }
 </style>
 </head>
 <body>
-<div class="main-header">
-    <div class="container">
+
+<div class="container">
+    <div class="main-header mt-4">
         <div class="d-flex justify-content-between align-items-center">
             <div>
-                <h1 class="mb-1"><i class="bi bi-question-circle me-3"></i>Questions Management</h1>
+                <h2 class="mb-2"><i class="bi bi-question-circle me-2"></i>Questions Management</h2>
                 <p class="mb-0">Manage and organize exam questions efficiently</p>
             </div>
-            <span class="badge badge-custom bg-light text-dark">
+            <span class="badge badge-custom px-3 py-2">
                 <i class="bi bi-list-check me-2"></i>{{ $questions->count() }} question{{ $questions->count() !== 1 ? 's' : '' }} found
             </span>
         </div>
     </div>
-</div>
 
-<div class="container">
     <!-- Success/Error Messages -->
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert" style="border-radius: 15px; border: none;">

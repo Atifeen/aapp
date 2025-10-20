@@ -69,65 +69,23 @@
             </div>
         </div>
 
-        <!-- Stats Grid -->
-        <div class="row g-4 mb-4">
-            <div class="col-md-3">
-                <div class="dashboard-card">
-                    <div class="card-body p-4">
-                        <h5 class="card-title">Total Exams</h5>
-                        <p class="display-6 mb-1">{{ $totalExams }}</p>
-                        <small class="text-muted">Available exams</small>
-                        <i class="bi bi-file-earmark-text stat-icon text-primary"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="dashboard-card">
-                    <div class="card-body p-4">
-                        <h5 class="card-title">Rated Exams</h5>
-                        <p class="display-6 mb-1">{{ $totalRatedExams }}</p>
-                        <small class="text-muted">Rating contests</small>
-                        <i class="bi bi-star stat-icon text-warning"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="dashboard-card">
-                    <div class="card-body p-4">
-                        <h5 class="card-title">Upcoming</h5>
-                        <p class="display-6 mb-1">{{ $upcomingExams }}</p>
-                        <small class="text-muted">Scheduled exams</small>
-                        <i class="bi bi-calendar-event stat-icon text-success"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="dashboard-card">
-                    <div class="card-body p-4">
-                        <h5 class="card-title">Active Now</h5>
-                        <p class="display-6 mb-1">{{ $activeExams }}</p>
-                        <small class="text-muted">Currently running</small>
-                        <i class="bi bi-play-circle stat-icon text-info"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Quick Actions -->
         <div class="row g-4">
-            <div class="col-12">
-                <h4>
-                    <i class="bi bi-lightning-charge me-2"></i>Quick Actions
-                </h4>
-            </div>
+            <!-- <div class="col-12">
+                <div class="p-3 rounded shadow-sm" style="background-color: #334155;">
+                    <h4 class="fw-bold text-white mb-0">
+                        <i class="bi bi-lightning-charge me-2"></i>Quick Actions
+                    </h4>
+                </div>
+            </div> -->
             
             <div class="col-md-4">
                 <div class="dashboard-card">
                     <div class="card-body p-4 text-center">
-                        <i class="bi bi-plus-circle text-primary mb-3" style="font-size: 2.5rem"></i>
+                        <i class="bi bi-plus-circle mb-3" style="font-size: 2.5rem; color: #16a34a;"></i>
                         <h5>Create Exam</h5>
                         <p class="text-muted mb-4">Add a new practice exam or contest</p>
-                        <a href="{{ route('exams.create') }}" class="btn btn-primary">Create Now</a>
+                        <a href="{{ route('exams.create') }}" class="btn btn-success">Create Now</a>
                     </div>
                 </div>
             </div>
@@ -135,7 +93,7 @@
             <div class="col-md-4">
                 <div class="dashboard-card">
                     <div class="card-body p-4 text-center">
-                        <i class="bi bi-collection text-success mb-3" style="font-size: 2.5rem"></i>
+                        <i class="bi bi-collection mb-3" style="font-size: 2.5rem; color: #16a34a;"></i>
                         <h5>Manage Questions</h5>
                         <p class="text-muted mb-4">Add or edit question bank</p>
                         <a href="{{ route('questions.index') }}" class="btn btn-success">Manage Now</a>
@@ -146,185 +104,84 @@
             <div class="col-md-4">
                 <div class="dashboard-card">
                     <div class="card-body p-4 text-center">
-                        <i class="bi bi-people text-info mb-3" style="font-size: 2.5rem"></i>
+                        <i class="bi bi-people mb-3" style="font-size: 2.5rem; color: #16a34a;"></i>
                         <h5>View Students</h5>
                         <p class="text-muted mb-4">Manage student profiles</p>
-                        <button class="btn btn-info">View All</button>
+                        <button class="btn btn-success">View All</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Exam Categories -->
+        <!-- View All Exams Section -->
         <div class="row mt-5">
+            <!-- <div class="col-12 mb-4">
+                <div class="p-3 rounded shadow-sm" style="background-color: #334155;">
+                    <h4 class="fw-bold text-white mb-0">
+                        <i class="bi bi-folder2-open me-2"></i>Manage All Exams
+                    </h4>
+                </div>
+            </div> -->
+            
             <!-- Board Exams -->
             <div class="col-md-4">
-                <div class="card dashboard-card">
-                    <div class="card-header bg-success text-white">
-                        <h5 class="mb-0"><i class="bi bi-mortarboard me-2"></i>Board Exams</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="list-group">
-                            @php
-                                $boardExams = \App\Models\Exam::where('exam_type', 'board')
-                                    ->with(['subject', 'questions'])
-                                    ->latest()
-                                    ->take(5)
-                                    ->get();
-                            @endphp
-                            @forelse($boardExams as $exam)
-                                <a href="{{ route('exams.show', $exam) }}" class="list-group-item list-group-item-action">
-                                    <div class="d-flex w-100 justify-content-between">
-                                        <h6 class="mb-1 fw-bold">{{ $exam->title }}</h6>
-                                        @if($exam->start_time)
-                                            <small class="text-primary">{{ $exam->start_time->format('M d, Y') }}</small>
-                                        @else
-                                            <small class="text-muted">No schedule</small>
-                                        @endif
-                                    </div>
-                                    @if($exam->subject)
-                                        <p class="mb-1 text-muted small">
-                                            <i class="bi bi-book me-1"></i>{{ $exam->subject->name }}
-                                        </p>
-                                    @endif
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <small class="text-muted">
-                                            <i class="bi bi-clock me-1"></i>{{ $exam->duration }} min | 
-                                            <i class="bi bi-question-circle me-1"></i>{{ $exam->questions->count() }} questions
-                                        </small>
-                                        @if($exam->is_rated)
-                                            <span class="badge bg-warning text-dark">Rated</span>
-                                        @endif
-                                    </div>
-                                </a>
-                            @empty
-                                <div class="text-center py-3">
-                                    <i class="bi bi-inbox text-muted" style="font-size: 2rem;"></i>
-                                    <p class="text-muted mt-2 mb-0">No board exams</p>
-                                </div>
-                            @endforelse
-                        </div>
-                        <div class="text-center mt-3">
-                            <a href="{{ route('exams.index') }}?exam_type=board" class="btn btn-outline-success btn-sm">View All Board Exams</a>
-                        </div>
+                <div class="dashboard-card">
+                    <!-- <div class="card-header text-white py-2 px-3" style="background-color: #334155; border: none;">
+                        <h5 class="mb-0 fw-bold"><i class="bi bi-mortarboard me-2"></i>Board Exams</h5>
+                    </div> -->
+                    <div class="card-body text-center p-5">
+                        <i class="bi bi-folder2-open mb-3" style="font-size: 3rem; color: #16a34a;"></i>
+                        <p class="text-muted mb-4">View and manage all board examination papers</p>
+                        <a href="{{ route('exams.index') }}?exam_type=board" class="btn btn-success">View All Board Exams</a>
                     </div>
                 </div>
             </div>
 
             <!-- University Exams -->
             <div class="col-md-4">
-                <div class="card dashboard-card">
-                    <div class="card-header bg-info text-white">
-                        <h5 class="mb-0"><i class="bi bi-building me-2"></i>University Exams</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="list-group">
-                            @php
-                                $universityExams = \App\Models\Exam::where('exam_type', 'university')
-                                    ->with(['subject', 'questions'])
-                                    ->latest()
-                                    ->take(5)
-                                    ->get();
-                            @endphp
-                            @forelse($universityExams as $exam)
-                                <a href="{{ route('exams.show', $exam) }}" class="list-group-item list-group-item-action">
-                                    <div class="d-flex w-100 justify-content-between">
-                                        <h6 class="mb-1 fw-bold">{{ $exam->title }}</h6>
-                                        @if($exam->start_time)
-                                            <small class="text-primary">{{ $exam->start_time->format('M d, Y') }}</small>
-                                        @else
-                                            <small class="text-muted">No schedule</small>
-                                        @endif
-                                    </div>
-                                    @if($exam->institution_name || $exam->year)
-                                        <p class="mb-1 text-muted small">
-                                            <i class="bi bi-bank me-1"></i>{{ $exam->institution_name }} 
-                                            @if($exam->year) - {{ $exam->year }} @endif
-                                        </p>
-                                    @endif
-                                    @if($exam->subject)
-                                        <p class="mb-1 text-muted small">
-                                            <i class="bi bi-book me-1"></i>{{ $exam->subject->name }}
-                                        </p>
-                                    @endif
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <small class="text-muted">
-                                            <i class="bi bi-clock me-1"></i>{{ $exam->duration }} min | 
-                                            <i class="bi bi-question-circle me-1"></i>{{ $exam->questions->count() }} questions
-                                        </small>
-                                        @if($exam->is_rated)
-                                            <span class="badge bg-warning text-dark">Rated</span>
-                                        @endif
-                                    </div>
-                                </a>
-                            @empty
-                                <div class="text-center py-3">
-                                    <i class="bi bi-inbox text-muted" style="font-size: 2rem;"></i>
-                                    <p class="text-muted mt-2 mb-0">No university exams</p>
-                                </div>
-                            @endforelse
-                        </div>
-                        <div class="text-center mt-3">
-                            <a href="{{ route('exams.index') }}?exam_type=university" class="btn btn-outline-info btn-sm">View All University Exams</a>
-                        </div>
+                <div class="dashboard-card">
+                    <!-- <div class="card-header text-white py-3 px-4" style="background-color: #334155; border: none;">
+                        <h5 class="mb-0 fw-bold"><i class="bi bi-building me-2"></i>University Exams</h5>
+                    </div> -->
+                    <div class="card-body text-center p-5">
+                        <i class="bi bi-folder2-open mb-3" style="font-size: 3rem; color: #16a34a;"></i>
+                        <p class="text-muted mb-4">View and manage all university admission tests</p>
+                        <a href="{{ route('exams.index') }}?exam_type=university" class="btn btn-success">View All University Exams</a>
                     </div>
                 </div>
             </div>
 
             <!-- Custom Exams -->
             <div class="col-md-4">
-                <div class="card dashboard-card">
-                    <div class="card-header bg-warning text-dark">
-                        <h5 class="mb-0"><i class="bi bi-gear me-2"></i>Custom Exams</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="list-group">
-                            @php
-                                $customExams = \App\Models\Exam::where('exam_type', 'custom')
-                                    ->with(['subject', 'chapter', 'questions'])
-                                    ->latest()
-                                    ->take(5)
-                                    ->get();
-                            @endphp
-                            @forelse($customExams as $exam)
-                                <a href="{{ route('exams.show', $exam) }}" class="list-group-item list-group-item-action">
-                                    <div class="d-flex w-100 justify-content-between">
-                                        <h6 class="mb-1 fw-bold">{{ $exam->title }}</h6>
-                                        @if($exam->start_time)
-                                            <small class="text-primary">{{ $exam->start_time->format('M d, Y') }}</small>
-                                        @else
-                                            <small class="text-muted">No schedule</small>
-                                        @endif
-                                    </div>
-                                    @if($exam->subject)
-                                        <p class="mb-1 text-muted small">
-                                            <i class="bi bi-book me-1"></i>{{ $exam->subject->name }}
-                                            @if($exam->chapter) - {{ $exam->chapter->name }} @endif
-                                        </p>
-                                    @endif
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <small class="text-muted">
-                                            <i class="bi bi-clock me-1"></i>{{ $exam->duration }} min | 
-                                            <i class="bi bi-question-circle me-1"></i>{{ $exam->questions->count() }} questions
-                                        </small>
-                                        @if($exam->is_rated)
-                                            <span class="badge bg-warning text-dark">Rated</span>
-                                        @endif
-                                    </div>
-                                </a>
-                            @empty
-                                <div class="text-center py-3">
-                                    <i class="bi bi-inbox text-muted" style="font-size: 2rem;"></i>
-                                    <p class="text-muted mt-2 mb-0">No custom exams</p>
-                                </div>
-                            @endforelse
-                        </div>
-                        <div class="text-center mt-3">
-                            <a href="{{ route('exams.index') }}?exam_type=custom" class="btn btn-outline-warning btn-sm">View All Custom Exams</a>
-                        </div>
+                <div class="dashboard-card">
+                    <!-- <div class="card-header text-white py-3 px-4" style="background-color: #334155; border: none;">
+                        <h5 class="mb-0 fw-bold"><i class="bi bi-gear me-2"></i>Custom Exams</h5>
+                    </div> -->
+                    <div class="card-body text-center p-5">
+                        <i class="bi bi-folder2-open mb-3" style="font-size: 3rem; color: #16a34a;"></i>
+                        <p class="text-muted mb-4">View and manage all custom questions exam....</p>
+                        <a href="{{ route('exams.index') }}?exam_type=custom" class="btn btn-success">View All Custom Exams</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+<style>
+    .btn-success {
+        background-color: #15803d !important;
+        border-color: #15803d !important;
+        box-shadow: none !important;
+    }
+    .btn-success:hover {
+        background-color: #166534 !important;
+        border-color: #166534 !important;
+        box-shadow: none !important;
+    }
+    .btn-success:focus, .btn-success:active {
+        background-color: #166534 !important;
+        border-color: #166534 !important;
+        box-shadow: none !important;
+    }
+</style>
 @endsection

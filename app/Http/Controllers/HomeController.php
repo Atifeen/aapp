@@ -19,19 +19,7 @@ class HomeController extends Controller
 
     public function adminDashboard()
     {
-        $data = [
-            'totalExams' => Exam::count(),
-            'totalRatedExams' => Exam::where('is_rated', true)->count(),
-            'upcomingExams' => Exam::where('start_time', '>', now())->count(),
-            'activeExams' => Exam::where('start_time', '<=', now())
-                                ->where('end_time', '>', now())
-                                ->count(),
-            'recentExams' => Exam::with(['subject'])
-                                ->orderBy('created_at', 'desc')
-                                ->take(5)
-                                ->get()
-        ];
-        return view('admin.dashboard', $data);
+        return view('admin.dashboard');
     }
 
     public function studentDashboard()
