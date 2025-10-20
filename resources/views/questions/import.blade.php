@@ -5,6 +5,66 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Import Questions from JSON</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+    body {
+        background: #0f172a !important;
+        color: #e2e8f0 !important;
+    }
+    
+    .container {
+        background-color: #1e293b;
+        padding: 30px;
+        border-radius: 15px;
+        border: 1px solid #475569;
+        margin-top: 50px;
+    }
+    
+    h2 {
+        color: #e2e8f0 !important;
+        margin-bottom: 20px;
+    }
+    
+    label {
+        color: #e2e8f0 !important;
+    }
+    
+    .form-control, .form-select {
+        background-color: #334155 !important;
+        color: #e2e8f0 !important;
+        border: 1px solid #475569 !important;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        background-color: #334155 !important;
+        color: #e2e8f0 !important;
+        border-color: #15803d !important;
+        box-shadow: 0 0 0 0.2rem rgba(21, 128, 61, 0.25) !important;
+    }
+    
+    .btn-primary {
+        background-color: #15803d !important;
+        border-color: #15803d !important;
+        color: white !important;
+        box-shadow: none !important;
+    }
+    
+    .btn-primary:hover {
+        background-color: #166534 !important;
+        border-color: #166534 !important;
+    }
+    
+    .alert-success {
+        background-color: #15803d !important;
+        border-color: #15803d !important;
+        color: white !important;
+    }
+    
+    .alert-danger {
+        background-color: #dc2626 !important;
+        border-color: #dc2626 !important;
+        color: white !important;
+    }
+</style>
 </head>
 <body>
 <div class="container mt-5">

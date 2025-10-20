@@ -19,22 +19,22 @@
                 <!-- Question Header -->
                 <div class="d-flex justify-content-between align-items-start mb-3">
                     <div class="question-header">
-                        <span class="badge bg-primary me-2">#{{ $question->id }}</span>
-                        <strong class="text-primary">Question {{ $loop->iteration }}</strong>
+                        <span class="badge me-2" style="background-color: #15803d !important;">#{{ $question->id }}</span>
+                        <strong style="color: #e2e8f0;">Question {{ $loop->iteration }}</strong>
                     </div>
                     <div class="question-meta d-flex flex-wrap gap-1">
                         @if($question->subject)
-                            <span class="badge bg-info">{{ $question->subject->class }}</span>
-                            <span class="badge bg-secondary">{{ $question->subject->name }}</span>
+                            <span class="badge" style="background-color: #15803d !important;">{{ $question->subject->class }}</span>
+                            <span class="badge" style="background-color: #15803d !important;">{{ $question->subject->name }}</span>
                         @endif
                         @if($question->chapter)
-                            <span class="badge bg-light text-dark">{{ $question->chapter->name }}</span>
+                            <span class="badge" style="background-color: #15803d !important;">{{ $question->chapter->name }}</span>
                         @endif
                         @if($question->source_type)
-                            <span class="badge bg-warning text-dark">{{ ucfirst($question->source_type) }}</span>
+                            <span class="badge" style="background-color: #15803d !important;">{{ ucfirst($question->source_type) }}</span>
                         @endif
                         @if($question->year)
-                            <span class="badge bg-dark">{{ $question->year }}</span>
+                            <span class="badge" style="background-color: #15803d !important;">{{ $question->year }}</span>
                         @endif
                     </div>
                 </div>
@@ -62,7 +62,7 @@
                 </div>
                 
                 <!-- Options with Correct Answer Highlighted -->
-                <div class="options-display">
+                <div class="options-display" style="background-color: #1e293b !important; border: 1px solid #475569;">
                     <div class="row g-2">
                         @php
                             $options = ['a' => $question->option_a, 'b' => $question->option_b, 'c' => $question->option_c, 'd' => $question->option_d];
@@ -70,7 +70,7 @@
                         @endphp
                         @foreach($options as $key => $option)
                             <div class="col-md-6">
-                                <div class="option-item p-2 rounded border @if($correctOption === $key) bg-success text-white border-success @else bg-light @endif">
+                                <div class="option-item p-2 rounded border @if($correctOption === $key) border-success @endif" style="background-color: #1e293b !important; border-color: #475569 !important; color: #e2e8f0 !important; @if($correctOption === $key) border-color: #15803d !important; background-color: #166534 !important; @endif">
                                     <strong>{{ $key }})</strong> {!! $option !!}
                                     @if($correctOption === $key)
                                         <i class="bi bi-check-circle-fill ms-2"></i>
@@ -84,22 +84,20 @@
                 <!-- Additional Info -->
                 @if($question->source_name)
                     <div class="mt-2">
-                        <small class="text-muted">
+                        <small style="color: #94a3b8 !important;">
                             <i class="bi bi-building me-1"></i>Source: {{ $question->source_name }}
                         </small>
                     </div>
                 @endif
 
                 @if($showActions)
-                    <div class="mt-3 text-end">
-                        <div class="btn-group" role="group">
-                            <button class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editModal{{ $question->id }}" title="Edit">
-                                <i class="bi bi-pencil me-1"></i>Edit
-                            </button>
-                            <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $question->id }}" title="Delete">
-                                <i class="bi bi-trash me-1"></i>Delete
-                            </button>
-                        </div>
+                    <div class="mt-3 d-flex gap-2 justify-content-end">
+                        <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#editModal{{ $question->id }}" title="Edit" style="background-color: #15803d !important; border-color: #15803d !important;">
+                            <i class="bi bi-pencil me-1"></i>Edit
+                        </button>
+                        <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $question->id }}" title="Delete">
+                            <i class="bi bi-trash me-1"></i>Delete
+                        </button>
                     </div>
                 @endif
         @if($showCheckbox)

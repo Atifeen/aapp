@@ -13,10 +13,18 @@
     .main-header {
         background-color: #1e293b;
         color: white;
-        padding: 1.5rem 0;
+        padding: 1.5rem 1.75rem;
         margin-bottom: 2rem;
         border-radius: 15px;
         box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+    .main-header h2 {
+        font-size: 1.75rem;
+        font-weight: 600;
+    }
+    .main-header p {
+        font-size: 1rem;
+        opacity: 0.9;
     }
     .filter-card {
         background: #1e293b;
@@ -57,7 +65,7 @@
         color: #e2e8f0;
     }
     .table th {
-        background-color: #334155;
+        background-color: #1e293b;
         border: none;
         font-weight: 600;
         color: #e2e8f0;
@@ -98,10 +106,10 @@
         background-color: #2d3748;
     }
     .options-display {
-        background-color: #334155;
+        background-color: #1e293b;
         padding: 8px;
         border-radius: 6px;
-        border-left: 3px solid #15803d;
+        border-left: none;
         color: #e2e8f0;
     }
     .question-card {
@@ -114,7 +122,8 @@
     }
     .question-card:hover {
         box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        border-color: #15803d;
+        border-color: #0F172A;
+        
     }
     
     /* Custom Pagination Styles */
@@ -287,14 +296,16 @@
 
 <div class="container">
     <div class="main-header mt-4">
-        <div class="d-flex justify-content-between align-items-center">
-            <div>
+        <div class="row align-items-center">
+            <div class="col-md-8">
                 <h2 class="mb-2"><i class="bi bi-question-circle me-2"></i>Questions Management</h2>
                 <p class="mb-0">Manage and organize exam questions efficiently</p>
             </div>
-            <span class="badge badge-custom px-3 py-2">
-                <i class="bi bi-list-check me-2"></i>{{ $questions->count() }} question{{ $questions->count() !== 1 ? 's' : '' }} found
-            </span>
+            <div class="col-md-4 text-end">
+                <span class="badge badge-custom px-3 py-2 fs-6">
+                    <i class="bi bi-list-check me-2"></i>{{ $questions->count() }} question{{ $questions->count() !== 1 ? 's' : '' }} found
+                </span>
+            </div>
         </div>
     </div>
 
@@ -428,17 +439,17 @@
                             </div>
                             <div class="question-meta d-flex flex-wrap gap-1">
                                 @if($question->subject)
-                                    <span class="badge bg-info">{{ $question->subject->class }}</span>
-                                    <span class="badge bg-secondary">{{ $question->subject->name }}</span>
+                                    <span class="badge" style="background-color: #15803d;">{{ $question->subject->class }}</span>
+                                    <span class="badge" style="background-color: #15803d;">{{ $question->subject->name }}</span>
                                 @endif
                                 @if($question->chapter)
-                                    <span class="badge bg-light text-dark">{{ $question->chapter->name }}</span>
+                                    <span class="badge" style="background-color: #15803d;">{{ $question->chapter->name }}</span>
                                 @endif
                                 @if($question->source_type)
-                                    <span class="badge bg-warning text-dark">{{ ucfirst($question->source_type) }}</span>
+                                    <span class="badge" style="background-color: #15803d;">{{ ucfirst($question->source_type) }}</span>
                                 @endif
                                 @if($question->year)
-                                    <span class="badge bg-dark">{{ $question->year }}</span>
+                                    <span class="badge" style="background-color: #15803d;">{{ $question->year }}</span>
                                 @endif
                             </div>
                         </div>
@@ -497,11 +508,11 @@
                     </div>
                 </td>
                 <td class="px-4 py-4 text-center">
-                    <div class="btn-group-vertical" role="group">
-                        <button class="btn btn-sm btn-outline-warning mb-1" data-bs-toggle="modal" data-bs-target="#editModal{{ $question->id }}" title="Edit">
+                    <div class="d-flex flex-column gap-2" role="group">
+                        <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#editModal{{ $question->id }}" title="Edit">
                             <i class="bi bi-pencil me-1"></i>Edit
                         </button>
-                        <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $question->id }}" title="Delete">
+                        <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $question->id }}" title="Delete">
                             <i class="bi bi-trash me-1"></i>Delete
                         </button>
                     </div>

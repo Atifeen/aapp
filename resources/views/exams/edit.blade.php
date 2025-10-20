@@ -320,4 +320,103 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
+<style>
+    /* Dark theme for exam edit form */
+    .dashboard-card {
+        background-color: #1e293b !important;
+        border: none !important;
+    }
+    
+    .dashboard-card .card-body {
+        color: #e2e8f0;
+    }
+    
+    .dashboard-card h3 {
+        color: #e2e8f0;
+    }
+    
+    .form-label {
+        color: #e2e8f0 !important;
+    }
+    
+    .form-control, .form-select, .form-check-input {
+        background-color: #334155 !important;
+        border-color: #475569 !important;
+        color: #e2e8f0 !important;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        background-color: #334155 !important;
+        border-color: #15803d !important;
+        color: #e2e8f0 !important;
+        box-shadow: 0 0 0 0.2rem rgba(21, 128, 61, 0.25) !important;
+    }
+    
+    .form-control::placeholder {
+        color: #94a3b8 !important;
+    }
+    
+    .form-select option {
+        background-color: #334155;
+        color: #e2e8f0;
+    }
+    
+    .form-text {
+        color: #94a3b8 !important;
+    }
+    
+    .breadcrumb {
+        background-color: transparent;
+    }
+    
+    .breadcrumb-item a {
+        color: #15803d !important;
+    }
+    
+    .breadcrumb-item.active {
+        color: #94a3b8;
+    }
+    
+    .breadcrumb-item + .breadcrumb-item::before {
+        color: #94a3b8;
+    }
+    
+    .alert-danger {
+        background-color: #dc2626;
+        border-color: #dc2626;
+        color: white;
+    }
+    
+    .btn-success {
+        background-color: #15803d !important;
+        border-color: #15803d !important;
+        box-shadow: none !important;
+    }
+    
+    .btn-success:hover {
+        background-color: #166534 !important;
+        border-color: #166534 !important;
+    }
+    
+    .btn-warning {
+        background-color: #15803d !important;
+        border-color: #15803d !important;
+    }
+    
+    .btn-warning:hover {
+        background-color: #166534 !important;
+        border-color: #166534 !important;
+    }
+    
+    .btn-secondary {
+        background-color: #475569 !important;
+        border-color: #475569 !important;
+    }
+    
+    .btn-secondary:hover {
+        background-color: #64748b !important;
+        border-color: #64748b !important;
+    }
+</style>
+
 @endsection

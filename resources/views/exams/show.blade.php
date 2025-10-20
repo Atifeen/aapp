@@ -551,6 +551,118 @@ document.addEventListener('DOMContentLoaded', function() {
     .pulse {
         animation: pulse 1s ease-in-out infinite;
     }
+    
+    /* Dark theme for exam show page */
+    .card {
+        background-color: #1e293b !important;
+        border: none !important;
+        color: #e2e8f0 !important;
+    }
+    
+    .card-header {
+        background-color: #334155 !important;
+        border-bottom: 1px solid #475569 !important;
+        color: #e2e8f0 !important;
+    }
+    
+    .card-title {
+        color: #e2e8f0 !important;
+    }
+    
+    .card-body {
+        color: #e2e8f0 !important;
+    }
+    
+    .list-group-item {
+        background-color: #1e293b !important;
+        border-color: #475569 !important;
+        color: #e2e8f0 !important;
+    }
+    
+    .list-group-item:hover {
+        background-color: #2d3748 !important;
+    }
+    
+    .badge {
+        background-color: #15803d !important;
+    }
+    
+    .text-muted {
+        color: #94a3b8 !important;
+    }
+    
+    /* Button styles */
+    .btn-primary, .btn-outline-primary {
+        background-color: #15803d !important;
+        border-color: #15803d !important;
+        color: white !important;
+    }
+    
+    .btn-primary:hover, .btn-outline-primary:hover {
+        background-color: #166534 !important;
+        border-color: #166534 !important;
+    }
+    
+    .btn-success {
+        background-color: #15803d !important;
+        border-color: #15803d !important;
+    }
+    
+    .btn-success:hover {
+        background-color: #166534 !important;
+        border-color: #166534 !important;
+    }
+    
+    .btn-warning {
+        background-color: #ca8a04 !important;
+        border-color: #ca8a04 !important;
+    }
+    
+    .btn-secondary {
+        background-color: #475569 !important;
+        border-color: #475569 !important;
+    }
+    
+    /* Alert styles */
+    .alert-warning {
+        background-color: #ca8a04;
+        border-color: #ca8a04;
+        color: #000;
+    }
+    
+    .alert-success {
+        background-color: #15803d;
+        border-color: #15803d;
+        color: white;
+    }
+    
+    .alert-info {
+        background-color: #334155;
+        border-color: #475569;
+        color: #e2e8f0;
+    }
+    
+    /* Question display */
+    .question-text {
+        color: #e2e8f0 !important;
+    }
+    
+    .option-label {
+        color: #e2e8f0 !important;
+    }
+    
+    /* Performance section */
+    .performance-card {
+        background-color: #1e293b !important;
+        border: 1px solid #475569 !important;
+    }
+    
+    /* Form elements if any */
+    .form-control, .form-select {
+        background-color: #334155 !important;
+        border-color: #475569 !important;
+        color: #e2e8f0 !important;
+    }
 </style>
 
 @endsection

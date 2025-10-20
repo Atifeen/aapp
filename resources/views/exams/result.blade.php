@@ -2,6 +2,149 @@
 
 @section('title', 'Exam Results - ' . $exam->title)
 
+<style>
+    body {
+        background: #0f172a !important;
+        color: #e2e8f0 !important;
+    }
+    
+    .card {
+        background-color: #1e293b !important;
+        border: 1px solid #475569 !important;
+        color: #e2e8f0 !important;
+    }
+    
+    .card-header {
+        background-color: #334155 !important;
+        color: #e2e8f0 !important;
+        border-bottom: 1px solid #475569;
+    }
+    
+    .card-body {
+        background-color: #1e293b !important;
+        color: #e2e8f0 !important;
+    }
+    
+    .bg-success {
+        background-color: #15803d !important;
+    }
+    
+    .bg-warning {
+        background-color: #ca8a04 !important;
+    }
+    
+    .bg-danger {
+        background-color: #dc2626 !important;
+    }
+    
+    .text-success {
+        color: #22c55e !important;
+    }
+    
+    .text-warning {
+        color: #fbbf24 !important;
+    }
+    
+    .text-danger {
+        color: #ef4444 !important;
+    }
+    
+    .text-info {
+        color: #3b82f6 !important;
+    }
+    
+    .border {
+        border-color: #475569 !important;
+    }
+    
+    .border-success {
+        border-color: #15803d !important;
+    }
+    
+    .border-danger {
+        border-color: #dc2626 !important;
+    }
+    
+    .badge {
+        background-color: #15803d !important;
+        color: white !important;
+    }
+    
+    .badge.bg-success {
+        background-color: #15803d !important;
+    }
+    
+    .badge.bg-danger {
+        background-color: #dc2626 !important;
+    }
+    
+    .btn-primary {
+        background-color: #15803d !important;
+        border-color: #15803d !important;
+        color: white !important;
+        box-shadow: none !important;
+    }
+    
+    .btn-primary:hover {
+        background-color: #166534 !important;
+        border-color: #166534 !important;
+    }
+    
+    .btn-outline-secondary {
+        background-color: #334155 !important;
+        border-color: #475569 !important;
+        color: #e2e8f0 !important;
+    }
+    
+    .btn-outline-secondary:hover {
+        background-color: #475569 !important;
+        border-color: #475569 !important;
+        color: white !important;
+    }
+    
+    .alert-success {
+        background-color: #15803d !important;
+        border-color: #15803d !important;
+        color: white !important;
+    }
+    
+    .alert-warning {
+        background-color: #ca8a04 !important;
+        border-color: #ca8a04 !important;
+        color: white !important;
+    }
+    
+    .alert-danger {
+        background-color: #dc2626 !important;
+        border-color: #dc2626 !important;
+        color: white !important;
+    }
+    
+    .bg-opacity-10 {
+        opacity: 0.2 !important;
+    }
+    
+    h1, h2, h3, h4, h5, h6, p, strong {
+        color: #e2e8f0 !important;
+    }
+    
+    .text-muted {
+        color: #94a3b8 !important;
+    }
+    
+    .question-text {
+        color: #e2e8f0 !important;
+    }
+    
+    .option-item {
+        background-color: #334155 !important;
+        border: 1px solid #475569 !important;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 8px;
+    }
+</style>
+
 @section('content')
 <div class="container-fluid py-4">
     <div class="row justify-content-center">

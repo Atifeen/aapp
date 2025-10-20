@@ -7,26 +7,27 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 <style>
     body {
-        background: #f8f9fa !important;
+        background: #0f172a !important;
+        color: #e2e8f0 !important;
     }
     .main-header {
-        background: #667eea;
+        background: #334155;
         color: white;
         padding: 2rem 0;
         margin-bottom: 2rem;
         border-radius: 0 0 15px 15px;
     }
     .filter-card {
-        background: white;
+        background: #1e293b !important;
         border-radius: 15px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        border: none;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        border: 1px solid #475569;
     }
     .table-card {
-        background: white;
+        background: #1e293b !important;
         border-radius: 15px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        border: none;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        border: 1px solid #475569;
         overflow: hidden;
     }
     .btn-custom {
@@ -35,23 +36,37 @@
         font-weight: 500;
     }
     .form-control, .form-select {
+        background-color: #334155 !important;
+        color: #e2e8f0 !important;
+        border: 1px solid #475569 !important;
         border-radius: 10px;
-        border: 2px solid #e9ecef;
         transition: all 0.3s ease;
     }
     .form-control:focus, .form-select:focus {
-        border-color: #667eea;
-        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        background-color: #334155 !important;
+        color: #e2e8f0 !important;
+        border-color: #15803d !important;
+        box-shadow: 0 0 0 0.2rem rgba(21, 128, 61, 0.25) !important;
     }
     .table th {
-        background-color: #f8f9fa;
+        background-color: #334155 !important;
         border: none;
         font-weight: 600;
-        color: #495057;
+        color: #e2e8f0 !important;
+    }
+    .table td {
+        background-color: #1e293b !important;
+        color: #e2e8f0 !important;
+        border: none;
+        border-bottom: 1px solid #475569;
+        vertical-align: middle;
+    }
+    .table {
+        background-color: #1e293b !important;
     }
     .question-image {
         transition: all 0.3s ease;
-        background: #f8f9fa;
+        background: #334155;
         padding: 10px;
         border-radius: 8px;
         text-align: center;
@@ -59,11 +74,11 @@
     .question-image img {
         transition: transform 0.3s ease;
         border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     }
     .question-image img:hover {
         transform: scale(1.02);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.5);
     }
     .image-controls {
         gap: 8px;
@@ -73,36 +88,33 @@
         font-size: 0.85rem;
         padding: 0.4rem 0.8rem;
     }
-    .table td {
-        border: none;
-        border-bottom: 1px solid #dee2e6;
-        vertical-align: middle;
-    }
     .options-display {
-        background-color: #f8f9fa;
+        background-color: #1e293b !important;
         padding: 8px;
         border-radius: 6px;
-        border-left: 3px solid #dee2e6;
+        border: 1px solid #475569;
     }
     .question-card {
-        background: white;
-        border: 1px solid #e9ecef;
+        background: #1e293b !important;
+        border: 1px solid #475569;
         border-radius: 10px;
         padding: 1rem;
         transition: all 0.3s ease;
+        color: #e2e8f0;
     }
     .question-card:hover {
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        border-color: #667eea;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        background: #2d3748 !important;
     }
     
     /* Custom Pagination Styles */
     .pagination-wrapper {
-        background: white;
+        background: #1e293b !important;
         border-radius: 15px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         padding: 1rem 1.5rem;
         margin: 2rem 0;
+        border: 1px solid #475569;
     }
     
     .pagination {
@@ -111,14 +123,14 @@
     }
     
     .pagination .page-item .page-link {
-        border: 2px solid #e9ecef;
+        border: 1px solid #475569 !important;
         border-radius: 8px;
-        color: #495057;
+        color: #e2e8f0 !important;
         font-weight: 500;
         padding: 0.375rem 0.5rem;
         margin: 0 0.15rem;
         transition: all 0.3s ease;
-        background: white;
+        background: #334155 !important;
         min-width: 35px;
         height: 35px;
         text-align: center;
@@ -129,25 +141,25 @@
     }
     
     .pagination .page-item .page-link:hover {
-        border-color: #667eea;
-        background-color: #667eea;
-        color: white;
+        border-color: #15803d !important;
+        background-color: #15803d !important;
+        color: white !important;
         transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        box-shadow: 0 4px 8px rgba(21, 128, 61, 0.3);
     }
     
     .pagination .page-item.active .page-link {
-        background-color: #667eea;
-        border-color: #667eea;
-        color: white;
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        background-color: #15803d !important;
+        border-color: #15803d !important;
+        color: white !important;
+        box-shadow: 0 4px 12px rgba(21, 128, 61, 0.4);
         transform: translateY(-1px);
     }
     
     .pagination .page-item.disabled .page-link {
-        background-color: #f8f9fa;
-        border-color: #dee2e6;
-        color: #6c757d;
+        background-color: #1e293b !important;
+        border-color: #475569 !important;
+        color: #64748b !important;
         cursor: not-allowed;
     }
     
@@ -171,7 +183,7 @@
     }
     
     .pagination-info {
-        color: #6c757d;
+        color: #94a3b8 !important;
         font-size: 0.85rem;
         margin-bottom: 0.75rem;
     }
@@ -183,15 +195,174 @@
     }
     
     .selected-question {
-        background-color: #e7f3ff;
-        border-color: #667eea;
+        background-color: #334155 !important;
+        border-color: #15803d !important;
     }
     
     .random-selection-card {
-        background: #667eea;
+        background: #334155 !important;
         color: white;
         border-radius: 15px;
         margin-bottom: 1rem;
+        border: 1px solid #475569;
+    }
+    
+    /* Button styles */
+    .btn-primary, .btn-success, .btn-info {
+        background-color: #15803d !important;
+        border-color: #15803d !important;
+        color: white !important;
+        box-shadow: none !important;
+    }
+    
+    .btn-primary:hover, .btn-success:hover, .btn-info:hover {
+        background-color: #166534 !important;
+        border-color: #166534 !important;
+    }
+    
+    .btn-secondary {
+        background-color: #475569 !important;
+        border-color: #475569 !important;
+        color: white !important;
+    }
+    
+    .btn-secondary:hover {
+        background-color: #334155 !important;
+        border-color: #334155 !important;
+    }
+    
+    .btn-outline-primary, .btn-outline-secondary {
+        background-color: #334155 !important;
+        border-color: #475569 !important;
+        color: #e2e8f0 !important;
+    }
+    
+    .btn-outline-primary:hover, .btn-outline-secondary:hover {
+        background-color: #475569 !important;
+        border-color: #475569 !important;
+        color: white !important;
+    }
+    
+    .btn-outline-danger {
+        background-color: #7f1d1d !important;
+        border-color: #dc2626 !important;
+        color: white !important;
+    }
+    
+    .btn-outline-danger:hover {
+        background-color: #dc2626 !important;
+        border-color: #dc2626 !important;
+    }
+    
+    .btn-outline-info {
+        background-color: #334155 !important;
+        border-color: #475569 !important;
+        color: #e2e8f0 !important;
+    }
+    
+    .btn-outline-info:hover {
+        background-color: #15803d !important;
+        border-color: #15803d !important;
+        color: white !important;
+    }
+    
+    .btn-danger {
+        background-color: #dc2626 !important;
+        border-color: #dc2626 !important;
+    }
+    
+    .badge {
+        background-color: #15803d !important;
+        color: white !important;
+    }
+    
+    .badge.bg-light {
+        background-color: #334155 !important;
+        color: white !important;
+    }
+    
+    .badge.bg-white {
+        background-color: #475569 !important;
+        color: white !important;
+    }
+    
+    /* Alert styles */
+    .alert-success {
+        background-color: #15803d !important;
+        border-color: #15803d !important;
+        color: white !important;
+    }
+    
+    .alert-danger {
+        background-color: #dc2626 !important;
+        border-color: #dc2626 !important;
+        color: white !important;
+    }
+    
+    /* Card header styles */
+    .card-header {
+        background-color: #334155 !important;
+        color: #e2e8f0 !important;
+        border-bottom: 1px solid #475569;
+    }
+    
+    .card-body {
+        background-color: #1e293b !important;
+        color: #e2e8f0 !important;
+    }
+    
+    /* Text colors */
+    h1, h2, h3, h4, h5, h6, p, label, span {
+        color: #e2e8f0 !important;
+    }
+    
+    .text-muted {
+        color: #94a3b8 !important;
+    }
+    
+    .text-dark {
+        color: #e2e8f0 !important;
+    }
+    
+    /* Badge overrides */
+    .badge.bg-info, .badge.bg-secondary, .badge.bg-warning, .badge.bg-dark {
+        background-color: #15803d !important;
+        color: white !important;
+    }
+    
+    /* Table header styling */
+    .table thead th {
+        background-color: #334155 !important;
+        color: #e2e8f0 !important;
+        border: none;
+    }
+    
+    /* Ensure all table cells are dark */
+    .table tbody tr td {
+        background-color: #1e293b !important;
+        color: #e2e8f0 !important;
+    }
+    
+    /* Override Bootstrap default colors */
+    .bg-light {
+        background-color: #1e293b !important;
+        color: #e2e8f0 !important;
+    }
+    
+    /* Form labels */
+    .form-label, label {
+        color: #e2e8f0 !important;
+    }
+    
+    /* Question card hover effect - remove green border */
+    .question-card:hover {
+        background-color: #2d3748 !important;
+        border-color: #475569 !important;
+    }
+    
+    /* Empty state text */
+    .text-center i, .text-center h5, .text-center p {
+        color: #94a3b8 !important;
     }
 </style>
 
@@ -204,11 +375,11 @@
                 <p class="mb-0">Choose questions to include in your exam</p>
             </div>
             <div class="text-end">
-                <span class="badge badge-custom bg-light text-dark">
+                <span class="badge" style="background-color: #334155 !important; color: white !important;">
                     <i class="bi bi-list-check me-2"></i><span id="selectedCount">{{ $exam->questions->count() }}</span> selected
                 </span>
                 <div class="mt-2">
-                    <span class="badge bg-white text-dark">
+                    <span class="badge" style="background-color: #475569 !important; color: white !important;">
                         <i class="bi bi-search me-2"></i>{{ $questions->total() }} total questions
                     </span>
                 </div>
@@ -380,25 +551,25 @@
                     <div class="question-card">
                         <!-- Question Header with Badge -->
                         <div class="d-flex justify-content-between align-items-start mb-2">
-                            <h6 class="fw-bold text-primary mb-0">
+                            <h6 class="fw-bold mb-0" style="color: #e2e8f0 !important;">
                                 <i class="bi bi-hash me-1"></i>Question #{{ $question->id }}
                             </h6>
                             <div class="d-flex gap-1">
                                 @if($question->subject)
-                                    <span class="badge bg-info">{{ $question->subject->name }}</span>
+                                    <span class="badge" style="background-color: #15803d !important; color: white !important;">{{ $question->subject->name }}</span>
                                 @endif
                                 @if($question->chapter)
-                                    <span class="badge bg-secondary">{{ $question->chapter->name }}</span>
+                                    <span class="badge" style="background-color: #15803d !important; color: white !important;">{{ $question->chapter->name }}</span>
                                 @endif
                                 @if($question->year)
-                                    <span class="badge bg-warning text-dark">{{ $question->year }}</span>
+                                    <span class="badge" style="background-color: #15803d !important; color: white !important;">{{ $question->year }}</span>
                                 @endif
                             </div>
                         </div>
                         
                         <!-- Question Text -->
                         <div class="question-text mb-3">
-                            <p class="mb-2">{!! $question->question_text !!}</p>
+                            <p class="mb-2" style="color: #e2e8f0 !important;">{!! $question->question_text !!}</p>
                         </div>
                         
                         <!-- Image Section -->
@@ -439,7 +610,7 @@
                                     @foreach($options as $option)
                                         @if($question->{'option_' . $option})
                                             <div class="col-md-6">
-                                                <div class="option-item p-2 rounded {{ $question->correct_option === $option ? 'bg-success text-white' : 'bg-light' }}">
+                                                <div class="option-item p-2 rounded" style="background-color: {{ $question->correct_option === $option ? '#166534' : '#1e293b' }} !important; border: 1px solid {{ $question->correct_option === $option ? '#15803d' : '#475569' }} !important; color: #e2e8f0 !important;">
                                                     <strong>{{ strtoupper($option) }})</strong> {{ $question->{'option_' . $option} }}
                                                     @if($question->correct_option === $option)
                                                         <i class="bi bi-check-circle-fill ms-2"></i>
@@ -450,8 +621,8 @@
                                     @endforeach
                                 @else
                                     <div class="col-12">
-                                        <div class="option-item p-2 rounded bg-light">
-                                            <em class="text-muted">No multiple choice options available</em>
+                                        <div class="option-item p-2 rounded" style="background-color: #1e293b !important; border: 1px solid #475569 !important;">
+                                            <em style="color: #94a3b8 !important;">No multiple choice options available</em>
                                         </div>
                                     </div>
                                 @endif
@@ -461,7 +632,7 @@
                         <!-- Additional Info -->
                         @if($question->source_name)
                             <div class="mt-2">
-                                <small class="text-muted">
+                                <small style="color: #94a3b8 !important;">
                                     <i class="bi bi-building me-1"></i>Source: {{ $question->source_name }}
                                 </small>
                             </div>
