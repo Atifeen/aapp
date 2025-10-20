@@ -23,6 +23,8 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class . ':admin'])->g
         Route::get('/{exam}/questions', [ExamController::class, 'selectQuestions'])->name('questions.select');
         Route::post('/{exam}/questions/random', [ExamController::class, 'selectRandomQuestions'])->name('questions.random');
         Route::post('/{exam}/questions', [ExamController::class, 'attachQuestions'])->name('questions.attach');
+        Route::get('/{exam}/assign-students', [ExamController::class, 'assignStudentsForm'])->name('assign-students');
+        Route::post('/{exam}/assign-students', [ExamController::class, 'assignStudents'])->name('assign-students.store');
         Route::delete('/{exam}', [ExamController::class, 'destroy'])->name('destroy');
     });
 });
@@ -91,6 +93,10 @@ Route::middleware('auth')->group(function () {
 // Admin-only routes
 // ----------------------------
 Route::middleware(['auth', \App\Http\Middleware\CheckRole::class . ':admin'])->group(function () {
+    // Student Management
+    Route::get('/students', [HomeController::class, 'students'])->name('students.index');
+    Route::delete('/students/{user}', [HomeController::class, 'deleteStudent'])->name('students.destroy');
+    
     // Questions CRUD
     Route::get('/questions', [QuestionController::class, 'index'])->name('questions.index');
     Route::post('/questions', [QuestionController::class, 'store'])->name('questions.store');

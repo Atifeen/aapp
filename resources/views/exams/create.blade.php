@@ -150,19 +150,6 @@
                     @enderror
                 </div>
 
-                <div class="mb-3">
-                    <label for="assigned_users" class="form-label">Assign to Specific Students (Optional)</label>
-                    <select name="assigned_users[]" id="assigned_users" class="form-select" multiple size="5">
-                        @foreach(\App\Models\User::where('role', 'student')->orderBy('name')->get() as $student)
-                            <option value="{{ $student->id }}">{{ $student->name }} ({{ $student->email }})</option>
-                        @endforeach
-                    </select>
-                    <small class="text-muted">
-                        <i class="bi bi-info-circle me-1"></i>
-                        Hold Ctrl (Cmd on Mac) to select multiple students. Leave empty for all students to access this exam.
-                    </small>
-                </div>
-
                 <div class="mt-4">
                     <button type="submit" class="btn btn-primary">
                         <i class="bi bi-plus-circle me-2"></i>Create Exam

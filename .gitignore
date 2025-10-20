@@ -27,17 +27,4 @@ Thumbs.db
 PROJECT_OVERVIEW.md
 ACTION_PLAN.md
 
-# Debug and testing files
-check_exam.php
-fix_exam_time.php
-check_timezone.php
-fix_timezone_issue.php
-test_dashboard_query.php
-make_exam_active_now.php
-DEBUG_SUBMISSION.md
-EXAM_FIXES_COMPLETE.md
-EXAM_FIXES_SUMMARY.md
-QUICK_TEST.md
-FORM_SUBMISSION_DEBUG.md
-BADGE_FIX.md
-IMPLEMENTATION_COMPLETE.md
+

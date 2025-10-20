@@ -86,11 +86,6 @@ class ExamController extends Controller
             // Create the exam
             $exam = Exam::create($validated);
 
-            // Handle user assignments
-            if ($request->has('assigned_users')) {
-                $exam->assignedUsers()->sync($request->input('assigned_users'));
-            }
-
             DB::commit();
 
             return redirect()->route('exams.questions.select', $exam)
@@ -195,18 +190,95 @@ class ExamController extends Controller
             
             DB::commit();
             
-            return redirect()->route('exams.show', $exam)
-                ->with('success', 'Questions attached to exam successfully');
+            return redirect()->route('exams.assign-students', $exam)
+                ->with('success', 'Questions attached successfully. Now assign students to this exam.');
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Failed to attach questions. ' . $e->getMessage());
         }
     }
 
+    public function assignStudentsForm(Request $request, Exam $exam)
+    {
+        $query = User::where('role', 'student');
+        
+        // Apply filters
+        if ($request->filled('class')) {
+            $query->where('class', $request->class);
+        }
+        
+        if ($request->filled('email')) {
+            $query->where('email', 'like', '%' . $request->email . '%');
+        }
+        
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+        
+        $students = $query->orderBy('name')->paginate(50);
+        
+        // Get unique classes for filter
+        $classes = User::where('role', 'student')
+            ->whereNotNull('class')
+            ->distinct()
+            ->pluck('class')
+            ->sort();
+        
+        // Get already assigned students
+        $assignedStudentIds = $exam->assignedUsers()->pluck('user_id')->toArray();
+        
+        return view('exams.assign-students', compact('exam', 'students', 'classes', 'assignedStudentIds'));
+    }
+
+    public function assignStudents(Request $request, Exam $exam)
+    {
+        $validated = $request->validate([
+            'student_ids' => 'nullable|array',
+            'student_ids.*' => 'exists:users,id',
+            'assign_all' => 'nullable|boolean'
+        ]);
+        
+        try {
+            DB::beginTransaction();
+            
+            if ($request->has('assign_all') && $request->assign_all) {
+                // Detach all students (making it available to everyone)
+                $exam->assignedUsers()->detach();
+            } else {
+                // Sync selected students
+                $exam->assignedUsers()->sync($validated['student_ids'] ?? []);
+            }
+            
+            DB::commit();
+            
+            $message = $request->has('assign_all') && $request->assign_all
+                ? 'Exam is now available to all students.'
+                : 'Students assigned successfully.';
+            
+            return redirect()->route('exams.show', $exam)
+                ->with('success', $message);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Failed to assign students. ' . $e->getMessage());
+        }
+    }
+
     public function show(Exam $exam)
     {
         $exam->load(['subject', 'chapter', 'questions']);
-        return view('exams.show', compact('exam'));
+        
+        // Check if the current user has already attempted this exam (for students)
+        $userAttempt = null;
+        if (auth()->check() && auth()->user()->role === 'student') {
+            $userAttempt = ExamAttempt::where('exam_id', $exam->id)
+                ->where('user_id', auth()->id())
+                ->with(['answers.question', 'ratingChanges' => function($query) {
+                    $query->where('user_id', auth()->id());
+                }])
+                ->first();
+        }
+        
+        return view('exams.show', compact('exam', 'userAttempt'));
     }
 
     public function selectRandomQuestions(Request $request, Exam $exam)
@@ -385,6 +457,18 @@ class ExamController extends Controller
         if (!is_null($exam->start_time) && $exam->start_time > now()) {
             return redirect()->route('exams.show', $exam)
                 ->with('error', 'This exam has not started yet. Start time: ' . $exam->start_time->format('M d, Y H:i'));
+        }
+
+        // For rated exams, check if user has already attempted
+        if ($exam->is_rated) {
+            $existingAttempt = ExamAttempt::where('exam_id', $exam->id)
+                ->where('user_id', auth()->id())
+                ->first();
+            
+            if ($existingAttempt) {
+                return redirect()->route('exams.show', $exam)
+                    ->with('error', 'You have already attempted this rated exam. You can only take rated exams once.');
+            }
         }
 
         $exam->load(['subject', 'chapter', 'questions']);

@@ -23,6 +23,12 @@ class ExamAttempt extends Model
 
     public function answers()
     {
-        return $this->hasMany(ExamAnswer::class, 'attempt_id');
+        return $this->hasMany(ExamAnswer::class, 'exam_attempt_id');
+    }
+
+    public function ratingChanges()
+    {
+        return $this->hasMany(RatingChange::class, 'exam_id', 'exam_id')
+            ->where('user_id', $this->user_id);
     }
 }

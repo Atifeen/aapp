@@ -54,8 +54,13 @@
                                         // Show Questions button: for board exams OR finished exams
                                         $canShowQuestions = ($exam->exam_type === 'board') || $isFinished;
                                         
-                                        // Give Exam button: only if exam is available and not finished
-                                        $canTakeExam = !$isFinished && (is_null($exam->start_time) || $exam->start_time <= now());
+                                        // Check if user has already attempted this exam
+                                        $hasAttempted = isset($userAttempt) && $userAttempt;
+                                        
+                                        // Give Exam button: only if exam is available, not finished, and (not rated OR not attempted)
+                                        $canTakeExam = !$isFinished 
+                                            && (is_null($exam->start_time) || $exam->start_time <= now())
+                                            && (!$exam->is_rated || !$hasAttempted);
                                     @endphp
                                     
                                     <!-- Show Questions button: for board exams or finished exams -->
@@ -70,6 +75,11 @@
                                         <a href="{{ route('exams.take', $exam) }}" class="btn btn-success">
                                             <i class="bi bi-pencil-square me-1"></i>Give Exam
                                         </a>
+                                    @elseif($hasAttempted && $exam->is_rated)
+                                        <!-- Already attempted a rated exam -->
+                                        <span class="badge bg-info fs-6 p-2">
+                                            <i class="bi bi-check-circle-fill me-1"></i>Already Attempted
+                                        </span>
                                     @elseif($isFinished)
                                         <!-- Exam has finished -->
                                         <span class="badge bg-secondary fs-6 p-2">
@@ -148,6 +158,149 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Student's Performance Section -->
+            @if(isset($userAttempt) && $userAttempt)
+            <div class="card mb-4 border-success">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-clipboard-check me-2"></i>Your Performance
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center mb-4">
+                        <div class="col-md-3">
+                            <div class="border rounded p-3 bg-light">
+                                <h2 class="display-5 mb-0 text-{{ $userAttempt->score >= 80 ? 'success' : ($userAttempt->score >= 60 ? 'warning' : 'danger') }}">
+                                    {{ $userAttempt->score }}%
+                                </h2>
+                                <p class="text-muted mb-0 small">Your Score</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="border rounded p-3 bg-light">
+                                <h2 class="display-5 mb-0 text-success">{{ $userAttempt->correct_ans }}</h2>
+                                <p class="text-muted mb-0 small">Correct</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="border rounded p-3 bg-light">
+                                <h2 class="display-5 mb-0 text-danger">{{ $userAttempt->wrong_ans }}</h2>
+                                <p class="text-muted mb-0 small">Wrong</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="border rounded p-3 bg-light">
+                                <h2 class="display-5 mb-0 text-info">{{ $userAttempt->total_ques }}</h2>
+                                <p class="text-muted mb-0 small">Total Questions</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    @if($exam->is_rated)
+                        @php
+                            $ratingChange = $userAttempt->ratingChanges->first();
+                        @endphp
+                        @if($ratingChange)
+                        <div class="alert alert-info">
+                            <i class="bi bi-graph-up me-2"></i>
+                            <strong>Rating Change:</strong>
+                            {{ $ratingChange->old_rating }} 
+                            <i class="bi bi-arrow-right mx-2"></i>
+                            <span class="text-{{ $ratingChange->new_rating > $ratingChange->old_rating ? 'success' : 'danger' }} fw-bold">
+                                {{ $ratingChange->new_rating }}
+                                ({{ $ratingChange->new_rating > $ratingChange->old_rating ? '+' : '' }}{{ $ratingChange->new_rating - $ratingChange->old_rating }})
+                            </span>
+                            <span class="ms-3">
+                                <i class="bi bi-trophy me-1"></i>Rank: #{{ $ratingChange->rank_in_contest }}
+                            </span>
+                        </div>
+                        @endif
+                    @endif
+                    
+                    <div class="alert alert-{{ $userAttempt->score >= 80 ? 'success' : ($userAttempt->score >= 60 ? 'warning' : 'info') }} mb-3">
+                        <i class="bi bi-info-circle me-2"></i>
+                        @if($exam->is_rated)
+                            <strong>You have completed this rated exam.</strong> You cannot take it again, but you can review your answers below.
+                        @else
+                            <strong>Exam completed on {{ $userAttempt->created_at->format('M d, Y H:i') }}</strong>
+                        @endif
+                    </div>
+                    
+                    <!-- Show detailed answers -->
+                    <div class="mt-4">
+                        <h6 class="mb-3"><i class="bi bi-list-check me-2"></i>Your Detailed Answers</h6>
+                        @foreach($userAttempt->answers as $index => $answer)
+                        <div class="card mb-3 border-{{ $answer->is_correct ? 'success' : 'danger' }}">
+                            <div class="card-header bg-{{ $answer->is_correct ? 'success' : 'danger' }} bg-opacity-10">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <strong>Question {{ $index + 1 }}</strong>
+                                    <span class="badge bg-{{ $answer->is_correct ? 'success' : 'danger' }}">
+                                        @if($answer->is_correct)
+                                            <i class="bi bi-check-circle me-1"></i>Correct
+                                        @else
+                                            <i class="bi bi-x-circle me-1"></i>Wrong
+                                        @endif
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <p class="mb-3">{!! $answer->question->question_text !!}</p>
+                                
+                                @if($answer->question->image_url)
+                                    <div class="mb-3">
+                                        <button class="btn btn-sm btn-outline-secondary" type="button" 
+                                                data-bs-toggle="collapse" 
+                                                data-bs-target="#perf-image-{{ $answer->question->id }}">
+                                            <i class="bi bi-image me-1"></i>Toggle Image
+                                        </button>
+                                        <div class="collapse mt-2" id="perf-image-{{ $answer->question->id }}">
+                                            <img src="{{ $answer->question->image_url }}" 
+                                                 alt="Question Image" 
+                                                 class="img-fluid rounded border"
+                                                 style="max-height: 300px;">
+                                        </div>
+                                    </div>
+                                @endif
+                                
+                                <div class="row">
+                                    @foreach(['A', 'B', 'C', 'D'] as $option)
+                                        @php
+                                            $optionField = 'option_' . strtolower($option);
+                                            $isCorrect = $answer->question->correct_answer === $option;
+                                            $isUserAnswer = $answer->user_answer === $option;
+                                        @endphp
+                                        @if($answer->question->$optionField)
+                                            <div class="col-md-6 mb-2">
+                                                <div class="p-2 rounded 
+                                                    @if($isCorrect) 
+                                                        bg-success bg-opacity-10 border border-success
+                                                    @elseif($isUserAnswer && !$isCorrect)
+                                                        bg-danger bg-opacity-10 border border-danger
+                                                    @else 
+                                                        bg-light border
+                                                    @endif">
+                                                    <strong>{{ $option }})</strong> {!! $answer->question->$optionField !!}
+                                                    
+                                                    @if($isCorrect)
+                                                        <span class="badge bg-success ms-2">✓</span>
+                                                    @endif
+                                                    
+                                                    @if($isUserAnswer && !$isCorrect)
+                                                        <span class="badge bg-danger ms-2">✗ Your Answer</span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        @endif
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+            @endif
 
             <!-- Questions List - Only visible to Admin -->
             @auth
@@ -233,7 +386,7 @@
 
             <!-- Student Instructions - Only visible to Students -->
             @auth
-                @if(auth()->user()->role === 'student' && $exam->questions->isNotEmpty())
+                @if(auth()->user()->role === 'student' && $exam->questions->isNotEmpty() && !isset($userAttempt))
                     @php
                         // Check if exam is finished
                         $isFinished = false;
