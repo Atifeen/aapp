@@ -149,7 +149,7 @@
                         <i class="bi bi-people text-info mb-3" style="font-size: 2.5rem"></i>
                         <h5>View Students</h5>
                         <p class="text-muted mb-4">Manage student profiles</p>
-                        <a href="{{ route('students.index') }}" class="btn btn-info">View All</a>
+                        <button class="btn btn-info">View All</button>
                     </div>
                 </div>
             </div>

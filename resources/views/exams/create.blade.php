@@ -109,9 +109,9 @@
                 <div class="mb-3">
                     <label for="class_filter" class="form-label">Filter by Class</label>
                     <select class="form-select" id="class_filter">
-                        <option value="">All Classes</option>
-                        <option value="SSC">SSC</option>
-                        <option value="HSC">HSC</option>
+                        <option value="" {{ $selectedClass == '' ? 'selected' : '' }}>All Classes</option>
+                        <option value="SSC" {{ $selectedClass == 'SSC' ? 'selected' : '' }}>SSC</option>
+                        <option value="HSC" {{ $selectedClass == 'HSC' ? 'selected' : '' }}>HSC</option>
                     </select>
                     <div class="form-text">Filter subjects by class for easier selection</div>
                 </div>
@@ -121,7 +121,7 @@
                     <select class="form-select @error('subject_id') is-invalid @enderror" id="subject_id" name="subject_id">
                         <option value="">Select Subject (Optional for custom exams)</option>
                         @foreach($subjects as $subject)
-                            <option value="{{ $subject->id }}" data-class="{{ $subject->class }}">{{ $subject->name }} ({{ $subject->class }})</option>
+                            <option value="{{ $subject->id }}">{{ $subject->name }} ({{ $subject->class }})</option>
                         @endforeach
                     </select>
                 </div>
@@ -281,37 +281,24 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Handle class filtering for subjects
+    // Handle class filtering for subjects (server-side filtering)
     const classFilterElement = document.getElementById('class_filter');
-    classFilterElement.addEventListener('change', function() {
-        const selectedClass = this.value;
-        const subjectSelect = document.getElementById('subject_id');
-        const allOptions = subjectSelect.querySelectorAll('option[data-class]');
-        
-        // Show/hide options based on selected class
-        allOptions.forEach(option => {
-            if (!selectedClass || option.dataset.class === selectedClass) {
-                option.style.display = 'block';
-            } else {
-                option.style.display = 'none';
-            }
-        });
-        
-        // Reset subject selection if current selection doesn't match filter
-        if (selectedClass && subjectSelect.value) {
-            const currentOption = subjectSelect.querySelector(`option[value="${subjectSelect.value}"]`);
-            if (currentOption && currentOption.dataset.class !== selectedClass) {
-                subjectSelect.value = '';
-                // Also reset chapters when subject is cleared
-                const chapterSelect = document.getElementById('chapter_id');
-                chapterSelect.innerHTML = '<option value="">Select Chapter</option>';
-                chapterSelect.disabled = true;
-            }
-        }
-    });
     
-    // Trigger the filter on page load to handle any pre-selected class
-    classFilterElement.dispatchEvent(new Event('change'));
+    if (classFilterElement) {
+        classFilterElement.addEventListener('change', function() {
+            const selectedClass = this.value;
+            const currentUrl = new URL(window.location.href);
+            
+            if (selectedClass) {
+                currentUrl.searchParams.set('class', selectedClass);
+            } else {
+                currentUrl.searchParams.delete('class');
+            }
+            
+            // Reload page with class filter
+            window.location.href = currentUrl.toString();
+        });
+    }
 });
 </script>
 @endpush

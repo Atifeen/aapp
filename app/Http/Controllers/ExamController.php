@@ -36,10 +36,19 @@ class ExamController extends Controller
         return view('exams.index', compact('exams', 'filterType'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        $subjects = Subject::orderBy('class')->orderBy('name')->get();
-        return view('exams.create', compact('subjects'));
+        // Filter subjects by class if provided
+        $query = Subject::orderBy('class')->orderBy('name');
+        
+        if ($request->filled('class')) {
+            $query->where('class', $request->class);
+        }
+        
+        $subjects = $query->get();
+        $selectedClass = $request->input('class', '');
+        
+        return view('exams.create', compact('subjects', 'selectedClass'));
     }
 
     public function getChapters(Subject $subject)
@@ -190,76 +199,11 @@ class ExamController extends Controller
             
             DB::commit();
             
-            return redirect()->route('exams.assign-students', $exam)
-                ->with('success', 'Questions attached successfully. Now assign students to this exam.');
+            return redirect()->route('exams.show', $exam)
+                ->with('success', 'Questions attached to exam successfully');
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Failed to attach questions. ' . $e->getMessage());
-        }
-    }
-
-    public function assignStudentsForm(Request $request, Exam $exam)
-    {
-        $query = User::where('role', 'student');
-        
-        // Apply filters
-        if ($request->filled('class')) {
-            $query->where('class', $request->class);
-        }
-        
-        if ($request->filled('email')) {
-            $query->where('email', 'like', '%' . $request->email . '%');
-        }
-        
-        if ($request->filled('name')) {
-            $query->where('name', 'like', '%' . $request->name . '%');
-        }
-        
-        $students = $query->orderBy('name')->paginate(50);
-        
-        // Get unique classes for filter
-        $classes = User::where('role', 'student')
-            ->whereNotNull('class')
-            ->distinct()
-            ->pluck('class')
-            ->sort();
-        
-        // Get already assigned students
-        $assignedStudentIds = $exam->assignedUsers()->pluck('user_id')->toArray();
-        
-        return view('exams.assign-students', compact('exam', 'students', 'classes', 'assignedStudentIds'));
-    }
-
-    public function assignStudents(Request $request, Exam $exam)
-    {
-        $validated = $request->validate([
-            'student_ids' => 'nullable|array',
-            'student_ids.*' => 'exists:users,id',
-            'assign_all' => 'nullable|boolean'
-        ]);
-        
-        try {
-            DB::beginTransaction();
-            
-            if ($request->has('assign_all') && $request->assign_all) {
-                // Detach all students (making it available to everyone)
-                $exam->assignedUsers()->detach();
-            } else {
-                // Sync selected students
-                $exam->assignedUsers()->sync($validated['student_ids'] ?? []);
-            }
-            
-            DB::commit();
-            
-            $message = $request->has('assign_all') && $request->assign_all
-                ? 'Exam is now available to all students.'
-                : 'Students assigned successfully.';
-            
-            return redirect()->route('exams.show', $exam)
-                ->with('success', $message);
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return back()->with('error', 'Failed to assign students. ' . $e->getMessage());
         }
     }
 
@@ -346,12 +290,20 @@ class ExamController extends Controller
         ]);
     }
 
-    public function edit(Exam $exam)
+    public function edit(Request $request, Exam $exam)
     {
-        $subjects = Subject::orderBy('class')->orderBy('name')->get();
-        $chapters = $exam->subject ? $exam->subject->chapters : collect();
+        // Filter subjects by class if provided
+        $query = Subject::orderBy('class')->orderBy('name');
         
-        return view('exams.edit', compact('exam', 'subjects', 'chapters'));
+        if ($request->filled('class')) {
+            $query->where('class', $request->class);
+        }
+        
+        $subjects = $query->get();
+        $chapters = $exam->subject ? $exam->subject->chapters : collect();
+        $selectedClass = $request->input('class', '');
+        
+        return view('exams.edit', compact('exam', 'subjects', 'chapters', 'selectedClass'));
     }
 
     public function update(Request $request, Exam $exam)
@@ -386,13 +338,6 @@ class ExamController extends Controller
 
         try {
             $exam->update($validated);
-            
-            // Handle user assignments
-            if ($request->has('assigned_users')) {
-                $exam->assignedUsers()->sync($request->input('assigned_users'));
-            } else {
-                $exam->assignedUsers()->detach(); // Remove all assignments if none selected
-            }
             
             return redirect()->route('exams.index')->with('success', 'Exam updated successfully!');
         } catch (\Exception $e) {

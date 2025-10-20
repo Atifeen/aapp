@@ -123,44 +123,4 @@ class HomeController extends Controller
         
         return view('student.exam-history', compact('attempts'));
     }
-
-    public function students(Request $request)
-    {
-        $query = User::where('role', 'student');
-        
-        // Apply filters
-        if ($request->filled('class')) {
-            $query->where('class', $request->class);
-        }
-        
-        if ($request->filled('email')) {
-            $query->where('email', 'like', '%' . $request->email . '%');
-        }
-        
-        if ($request->filled('name')) {
-            $query->where('name', 'like', '%' . $request->name . '%');
-        }
-        
-        $students = $query->orderBy('created_at', 'desc')->paginate(20);
-        
-        // Get unique classes for filter
-        $classes = User::where('role', 'student')
-            ->whereNotNull('class')
-            ->distinct()
-            ->pluck('class')
-            ->sort();
-        
-        return view('admin.students', compact('students', 'classes'));
-    }
-
-    public function deleteStudent(User $user)
-    {
-        if ($user->role !== 'student') {
-            return back()->with('error', 'Cannot delete non-student users.');
-        }
-        
-        $user->delete();
-        
-        return back()->with('success', 'Student deleted successfully.');
-    }
 }
