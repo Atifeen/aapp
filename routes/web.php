@@ -18,9 +18,28 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class . ':admin'])->g
         Route::get('/create', [ExamController::class, 'create'])->name('create');
         Route::post('/', [ExamController::class, 'store'])->name('store');
         Route::get('/chapters/{subject}', [ExamController::class, 'getChapters'])->name('chapters');
-        Route::get('/{exam}', [ExamController::class, 'show'])->name('show');
+        Route::get('/{exam}/edit', [ExamController::class, 'edit'])->name('edit');
+        Route::put('/{exam}', [ExamController::class, 'update'])->name('update');
         Route::get('/{exam}/questions', [ExamController::class, 'selectQuestions'])->name('questions.select');
+        Route::post('/{exam}/questions/random', [ExamController::class, 'selectRandomQuestions'])->name('questions.random');
         Route::post('/{exam}/questions', [ExamController::class, 'attachQuestions'])->name('questions.attach');
+        Route::delete('/{exam}', [ExamController::class, 'destroy'])->name('destroy');
+    });
+});
+
+// Shared exam routes (both admin and student)
+Route::middleware(['auth'])->group(function () {
+    Route::prefix('exams')->name('exams.')->group(function () {
+        Route::get('/{exam}', [ExamController::class, 'show'])->name('show');
+    });
+});
+
+// Student exam routes
+Route::middleware(['auth', \App\Http\Middleware\CheckRole::class . ':student'])->group(function () {
+    Route::prefix('exams')->name('exams.')->group(function () {
+        Route::get('/{exam}/preview', [ExamController::class, 'preview'])->name('preview');
+        Route::get('/{exam}/take', [ExamController::class, 'take'])->name('take');
+        Route::post('/{exam}/submit', [ExamController::class, 'submit'])->name('submit');
     });
 });
 
@@ -55,6 +74,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/student/dashboard', [HomeController::class, 'studentDashboard'])
         ->middleware(\App\Http\Middleware\CheckRole::class . ':student')
         ->name('student.dashboard');
+    
+    Route::get('/leaderboard', [HomeController::class, 'leaderboard'])
+        ->middleware(\App\Http\Middleware\CheckRole::class . ':student')
+        ->name('leaderboard');
+    
+    Route::get('/exam-history', [HomeController::class, 'examHistory'])
+        ->middleware(\App\Http\Middleware\CheckRole::class . ':student')
+        ->name('exam.history');
 
     // Logout
     Route::post('/logout', [AuthController::class,'logout'])->name('logout');

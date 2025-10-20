@@ -161,13 +161,6 @@
         min-width: auto;
     }
     
-    /* Fix for pagination arrow icons */
-    .pagination .page-link svg {
-        width: 14px;
-        height: 14px;
-        vertical-align: middle;
-    }
-    
     .pagination .page-link {
         line-height: 1;
     }
@@ -235,6 +228,14 @@
                 <div class="col-md-4">
                     <label for="question_text" class="form-label fw-semibold">Question Text</label>
                     <input type="text" name="question_text" id="question_text" class="form-control" placeholder="Search in question text..." value="{{ request('question_text') }}">
+                </div>
+                <div class="col-md-2">
+                    <label for="class" class="form-label fw-semibold">Class</label>
+                    <select name="class" id="class" class="form-select">
+                        <option value="">All Classes</option>
+                        <option value="SSC" @if(request('class') == 'SSC') selected @endif>SSC</option>
+                        <option value="HSC" @if(request('class') == 'HSC') selected @endif>HSC</option>
+                    </select>
                 </div>
                 <div class="col-md-2">
                     <label for="subject_id" class="form-label fw-semibold">Subject</label>
@@ -358,10 +359,10 @@
                                             <i class="bi bi-image me-1"></i>View Full Size
                                         </a>
                                         <button class="btn btn-sm btn-outline-secondary btn-image-control" onclick="toggleImage('img-{{ $question->id }}')">
-                                            <i class="bi bi-eye me-1"></i>Show Image
+                                            <i class="bi bi-eye-slash me-1"></i>Hide Image
                                         </button>
                                     </div>
-                                    <div id="img-{{ $question->id }}" class="question-image" style="display: none;">
+                                    <div id="img-{{ $question->id }}" class="question-image" style="display: block;">
                                         <img src="{{ $question->image }}" alt="Question Image" 
                                              class="img-fluid rounded border shadow-sm" 
                                              style="max-width: 100%; max-height: 300px; object-fit: contain;"
@@ -557,7 +558,7 @@
                 </small>
             </div>
             <div class="d-flex justify-content-center">
-                {{ $questions->links() }}
+                {{ $questions->links('custom-pagination') }}
             </div>
         </div>
     @endif
@@ -699,6 +700,36 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     document.getElementById('source_type').addEventListener('change', toggleSourceName);
     toggleSourceName();
+
+    // Handle class filtering for subjects
+    function handleClassFilter() {
+        const classSelect = document.getElementById('class');
+        const subjectSelect = document.getElementById('subject_id');
+        
+        if (classSelect && subjectSelect) {
+            classSelect.addEventListener('change', function() {
+                const selectedClass = this.value;
+                
+                // If no class selected, reload page to show all subjects
+                if (!selectedClass) {
+                    // Remove class parameter and reload
+                    const url = new URL(window.location);
+                    url.searchParams.delete('class');
+                    url.searchParams.delete('subject_id'); // Clear subject selection
+                    window.location.href = url.toString();
+                    return;
+                }
+                
+                // If class is selected, reload page with class filter
+                const url = new URL(window.location);
+                url.searchParams.set('class', selectedClass);
+                url.searchParams.delete('subject_id'); // Clear subject selection
+                window.location.href = url.toString();
+            });
+        }
+    }
+    
+    handleClassFilter();
 });
 MathJax = {
   tex: {
@@ -791,7 +822,7 @@ function toggleImage(imageId) {
     const imageDiv = document.getElementById(imageId);
     const button = document.querySelector(`button[onclick="toggleImage('${imageId}')"]`);
     
-    if (imageDiv.style.display === 'none') {
+    if (imageDiv.style.display === 'none' || imageDiv.style.display === '') {
         imageDiv.style.display = 'block';
         button.innerHTML = '<i class="bi bi-eye-slash me-1"></i>Hide Image';
     } else {

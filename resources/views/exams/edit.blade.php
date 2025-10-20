@@ -8,7 +8,7 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ route('home') }}" class="text-decoration-none"><i class="bi bi-house-door"></i> Dashboard</a></li>
                     <li class="breadcrumb-item"><a href="{{ route('exams.index') }}" class="text-decoration-none">Exams</a></li>
-                    <li class="breadcrumb-item active">Create New Exam</li>
+                    <li class="breadcrumb-item active">Edit Exam</li>
                 </ol>
             </nav>
         </div>
@@ -27,12 +27,13 @@
 
     <div class="dashboard-card">
         <div class="card-body p-4">
-            <h3 class="mb-4">Create New Exam</h3>
-            <form action="{{ route('exams.store') }}" method="POST">
+            <h3 class="mb-4">Edit Exam: {{ $exam->title }}</h3>
+            <form action="{{ route('exams.update', $exam) }}" method="POST">
                 @csrf
+                @method('PUT')
                 <div class="mb-3">
                     <label for="title" class="form-label">Exam Title</label>
-                    <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title" value="{{ old('title') }}" required>
+                    <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title" value="{{ old('title', $exam->title) }}" required>
                     @error('title')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -42,66 +43,71 @@
                     <label for="exam_type" class="form-label">Exam Type</label>
                     <select class="form-select @error('exam_type') is-invalid @enderror" id="exam_type" name="exam_type" required>
                         <option value="">Select Type</option>
-                        <option value="board" {{ old('exam_type') == 'board' ? 'selected' : '' }}>Board Exam</option>
-                        <option value="university" {{ old('exam_type') == 'university' ? 'selected' : '' }}>University Exam</option>
-                        <option value="custom" {{ old('exam_type') == 'custom' ? 'selected' : '' }}>Custom Exam</option>
+                        <option value="board" {{ old('exam_type', $exam->exam_type) == 'board' ? 'selected' : '' }}>Board Exam</option>
+                        <option value="university" {{ old('exam_type', $exam->exam_type) == 'university' ? 'selected' : '' }}>University Exam</option>
+                        <option value="custom" {{ old('exam_type', $exam->exam_type) == 'custom' ? 'selected' : '' }}>Custom Exam</option>
                     </select>
                     @error('exam_type')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
 
-                <div class="mb-3">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="is_rated" name="is_rated" value="1" {{ old('is_rated') ? 'checked' : '' }}>
-                        <label class="form-check-label" for="is_rated">
-                            Rated Exam (affects user rating)
-                        </label>
-                    </div>
-                </div>
-
-                <div class="mb-3 rated-exam-field" style="{{ old('is_rated') ? 'display: block;' : 'display: none;' }}">
-                    <label for="difficulty_level" class="form-label">Difficulty Level</label>
-                    <select class="form-select" id="difficulty_level" name="difficulty_level">
-                        <option value="1">Easy (800-1200)</option>
-                        <option value="2">Medium (1200-1600)</option>
-                        <option value="3">Hard (1600-2000)</option>
-                        <option value="4">Expert (2000+)</option>
-                    </select>
-                </div>
-
-                <div id="institutionFields" style="display: none;">
+                <div id="institutionFields" style="{{ (old('exam_type', $exam->exam_type) == 'university') ? 'display:block;' : 'display:none;' }}">
                     <div class="mb-3">
                         <label for="institution_name" class="form-label">Institution Name</label>
-                        <input type="text" class="form-control @error('institution_name') is-invalid @enderror" id="institution_name" name="institution_name" value="{{ old('institution_name') }}">
+                        <input type="text" class="form-control @error('institution_name') is-invalid @enderror" id="institution_name" name="institution_name" value="{{ old('institution_name', $exam->institution_name) }}">
                         @error('institution_name')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="mb-3">
                         <label for="year" class="form-label">Year</label>
-                        <input type="number" class="form-control @error('year') is-invalid @enderror" id="year" name="year" value="{{ old('year') }}" min="1900" max="{{ date('Y') + 1 }}">
+                        <input type="number" class="form-control @error('year') is-invalid @enderror" id="year" name="year" value="{{ old('year', $exam->year) }}" min="1900" max="{{ date('Y') + 1 }}">
                         @error('year')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
 
-                <div id="customFields" style="display: none;">
+                <div id="customFields" style="{{ (old('exam_type', $exam->exam_type) == 'custom') ? 'display:block;' : 'display:none;' }}">
                     <div class="mb-3">
                         <label class="form-label">Custom Criteria</label>
                         <div id="criteriaContainer">
-                            <div class="row mb-2">
-                                <div class="col">
-                                    <input type="text" class="form-control" name="custom_criteria[key][]" placeholder="Key">
+                            @php
+                                $customCriteria = $exam->custom_criteria ? json_decode($exam->custom_criteria, true) : [];
+                                $criteriaCount = count($customCriteria);
+                            @endphp
+                            @if($criteriaCount > 0)
+                                @foreach($customCriteria as $key => $value)
+                                    <div class="row mb-2">
+                                        <div class="col">
+                                            <input type="text" class="form-control" name="custom_criteria[key][]" placeholder="Key" value="{{ $key }}">
+                                        </div>
+                                        <div class="col">
+                                            <input type="text" class="form-control" name="custom_criteria[value][]" placeholder="Value" value="{{ $value }}">
+                                        </div>
+                                        <div class="col-auto">
+                                            @if($loop->first)
+                                                <button type="button" class="btn btn-primary btn-add-criteria">+</button>
+                                            @else
+                                                <button type="button" class="btn btn-danger btn-remove-criteria">-</button>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @else
+                                <div class="row mb-2">
+                                    <div class="col">
+                                        <input type="text" class="form-control" name="custom_criteria[key][]" placeholder="Key">
+                                    </div>
+                                    <div class="col">
+                                        <input type="text" class="form-control" name="custom_criteria[value][]" placeholder="Value">
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="button" class="btn btn-primary btn-add-criteria">+</button>
+                                    </div>
                                 </div>
-                                <div class="col">
-                                    <input type="text" class="form-control" name="custom_criteria[value][]" placeholder="Value">
-                                </div>
-                                <div class="col-auto">
-                                    <button type="button" class="btn btn-primary btn-add-criteria">+</button>
-                                </div>
-                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -110,8 +116,8 @@
                     <label for="class_filter" class="form-label">Filter by Class</label>
                     <select class="form-select" id="class_filter">
                         <option value="">All Classes</option>
-                        <option value="SSC">SSC</option>
-                        <option value="HSC">HSC</option>
+                        <option value="SSC" {{ $exam->subject && $exam->subject->class == 'SSC' ? 'selected' : '' }}>SSC</option>
+                        <option value="HSC" {{ $exam->subject && $exam->subject->class == 'HSC' ? 'selected' : '' }}>HSC</option>
                     </select>
                     <div class="form-text">Filter subjects by class for easier selection</div>
                 </div>
@@ -121,22 +127,59 @@
                     <select class="form-select @error('subject_id') is-invalid @enderror" id="subject_id" name="subject_id">
                         <option value="">Select Subject (Optional for custom exams)</option>
                         @foreach($subjects as $subject)
-                            <option value="{{ $subject->id }}" data-class="{{ $subject->class }}">{{ $subject->name }} ({{ $subject->class }})</option>
+                            <option value="{{ $subject->id }}" data-class="{{ $subject->class }}" 
+                                {{ old('subject_id', $exam->subject_id) == $subject->id ? 'selected' : '' }}>
+                                {{ $subject->name }} ({{ $subject->class }})
+                            </option>
                         @endforeach
                     </select>
                 </div>
 
                 <div class="mb-3">
                     <label for="chapter_id" class="form-label">Chapter</label>
-                    <select class="form-select @error('chapter_id') is-invalid @enderror" id="chapter_id" name="chapter_id" disabled>
+                    <select class="form-select @error('chapter_id') is-invalid @enderror" id="chapter_id" name="chapter_id" {{ !$exam->subject_id ? 'disabled' : '' }}>
                         <option value="">Select Chapter (Optional for custom exams)</option>
+                        @if($exam->subject_id && $chapters)
+                            @foreach($chapters as $chapter)
+                                <option value="{{ $chapter->id }}" 
+                                    {{ old('chapter_id', $exam->chapter_id) == $chapter->id ? 'selected' : '' }}>
+                                    {{ $chapter->name }}
+                                </option>
+                            @endforeach
+                        @endif
                     </select>
                 </div>
 
-                <div class="mb-3" id="start_time_container">
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="is_rated" name="is_rated" value="1" 
+                        {{ old('is_rated', $exam->is_rated) ? 'checked' : '' }}>
+                    <label class="form-check-label" for="is_rated">
+                        Rated Exam
+                    </label>
+                    <div class="form-text">Check this if the exam affects student ratings</div>
+                </div>
+
+                <div class="rated-exam-field" style="{{ old('is_rated', $exam->is_rated) ? 'display:block;' : 'display:none;' }}">
+                    <div class="mb-3">
+                        <label for="difficulty_level" class="form-label">Difficulty Level</label>
+                        <select class="form-select @error('difficulty_level') is-invalid @enderror" id="difficulty_level" name="difficulty_level">
+                            <option value="">Select Difficulty</option>
+                            <option value="1" {{ old('difficulty_level', $exam->difficulty_level) == '1' ? 'selected' : '' }}>Beginner (1)</option>
+                            <option value="2" {{ old('difficulty_level', $exam->difficulty_level) == '2' ? 'selected' : '' }}>Intermediate (2)</option>
+                            <option value="3" {{ old('difficulty_level', $exam->difficulty_level) == '3' ? 'selected' : '' }}>Advanced (3)</option>
+                            <option value="4" {{ old('difficulty_level', $exam->difficulty_level) == '4' ? 'selected' : '' }}>Expert (4)</option>
+                        </select>
+                        @error('difficulty_level')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="mb-3" id="start_time_container" style="{{ old('is_rated', $exam->is_rated) ? 'display:block;' : 'display:none;' }}">
                     <label for="start_time" class="form-label">Start Time</label>
-                    <input type="datetime-local" class="form-control @error('start_time') is-invalid @enderror" id="start_time" name="start_time" value="{{ old('start_time') }}">
-                    <div class="form-text">Required for rated exams. Default is set to tomorrow at 9 AM.</div>
+                    <input type="datetime-local" class="form-control @error('start_time') is-invalid @enderror" id="start_time" name="start_time" 
+                        value="{{ old('start_time', $exam->start_time ? $exam->start_time->format('Y-m-d\TH:i') : '') }}">
+                    <div class="form-text">Required for rated exams.</div>
                     @error('start_time')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -144,7 +187,8 @@
 
                 <div class="mb-3">
                     <label for="duration" class="form-label">Duration (minutes)</label>
-                    <input type="number" class="form-control @error('duration') is-invalid @enderror" id="duration" name="duration" value="{{ old('duration') }}" min="1" required>
+                    <input type="number" class="form-control @error('duration') is-invalid @enderror" id="duration" name="duration" 
+                        value="{{ old('duration', $exam->duration) }}" min="1" required>
                     @error('duration')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -154,7 +198,10 @@
                     <label for="assigned_users" class="form-label">Assign to Specific Students (Optional)</label>
                     <select name="assigned_users[]" id="assigned_users" class="form-select" multiple size="5">
                         @foreach(\App\Models\User::where('role', 'student')->orderBy('name')->get() as $student)
-                            <option value="{{ $student->id }}">{{ $student->name }} ({{ $student->email }})</option>
+                            <option value="{{ $student->id }}" 
+                                {{ $exam->assignedUsers->contains($student->id) ? 'selected' : '' }}>
+                                {{ $student->name }} ({{ $student->email }})
+                            </option>
                         @endforeach
                     </select>
                     <small class="text-muted">
@@ -165,7 +212,7 @@
 
                 <div class="mt-4">
                     <button type="submit" class="btn btn-primary">
-                        <i class="bi bi-plus-circle me-2"></i>Create Exam
+                        <i class="bi bi-check-circle me-2"></i>Update Exam
                     </button>
                     <a href="{{ route('exams.index') }}" class="btn btn-link text-muted text-decoration-none">Cancel</a>
                 </div>
@@ -188,78 +235,52 @@ document.addEventListener('DOMContentLoaded', function() {
     const startTimeInput = document.getElementById('start_time');
     const difficultyLevelInput = document.getElementById('difficulty_level');
 
-    // Set default start time to tomorrow at 9 AM if not already set
-    if (!startTimeInput.value) {
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        tomorrow.setHours(9, 0, 0, 0);
-        startTimeInput.value = tomorrow.toISOString().slice(0, 16);
-    }
-
-    // Initialize fields based on initial rated status
-    if (isRatedCheckbox.checked) {
-        ratedFields.style.display = 'block';
-        startTimeField.style.display = 'block';
-        startTimeInput.required = true;
-        difficultyLevelInput.required = true;
-    }
-
-    // Initialize start time visibility based on exam type
-    startTimeField.style.display = isRatedCheckbox.checked ? 'block' : 'none';
+    // Handle rated exam toggle
+    isRatedCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+            ratedFields.style.display = 'block';
+            startTimeField.style.display = 'block';
+            startTimeInput.required = true;
+            difficultyLevelInput.required = true;
+        } else {
+            ratedFields.style.display = 'none';
+            startTimeField.style.display = 'none';
+            startTimeInput.required = false;
+            difficultyLevelInput.required = false;
+        }
+    });
 
     // Handle exam type change
     examType.addEventListener('change', function() {
         const subjectField = document.getElementById('subject_id');
         const chapterField = document.getElementById('chapter_id');
         
-        if (this.value === 'custom') {
-            institutionFields.style.display = 'none';
-            customFields.style.display = 'block';
-            // Make subject and chapter optional for custom exams
-            subjectField.required = false;
-            chapterField.required = false;
-        } else if (this.value === 'university') {
+        if (this.value === 'university') {
             institutionFields.style.display = 'block';
             customFields.style.display = 'none';
-            // Make subject and chapter required for university exams
             subjectField.required = true;
-            chapterField.required = false;
+        } else if (this.value === 'custom') {
+            institutionFields.style.display = 'none';
+            customFields.style.display = 'block';
+            subjectField.required = false;
         } else if (this.value === 'board') {
             institutionFields.style.display = 'none';
             customFields.style.display = 'none';
-            // Make subject required for board exams
             subjectField.required = true;
-            chapterField.required = false;
         } else {
             institutionFields.style.display = 'none';
             customFields.style.display = 'none';
             subjectField.required = false;
-            chapterField.required = false;
         }
     });
 
-    // Handle rated exam checkbox
-    isRatedCheckbox.addEventListener('change', function() {
-        ratedFields.style.display = this.checked ? 'block' : 'none';
-        startTimeField.style.display = this.checked ? 'block' : 'none';
-        if (this.checked) {
-            document.getElementById('start_time').required = true;
-            document.getElementById('difficulty_level').required = true;
-        } else {
-            document.getElementById('start_time').required = false;
-            document.getElementById('difficulty_level').required = false;
-        }
-    });
-
-    // Handle subject change
+    // Handle subject change to load chapters
     subjectSelect.addEventListener('change', function() {
-        const subjectId = this.value;
-        chapterSelect.disabled = !subjectId;
-        
-        if (subjectId) {
-            fetch(`/exams/chapters/${subjectId}`)
+        if (this.value) {
+            fetch(`/exams/chapters/${this.value}`)
                 .then(response => response.json())
                 .then(chapters => {
+                    chapterSelect.disabled = false;
                     chapterSelect.innerHTML = '<option value="">Select Chapter</option>';
                     chapters.forEach(chapter => {
                         const option = new Option(chapter.name, chapter.id);
@@ -268,6 +289,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
         } else {
             chapterSelect.innerHTML = '<option value="">Select Chapter</option>';
+            chapterSelect.disabled = true;
         }
     });
 

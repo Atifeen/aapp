@@ -39,4 +39,61 @@ class Exam extends Model
     {
         return $this->hasMany(ExamAttempt::class);
     }
+
+    public function assignedUsers()
+    {
+        return $this->belongsToMany(User::class, 'exam_user_assignments');
+    }
+
+    // Helper methods
+    public function isAvailable()
+    {
+        // An exam is available if:
+        // 1. It has questions
+        // 2. If it's scheduled, the start time hasn't passed or there's no end time restriction
+        
+        if ($this->questions()->count() == 0) {
+            return false;
+        }
+
+        // If exam has a start time, check if it's available
+        if ($this->start_time) {
+            $now = now();
+            
+            // If start time is in the future, not available yet
+            if ($this->start_time > $now) {
+                return false;
+            }
+            
+            // If end time is set and has passed, not available
+            if ($this->end_time && $this->end_time < $now) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function getStatusAttribute()
+    {
+        if (!$this->isAvailable()) {
+            return 'Not Available';
+        }
+
+        if ($this->start_time) {
+            $now = now();
+            
+            if ($this->start_time > $now) {
+                return 'Scheduled';
+            }
+            
+            if ($this->end_time && $this->end_time < $now) {
+                return 'Ended';
+            }
+            
+            return 'Active';
+        }
+
+        return 'Available';
+    }
 }

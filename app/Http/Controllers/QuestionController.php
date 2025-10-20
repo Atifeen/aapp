@@ -12,6 +12,13 @@ class QuestionController extends Controller
     public function index(Request $request) {
         $query = Question::with(['subject', 'chapter']);
 
+        // Class filter - filter questions by subject class
+        if ($request->filled('class')) {
+            $query->whereHas('subject', function($q) use ($request) {
+                $q->where('class', $request->class);
+            });
+        }
+
         if ($request->filled('question_text')) {
             $query->where('question_text', 'like', '%' . $request->question_text . '%');
         }
@@ -31,10 +38,14 @@ class QuestionController extends Controller
             $query->where('source_type', 'like', '%' . $request->source_type . '%');
         }
 
-        // Add pagination with 10 questions per page
-        $questions = $query->latest()->paginate(10)->withQueryString();
+        // Add pagination with 50 questions per page
+        $questions = $query->latest()->paginate(50)->withQueryString();
         
-        $subjects = \App\Models\Subject::all();
+        // Filter subjects based on selected class
+        $subjects = $request->filled('class') 
+            ? \App\Models\Subject::where('class', $request->class)->get()
+            : \App\Models\Subject::all();
+            
         $chapters = \App\Models\Chapter::all();
         $boards = \App\Models\Board::all();
         $universities = \App\Models\University::all();

@@ -155,74 +155,173 @@
             </div>
         </div>
 
-        <!-- Recent Exams -->
+        <!-- Exam Categories -->
         <div class="row mt-5">
-            <div class="col-12">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h4>
-                        <i class="bi bi-clock-history me-2"></i>Recent Exams
-                    </h4>
-                    <a href="{{ route('exams.index') }}" class="btn btn-outline-primary">
-                        <i class="bi bi-list me-1"></i>View All
-                    </a>
+            <!-- Board Exams -->
+            <div class="col-md-4">
+                <div class="card dashboard-card">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="bi bi-mortarboard me-2"></i>Board Exams</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group">
+                            @php
+                                $boardExams = \App\Models\Exam::where('exam_type', 'board')
+                                    ->with(['subject', 'questions'])
+                                    ->latest()
+                                    ->take(5)
+                                    ->get();
+                            @endphp
+                            @forelse($boardExams as $exam)
+                                <a href="{{ route('exams.show', $exam) }}" class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1 fw-bold">{{ $exam->title }}</h6>
+                                        @if($exam->start_time)
+                                            <small class="text-primary">{{ $exam->start_time->format('M d, Y') }}</small>
+                                        @else
+                                            <small class="text-muted">No schedule</small>
+                                        @endif
+                                    </div>
+                                    @if($exam->subject)
+                                        <p class="mb-1 text-muted small">
+                                            <i class="bi bi-book me-1"></i>{{ $exam->subject->name }}
+                                        </p>
+                                    @endif
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <small class="text-muted">
+                                            <i class="bi bi-clock me-1"></i>{{ $exam->duration }} min | 
+                                            <i class="bi bi-question-circle me-1"></i>{{ $exam->questions->count() }} questions
+                                        </small>
+                                        @if($exam->is_rated)
+                                            <span class="badge bg-warning text-dark">Rated</span>
+                                        @endif
+                                    </div>
+                                </a>
+                            @empty
+                                <div class="text-center py-3">
+                                    <i class="bi bi-inbox text-muted" style="font-size: 2rem;"></i>
+                                    <p class="text-muted mt-2 mb-0">No board exams</p>
+                                </div>
+                            @endforelse
+                        </div>
+                        <div class="text-center mt-3">
+                            <a href="{{ route('exams.index') }}?exam_type=board" class="btn btn-outline-success btn-sm">View All Board Exams</a>
+                        </div>
+                    </div>
                 </div>
-                <div class="dashboard-card">
-                    <div class="table-responsive">
-                        <table class="table table-hover mb-0">
-                            <thead>
-                                <tr>
-                                    <th>Title</th>
-                                    <th>Subject</th>
-                                    <th>Start Time</th>
-                                    <th>Duration</th>
-                                    <th>Type</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($recentExams as $exam)
-                                    <tr>
-                                        <td>{{ $exam->title }}</td>
-                                        <td>{{ $exam->subject->name }}</td>
-                                        <td>
-                                            @if($exam->start_time)
-                                                {{ $exam->start_time->format('M d, Y H:i') }}
-                                            @else
-                                                <span class="text-muted">Not scheduled</span>
-                                            @endif
-                                        </td>
-                                        <td>{{ $exam->duration }} min</td>
-                                        <td>
-                                            @if($exam->is_rated)
-                                                <span class="badge bg-warning">Rated</span>
-                                            @else
-                                                <span class="badge bg-info">Practice</span>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            <div class="btn-group">
-                                                <a href="{{ route('exams.show', $exam) }}" class="btn btn-sm btn-primary" title="View Exam">
-                                                    <i class="bi bi-eye"></i>
-                                                </a>
-                                                <a href="{{ route('exams.questions.select', $exam) }}" class="btn btn-sm btn-info" title="Manage Questions">
-                                                    <i class="bi bi-list-check"></i>
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="6" class="text-center py-4">
-                                            <i class="bi bi-inbox display-4 d-block mb-2"></i>
-                                            <p class="text-muted mb-0">No exams created yet</p>
-                                            <a href="{{ route('exams.create') }}" class="btn btn-primary mt-3">
-                                                Create Your First Exam
-                                            </a>
-                                        </td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
+            </div>
+
+            <!-- University Exams -->
+            <div class="col-md-4">
+                <div class="card dashboard-card">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="bi bi-building me-2"></i>University Exams</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group">
+                            @php
+                                $universityExams = \App\Models\Exam::where('exam_type', 'university')
+                                    ->with(['subject', 'questions'])
+                                    ->latest()
+                                    ->take(5)
+                                    ->get();
+                            @endphp
+                            @forelse($universityExams as $exam)
+                                <a href="{{ route('exams.show', $exam) }}" class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1 fw-bold">{{ $exam->title }}</h6>
+                                        @if($exam->start_time)
+                                            <small class="text-primary">{{ $exam->start_time->format('M d, Y') }}</small>
+                                        @else
+                                            <small class="text-muted">No schedule</small>
+                                        @endif
+                                    </div>
+                                    @if($exam->institution_name || $exam->year)
+                                        <p class="mb-1 text-muted small">
+                                            <i class="bi bi-bank me-1"></i>{{ $exam->institution_name }} 
+                                            @if($exam->year) - {{ $exam->year }} @endif
+                                        </p>
+                                    @endif
+                                    @if($exam->subject)
+                                        <p class="mb-1 text-muted small">
+                                            <i class="bi bi-book me-1"></i>{{ $exam->subject->name }}
+                                        </p>
+                                    @endif
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <small class="text-muted">
+                                            <i class="bi bi-clock me-1"></i>{{ $exam->duration }} min | 
+                                            <i class="bi bi-question-circle me-1"></i>{{ $exam->questions->count() }} questions
+                                        </small>
+                                        @if($exam->is_rated)
+                                            <span class="badge bg-warning text-dark">Rated</span>
+                                        @endif
+                                    </div>
+                                </a>
+                            @empty
+                                <div class="text-center py-3">
+                                    <i class="bi bi-inbox text-muted" style="font-size: 2rem;"></i>
+                                    <p class="text-muted mt-2 mb-0">No university exams</p>
+                                </div>
+                            @endforelse
+                        </div>
+                        <div class="text-center mt-3">
+                            <a href="{{ route('exams.index') }}?exam_type=university" class="btn btn-outline-info btn-sm">View All University Exams</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Custom Exams -->
+            <div class="col-md-4">
+                <div class="card dashboard-card">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="mb-0"><i class="bi bi-gear me-2"></i>Custom Exams</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group">
+                            @php
+                                $customExams = \App\Models\Exam::where('exam_type', 'custom')
+                                    ->with(['subject', 'chapter', 'questions'])
+                                    ->latest()
+                                    ->take(5)
+                                    ->get();
+                            @endphp
+                            @forelse($customExams as $exam)
+                                <a href="{{ route('exams.show', $exam) }}" class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1 fw-bold">{{ $exam->title }}</h6>
+                                        @if($exam->start_time)
+                                            <small class="text-primary">{{ $exam->start_time->format('M d, Y') }}</small>
+                                        @else
+                                            <small class="text-muted">No schedule</small>
+                                        @endif
+                                    </div>
+                                    @if($exam->subject)
+                                        <p class="mb-1 text-muted small">
+                                            <i class="bi bi-book me-1"></i>{{ $exam->subject->name }}
+                                            @if($exam->chapter) - {{ $exam->chapter->name }} @endif
+                                        </p>
+                                    @endif
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <small class="text-muted">
+                                            <i class="bi bi-clock me-1"></i>{{ $exam->duration }} min | 
+                                            <i class="bi bi-question-circle me-1"></i>{{ $exam->questions->count() }} questions
+                                        </small>
+                                        @if($exam->is_rated)
+                                            <span class="badge bg-warning text-dark">Rated</span>
+                                        @endif
+                                    </div>
+                                </a>
+                            @empty
+                                <div class="text-center py-3">
+                                    <i class="bi bi-inbox text-muted" style="font-size: 2rem;"></i>
+                                    <p class="text-muted mt-2 mb-0">No custom exams</p>
+                                </div>
+                            @endforelse
+                        </div>
+                        <div class="text-center mt-3">
+                            <a href="{{ route('exams.index') }}?exam_type=custom" class="btn btn-outline-warning btn-sm">View All Custom Exams</a>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -63,7 +63,21 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <a href="{{ route('exams.show', $exam) }}" class="btn btn-sm btn-info">View</a>
+                                    <div class="btn-group" role="group">
+                                        <a href="{{ route('exams.show', $exam) }}" class="btn btn-sm btn-info me-1" title="View Exam">
+                                            <i class="bi bi-eye"></i> View
+                                        </a>
+                                        <a href="{{ route('exams.edit', $exam) }}" class="btn btn-sm btn-warning me-1" title="Edit Exam">
+                                            <i class="bi bi-pencil"></i> Edit
+                                        </a>
+                                        <form action="{{ route('exams.destroy', $exam) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this exam? This action cannot be undone.');" style="display:inline-block; margin-left:4px;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger" title="Delete Exam">
+                                                <i class="bi bi-trash"></i> Delete
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach

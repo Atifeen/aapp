@@ -13,8 +13,18 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">
+                        <a class="nav-link active" href="{{ route('student.dashboard') }}">
                             <i class="bi bi-house-door me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('leaderboard') }}">
+                            <i class="bi bi-trophy me-1"></i>Leaderboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('exam.history') }}">
+                            <i class="bi bi-clock-history me-1"></i>History
                         </a>
                     </li>
                     <li class="nav-item dropdown">
@@ -61,35 +71,105 @@
                     <h2 class="mb-3">
                         <i class="bi bi-emoji-smile me-2"></i>Welcome back, {{ auth()->user()->name }}!
                     </h2>
-                    <div class="d-flex align-items-center gap-4">
-                        <p class="mb-0 fs-5">
-                            <i class="bi bi-graph-up me-2"></i>
-                            <span class="text-muted">Rating:</span> 
-                            <strong>{{ auth()->user()->rating }}</strong>
-                        </p>
-                        <p class="mb-0 fs-5">
-                            <i class="bi bi-award me-2"></i>
-                            <span class="text-muted">Max Rating:</span> 
-                            <strong>{{ auth()->user()->max_rating }}</strong>
-                        </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rating Stats Cards -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-3">
+                <div class="card text-center text-white" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <div class="card-body py-4">
+                        <h3 class="display-4 fw-bold mb-2">{{ $currentRating }}</h3>
+                        <p class="mb-0 text-white-50">Current Rating</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center text-white" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    <div class="card-body py-4">
+                        <h3 class="display-4 fw-bold mb-2">{{ $maxRating }}</h3>
+                        <p class="mb-0 text-white-50">Max Rating</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center text-white" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                    <div class="card-body py-4">
+                        <h3 class="display-4 fw-bold mb-2">#{{ $rank }}</h3>
+                        <p class="mb-0 text-white-50">Global Rank</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center text-white" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                    <div class="card-body py-4">
+                        <h3 class="display-4 fw-bold mb-2">{{ $totalSolved }}</h3>
+                        <p class="mb-0 text-white-50">Exams Solved</p>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Recent Attempts -->
+        @if($recentAttempts->count() > 0)
+        <div class="card mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0"><i class="bi bi-clock-history me-2"></i>Recent Attempts</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Exam</th>
+                                <th>Score</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($recentAttempts as $attempt)
+                            <tr>
+                                <td>
+                                    <strong>{{ $attempt->exam->title }}</strong>
+                                    @if($attempt->exam->is_rated)
+                                        <span class="badge bg-warning text-dark ms-2">Rated</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <span class="badge fs-6 bg-{{ $attempt->score >= 80 ? 'success' : ($attempt->score >= 60 ? 'warning' : 'danger') }}">
+                                        {{ $attempt->score }}%
+                                    </span>
+                                </td>
+                                <td>{{ $attempt->created_at->diffForHumans() }}</td>
+                                <td>
+                                    <a href="{{ route('exams.show', $attempt->exam) }}" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-eye me-1"></i>Review
+                                    </a>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        @endif
+
         <!-- Stats Grid -->
         <div class="row g-4 mb-4">
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="dashboard-card">
                     <div class="card-body p-4">
-                        <h5 class="card-title">Contests</h5>
+                        <h5 class="card-title">Total Attempts</h5>
                         <p class="display-6 mb-1">{{ $totalParticipations }}</p>
                         <small class="text-muted">Contests participated</small>
                         <i class="bi bi-trophy stat-icon text-warning"></i>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="dashboard-card">
                     <div class="card-body p-4">
                         <h5 class="card-title">Success Rate</h5>
@@ -99,23 +179,13 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="dashboard-card">
                     <div class="card-body p-4">
-                        <h5 class="card-title">Next Exam</h5>
-                        <p class="display-6 mb-1">{{ $nextExamTime ?? 'None' }}</p>
-                        <small class="text-muted">Upcoming exam</small>
-                        <i class="bi bi-calendar-event stat-icon text-primary"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="dashboard-card">
-                    <div class="card-body p-4">
-                        <h5 class="card-title">Rank</h5>
-                        <p class="display-6 mb-1">#{{ $rank }}</p>
-                        <small class="text-muted">Current standing</small>
-                        <i class="bi bi-bar-chart stat-icon text-info"></i>
+                        <h5 class="card-title">Available Exams</h5>
+                        <p class="display-6 mb-1">{{ $availableExams->count() }}</p>
+                        <small class="text-muted">Ready to take</small>
+                        <i class="bi bi-file-earmark-text stat-icon text-primary"></i>
                     </div>
                 </div>
             </div>
@@ -135,18 +205,36 @@
                         <div class="card-body p-4">
                             <h5 class="card-title mb-3">{{ $exam->title }}</h5>
                             <div class="mb-3">
-                                <span class="badge {{ $exam->is_rated ? 'bg-warning' : 'bg-secondary' }} me-2">
-                                    {{ $exam->is_rated ? 'Rated' : 'Practice' }}
+                                <span class="badge {{ $exam->is_rated ? 'bg-warning text-dark' : 'bg-secondary' }} me-2">
+                                    {{ $exam->is_rated ? 'Rated Contest' : 'Practice' }}
                                 </span>
-                                <span class="badge bg-info">
+                                <span class="badge bg-info me-2">
                                     {{ $exam->duration }} minutes
                                 </span>
+                                @if($exam->start_time)
+                                    @php
+                                        $now = now();
+                                        $hasStarted = $exam->start_time <= $now;
+                                        $endTime = $exam->start_time->copy()->addMinutes($exam->duration);
+                                        $hasEnded = $now > $endTime;
+                                    @endphp
+                                    @if($hasEnded)
+                                        <span class="badge bg-secondary">Finished</span>
+                                    @elseif($hasStarted)
+                                        <span class="badge bg-success">Active Now!</span>
+                                    @else
+                                        <span class="badge bg-primary">Upcoming</span>
+                                    @endif
+                                @endif
                             </div>
-                            <p class="text-muted mb-4">{{ Str::limit($exam->description, 100) }}</p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <small class="text-muted">
                                     <i class="bi bi-calendar2 me-1"></i>
-                                    {{ $exam->start_time->format('M d, Y H:i') }}
+                                    @if($exam->start_time)
+                                        {{ $exam->start_time->format('M d, Y H:i') }}
+                                    @else
+                                        Always Available
+                                    @endif
                                 </small>
                                 <a href="{{ route('exams.show', $exam) }}" class="btn btn-primary btn-sm">
                                     View Details
