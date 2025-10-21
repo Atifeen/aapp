@@ -82,7 +82,7 @@
 
                     <!-- Submit Button -->
                     <div class="d-grid mb-3">
-                        <button type="submit" class="btn btn-primary" style="background-color: var(--accent-green); border: none; color: white; padding: 0.65rem; font-weight: 500; border-radius: 8px;">
+                        <button type="submit" class="btn" style="background-color: var(--accent-green) !important; border: none; color: white; padding: 0.65rem; font-weight: 500; border-radius: 8px;">
                             Sign In
                         </button>
                     </div>

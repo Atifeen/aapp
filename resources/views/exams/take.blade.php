@@ -28,7 +28,7 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-8">
+                        <div class="col-md-12">
                             @if($exam->subject)
                                 <p class="mb-2"><strong>Subject:</strong> {{ $exam->subject->name }} (Class {{ $exam->subject->class }})</p>
                             @endif
@@ -36,17 +36,6 @@
                                 <p class="mb-2"><strong>Chapter:</strong> {{ $exam->chapter->name }}</p>
                             @endif
                             <p class="mb-0"><strong>Total Questions:</strong> {{ $exam->questions->count() }}</p>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="mb-2">
-                                <small class="text-muted">Progress: <span id="progress-text">0/{{ $exam->questions->count() }}</span></small>
-                                <div class="progress" style="height: 20px;">
-                                    <div class="progress-bar bg-success" role="progressbar" id="progress-bar" 
-                                         style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                                        0%
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -87,14 +76,9 @@
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div>
                                             <strong>Question {{ $index + 1 }}</strong>
-                                            @if($question->year)
-                                                <span class="badge bg-info ms-2">Year: {{ $question->year }}</span>
-                                            @endif
-                                            @if($question->source_type)
-                                                <span class="badge bg-secondary ms-2">{{ ucfirst($question->source_type) }}</span>
-                                            @endif
+                                            
+                                                
                                         </div>
-                                        <span class="badge bg-warning" id="status-{{ $question->id }}">Not Answered</span>
                                     </div>
                                 </div>
                                 <div class="card-body">
@@ -126,15 +110,16 @@
                                                 @endphp
                                                 @if($question->$optionField)
                                                     <div class="col-md-6">
-                                                        <div class="option-item p-3 rounded border bg-light answer-option" 
-                                                             data-question="{{ $question->id }}" 
-                                                             style="cursor: pointer;">
-                                                            <input class="form-check-input me-2 answer-radio" 
-                                                                   type="radio" 
-                                                                   name="answers[{{ $question->id }}]" 
-                                                                   id="q{{ $question->id }}_{{ $option }}" 
-                                                                   value="{{ $option }}">
-                                                            <label class="form-check-label w-100" for="q{{ $question->id }}_{{ $option }}" style="cursor: pointer;">
+                                                        <div class="option-item p-3 rounded border bg-light answer-option d-flex align-items-start" 
+                                                                data-question="{{ $question->id }}" 
+                                                                style="cursor: pointer;">
+                                                            <input class="form-check-input me-2 answer-radio flex-shrink-0" 
+                                                                    type="radio" 
+                                                                    name="answers[{{ $question->id }}]" 
+                                                                    id="q{{ $question->id }}_{{ $option }}" 
+                                                                    value="{{ $option }}"
+                                                                    style="margin-top: 0.25rem;">
+                                                            <label class="form-check-label" for="q{{ $question->id }}_{{ $option }}" style="cursor: pointer; flex: 1;">
                                                                 <strong>{{ $option }})</strong> {!! $question->$optionField !!}
                                                             </label>
                                                         </div>
@@ -148,12 +133,10 @@
                         @endforeach
                     </div>
 
-                    <div class="card shadow-lg sticky-bottom mb-4" style="bottom: 20px;">
-                        <div class="card-body text-center py-3">
-                            <button type="submit" class="btn btn-success btn-lg px-5" id="submitBtn">
-                                <i class="bi bi-check-circle me-2"></i>Submit Exam
-                            </button>
-                        </div>
+                    <div class="text-center sticky-bottom mb-4" style="bottom: 20px;">
+                        <button type="submit" class="btn btn-success btn-lg px-4" id="submitBtn">
+                            <i class="bi bi-check-circle me-2"></i>Submit Exam
+                        </button>
                     </div>
                 </form>
             @endif
@@ -161,10 +144,85 @@
     </div>
 </div>
 
-@push('scripts')
 <script>
+var timeLeft;
+var timerInterval;
+
 document.addEventListener("DOMContentLoaded", function() {
-    setTimeout(() => {
+    // Timer variables
+    var isActiveExam = {{ $isActiveExam ? 'true' : 'false' }};
+    var duration = {{ $exam->duration }};
+    var remainingSeconds = {{ $remainingSeconds ?? 'null' }};
+    
+    // Calculate initial time left (ensure it's an integer)
+    if (isActiveExam && remainingSeconds !== null) {
+        timeLeft = Math.floor(remainingSeconds);
+    } else {
+        timeLeft = duration * 60;
+    }
+    
+    var timerElement = document.getElementById('timer');
+    var examForm = document.getElementById('examForm');
+    var submitBtn = document.getElementById('submitBtn');
+    var totalQuestions = {{ $exam->questions->count() }};
+    
+    // Timer update function (DISPLAY ONLY - no auto-submit)
+    function updateTimer() {
+        if (!timerElement) return;
+        
+        var minutes = Math.floor(timeLeft / 60);
+        var seconds = timeLeft % 60;
+        var displayText = minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+        timerElement.textContent = displayText;
+        
+        if (timeLeft <= 300 && timeLeft > 0) {
+            timerElement.classList.add('text-danger');
+        }
+        
+        if (timeLeft === 300) {
+            alert('Warning: Only 5 minutes remaining!');
+        }
+        
+        // ✅ REMOVED AUTO-SUBMIT: Backend will validate time
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            timerElement.textContent = '0:00';
+            timerElement.classList.add('text-danger');
+            alert('Time is up! Please submit your exam. The server will validate your submission time.');
+            // Note: User can still try to submit, but backend will reject if time expired
+            return;
+        }
+        
+        timeLeft--;
+    }
+    
+    // Start timer (DISPLAY ONLY - actual validation happens on server)
+    updateTimer();
+    timerInterval = setInterval(updateTimer, 1000);
+    
+    // Answer selection handlers
+    document.querySelectorAll('.answer-radio').forEach(function(radio) {
+        radio.addEventListener('change', function() {
+            var questionId = this.closest('.answer-option').dataset.question;
+            var allRadios = document.querySelectorAll('input[name="answers[' + questionId + ']"]');
+            
+            // Remove highlight from all options for this question
+            allRadios.forEach(function(r) {
+                var optionDiv = r.closest('.answer-option');
+                optionDiv.classList.remove('bg-primary', 'bg-opacity-10', 'border-primary');
+                optionDiv.classList.add('bg-light');
+                optionDiv.style.borderWidth = '';
+            });
+            
+            // Highlight selected option
+            this.closest('.answer-option').classList.remove('bg-light');
+            this.closest('.answer-option').classList.add('bg-primary', 'bg-opacity-10', 'border-primary');
+            this.closest('.answer-option').style.borderWidth = '2px';
+        });
+    });
+    
+    // MathJax rendering
+    setTimeout(function() {
         if (typeof renderMathInElement !== 'undefined') {
             renderMathInElement(document.body, {
                 delimiters: [
@@ -176,136 +234,37 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }, 200);
     
-    const totalQuestions = {{ $exam->questions->count() }};
-    
-    function updateProgress() {
-        const answeredCount = document.querySelectorAll('input[type="radio"]:checked').length;
-        const percentage = Math.round((answeredCount / totalQuestions) * 100);
-        document.getElementById('progress-text').textContent = answeredCount + '/' + totalQuestions;
-        document.getElementById('progress-bar').style.width = percentage + '%';
-        document.getElementById('progress-bar').textContent = percentage + '%';
-    }
-    
-    document.querySelectorAll('.answer-radio').forEach(radio => {
-        radio.addEventListener('change', function() {
-            console.log('Radio changed for question:', this.name, 'value:', this.value);
-            
-            const questionId = this.closest('.answer-option').dataset.question;
-            const allRadios = document.querySelectorAll('input[name="answers[' + questionId + ']"]');
-            const statusBadge = document.getElementById('status-' + questionId);
-            
-            console.log('Question ID:', questionId);
-            console.log('Status badge found:', statusBadge !== null);
-            
-            // Don't disable - just mark as answered
-            // allRadios.forEach(r => r.disabled = true);
-            
-            // Update status badge
-            if (statusBadge) {
-                statusBadge.textContent = 'Answered';
-                statusBadge.classList.remove('bg-warning');
-                statusBadge.classList.add('bg-success');
-                console.log('Status badge updated to Answered');
-            }
-            
-            // Remove highlight from all options for this question
-            allRadios.forEach(r => {
-                const optionDiv = r.closest('.answer-option');
-                optionDiv.classList.remove('bg-primary', 'bg-opacity-10', 'border-primary');
-                optionDiv.classList.add('bg-light');
-                optionDiv.style.borderWidth = '';
-            });
-            
-            // Highlight selected option
-            this.closest('.answer-option').classList.remove('bg-light');
-            this.closest('.answer-option').classList.add('bg-primary', 'bg-opacity-10', 'border-primary');
-            this.closest('.answer-option').style.borderWidth = '2px';
-            
-            // Update progress
-            updateProgress();
-            
-            // Re-render LaTeX
-            setTimeout(() => {
-                if (typeof renderMathInElement !== 'undefined') {
-                    renderMathInElement(this.closest('.answer-option'), {
-                        delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}],
-                        throwOnError: false
-                    });
-                }
-            }, 50);
-        });
-    });
-    
-    const duration = {{ $exam->duration }};
-    let timeLeft = duration * 60;
-    const timerElement = document.getElementById('timer');
-    const examForm = document.getElementById('examForm');
-    const submitBtn = document.getElementById('submitBtn');
-    
-    function updateTimer() {
-        const minutes = Math.floor(timeLeft / 60);
-        const seconds = timeLeft % 60;
-        timerElement.textContent = minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
-        
-        if (timeLeft <= 300) {
-            timerElement.classList.add('text-danger');
-        }
-        
-        if (timeLeft === 300) {
-            alert('Warning: Only 5 minutes remaining!');
-        }
-        
-        if (timeLeft <= 0) {
-            alert('Time is up! Submitting exam automatically.');
-            clearInterval(timerInterval);
-            window.onbeforeunload = null;
-            examForm.submit();
-            return;
-        }
-        
-        timeLeft--;
-    }
-    
-    const timerInterval = setInterval(updateTimer, 1000);
-    
+    // Form submission handler
     window.onbeforeunload = function(e) {
         e.preventDefault();
         return 'Are you sure you want to leave?';
     };
     
-    examForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        console.log('Form submit event triggered');
-        
-        const answeredQuestions = document.querySelectorAll('input[type="radio"]:checked').length;
-        console.log('Answered questions:', answeredQuestions, 'of', totalQuestions);
-        
-        let confirmMessage = 'Are you sure you want to submit your exam?';
-        
-        if (answeredQuestions < totalQuestions) {
-            const unanswered = totalQuestions - answeredQuestions;
-            confirmMessage = 'You have ' + unanswered + ' unanswered question(s). ' + confirmMessage;
-        }
-        
-        console.log('Showing confirmation dialog');
-        if (confirm(confirmMessage)) {
-            console.log('User confirmed - submitting form');
-            clearInterval(timerInterval);
-            window.onbeforeunload = null;
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Submitting...';
+    if (examForm) {
+        examForm.addEventListener('submit', function(e) {
+            e.preventDefault();
             
-            console.log('Form action:', this.action);
-            console.log('Form method:', this.method);
+            var answeredQuestions = document.querySelectorAll('input[type="radio"]:checked').length;
+            var confirmMessage = 'Are you sure you want to submit your exam?';
             
-            // Create a new form submit event without preventDefault
-            // This bypasses the event listener
-            HTMLFormElement.prototype.submit.call(this);
-            console.log('Form submitted via HTMLFormElement.prototype.submit');
-        } else {
-            console.log('User cancelled submission');
-        }
-    });
+            if (answeredQuestions < totalQuestions) {
+                var unanswered = totalQuestions - answeredQuestions;
+                confirmMessage = 'You have ' + unanswered + ' unanswered question(s). ' + confirmMessage;
+            }
+            
+            if (confirm(confirmMessage)) {
+                clearInterval(timerInterval);
+                window.onbeforeunload = null;
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Submitting...';
+                }
+                
+                // Submit the form
+                HTMLFormElement.prototype.submit.call(this);
+            }
+        });
+    }
 });
 </script>
 
@@ -315,5 +274,5 @@ document.addEventListener("DOMContentLoaded", function() {
     z-index: 1020;
 }
 </style>
-@endpush
+
 @endsection

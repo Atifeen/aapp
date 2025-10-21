@@ -257,38 +257,41 @@
 
             <!-- Student's Performance Section -->
             @if(isset($userAttempt) && $userAttempt)
-            <div class="card mb-4 border-success">
-                <div class="card-header bg-success text-white">
-                    <h5 class="mb-0">
+            <div class="card mb-4" style="background-color: #1e293b !important; border: 1px solid #475569 !important; border-radius: 12px !important; color: #e2e8f0 !important;">
+                <div class="card-header" style="background-color: #334155 !important; color: #e2e8f0 !important; border-bottom: 1px solid #475569; border-radius: 12px 12px 0 0 !important;">
+                    <h5 class="mb-0" style="color: #e2e8f0 !important;">
                         <i class="bi bi-clipboard-check me-2"></i>Your Performance
                     </h5>
                 </div>
-                <div class="card-body">
-                    <div class="row text-center mb-4">
-                        <div class="col-md-3">
-                            <div class="border rounded p-3 bg-light">
-                                <h2 class="display-5 mb-0 text-{{ $userAttempt->score >= 80 ? 'success' : ($userAttempt->score >= 60 ? 'warning' : 'danger') }}">
-                                    {{ $userAttempt->score }}%
-                                </h2>
-                                <p class="text-muted mb-0 small">Your Score</p>
+                <div class="card-body" style="background-color: #1e293b !important; color: #e2e8f0 !important;">
+                    <!-- Result Summary -->
+                    <div style="background: linear-gradient(135deg, #1e293b 0%, #334155 100%); border-radius: 15px; padding: 2rem; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); border: 1px solid #475569;" class="mb-4">
+                        <div class="row g-4">
+                            <div class="col-md-3">
+                                <div style="background: linear-gradient(135deg, #1e293b 0%, #334155 100%); border: 2px solid #475569; border-radius: 12px; padding: 1.5rem; transition: transform 0.3s ease;" class="text-center">
+                                    <div style="font-size: 3rem; font-weight: 700; line-height: 1; color: {{ $userAttempt->score >= 80 ? '#10b981' : ($userAttempt->score >= 60 ? '#fbbf24' : '#f43f5e') }} !important;">
+                                        {{ $userAttempt->score }}%
+                                    </div>
+                                    <p style="color: #94a3b8 !important;" class="mb-0 mt-2">Your Score</p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="border rounded p-3 bg-light">
-                                <h2 class="display-5 mb-0 text-success">{{ $userAttempt->correct_ans }}</h2>
-                                <p class="text-muted mb-0 small">Correct</p>
+                            <div class="col-md-3">
+                                <div style="background: linear-gradient(135deg, #1e293b 0%, #334155 100%); border: 2px solid #475569; border-radius: 12px; padding: 1.5rem; transition: transform 0.3s ease;" class="text-center">
+                                    <div style="font-size: 3rem; font-weight: 700; line-height: 1; color: #10b981 !important;">{{ $userAttempt->correct_ans }}</div>
+                                    <p style="color: #94a3b8 !important;" class="mb-0 mt-2">Correct</p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="border rounded p-3 bg-light">
-                                <h2 class="display-5 mb-0 text-danger">{{ $userAttempt->wrong_ans }}</h2>
-                                <p class="text-muted mb-0 small">Wrong</p>
+                            <div class="col-md-3">
+                                <div style="background: linear-gradient(135deg, #1e293b 0%, #334155 100%); border: 2px solid #475569; border-radius: 12px; padding: 1.5rem; transition: transform 0.3s ease;" class="text-center">
+                                    <div style="font-size: 3rem; font-weight: 700; line-height: 1; color: #f43f5e !important;">{{ $userAttempt->wrong_ans }}</div>
+                                    <p style="color: #94a3b8 !important;" class="mb-0 mt-2">Wrong</p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="border rounded p-3 bg-light">
-                                <h2 class="display-5 mb-0 text-info">{{ $userAttempt->total_ques }}</h2>
-                                <p class="text-muted mb-0 small">Total Questions</p>
+                            <div class="col-md-3">
+                                <div style="background: linear-gradient(135deg, #1e293b 0%, #334155 100%); border: 2px solid #475569; border-radius: 12px; padding: 1.5rem; transition: transform 0.3s ease;" class="text-center">
+                                    <div style="font-size: 3rem; font-weight: 700; line-height: 1; color: #3b82f6 !important;">{{ $userAttempt->total_ques }}</div>
+                                    <p style="color: #94a3b8 !important;" class="mb-0 mt-2">Total</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -325,66 +328,67 @@
                     
                     <!-- Show detailed answers -->
                     <div class="mt-4">
-                        <h6 class="mb-3"><i class="bi bi-list-check me-2"></i>Your Detailed Answers</h6>
+                        <h6 class="mb-3" style="color: #e2e8f0 !important;"><i class="bi bi-list-check me-2"></i>Detailed Results</h6>
                         @foreach($userAttempt->answers as $index => $answer)
-                        <div class="card mb-3 border-{{ $answer->is_correct ? 'success' : 'danger' }}">
-                            <div class="card-header bg-{{ $answer->is_correct ? 'success' : 'danger' }} bg-opacity-10">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <strong>Question {{ $index + 1 }}</strong>
-                                    <span class="badge bg-{{ $answer->is_correct ? 'success' : 'danger' }}">
-                                        @if($answer->is_correct)
-                                            <i class="bi bi-check-circle me-1"></i>Correct
-                                        @else
-                                            <i class="bi bi-x-circle me-1"></i>Wrong
-                                        @endif
+                        <div style="background: #1e293b; border-radius: 12px; border: 1px solid #475569; overflow: hidden; margin-bottom: 1.5rem;">
+                            <div style="padding: 1rem 1.25rem; display: flex; justify-content: space-between; align-items: center; background-color: #334155; border-bottom: 1px solid #475569;">
+                                <strong style="color: #e2e8f0 !important;">Question {{ $index + 1 }}</strong>
+                                @if($answer->is_correct)
+                                    <span class="badge" style="background-color: #10b981 !important; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 500;">
+                                        <i class="bi bi-check-circle me-1"></i>Correct
                                     </span>
-                                </div>
+                                @elseif($answer->chosen_option)
+                                    <span class="badge" style="background-color: #f43f5e !important; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 500;">
+                                        <i class="bi bi-x-circle me-1"></i>Wrong
+                                    </span>
+                                @else
+                                    <span class="badge" style="background-color: #3b82f6 !important; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 500;">
+                                        <i class="bi bi-dash-circle me-1"></i>Skipped
+                                    </span>
+                                @endif
                             </div>
-                            <div class="card-body">
-                                <p class="mb-3">{!! $answer->question->question_text !!}</p>
+                            <div class="p-4">
+                                <p class="mb-3" style="color: #e2e8f0 !important;">{!! str_replace(['\\(', '\\)', '\\[', '\\]'], ['\(', '\)', '\[', '\]'], html_entity_decode($answer->question->question_text)) !!}</p>
                                 
                                 @if($answer->question->image_url)
                                     <div class="mb-3">
-                                        <button class="btn btn-sm btn-outline-secondary" type="button" 
+                                        <button class="btn btn-sm" style="background-color: #334155 !important; border-color: #475569 !important; color: #e2e8f0 !important; border-radius: 8px; padding: 0.65rem 1.5rem;" type="button" 
                                                 data-bs-toggle="collapse" 
                                                 data-bs-target="#perf-image-{{ $answer->question->id }}">
-                                            <i class="bi bi-image me-1"></i>Toggle Image
+                                            <i class="bi bi-image me-1"></i>View Image
                                         </button>
                                         <div class="collapse mt-2" id="perf-image-{{ $answer->question->id }}">
                                             <img src="{{ $answer->question->image_url }}" 
                                                  alt="Question Image" 
-                                                 class="img-fluid rounded border"
-                                                 style="max-height: 300px;">
+                                                 class="img-fluid rounded"
+                                                 style="max-height: 400px;">
                                         </div>
                                     </div>
                                 @endif
                                 
-                                <div class="row">
+                                <div class="row g-3">
                                     @foreach(['A', 'B', 'C', 'D'] as $option)
                                         @php
                                             $optionField = 'option_' . strtolower($option);
-                                            $isCorrect = $answer->question->correct_answer === $option;
-                                            $isUserAnswer = $answer->user_answer === $option;
+                                            $isCorrect = strtoupper($answer->question->correct_option) === $option || $answer->question->correct_answer === $option;
+                                            $isUserAnswer = $answer->chosen_option === $option;
                                         @endphp
                                         @if($answer->question->$optionField)
-                                            <div class="col-md-6 mb-2">
-                                                <div class="p-2 rounded 
+                                            <div class="col-md-6">
+                                                <div style="background-color: #334155; border: 2px solid #475569; border-radius: 10px; padding: 1rem; margin-bottom: 0.75rem; transition: all 0.3s ease; 
                                                     @if($isCorrect) 
-                                                        bg-success bg-opacity-10 border border-success
-                                                    @elseif($isUserAnswer && !$isCorrect)
-                                                        bg-danger bg-opacity-10 border border-danger
-                                                    @else 
-                                                        bg-light border
+                                                        background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%); border-color: #10b981; border-width: 2px;
+                                                    @elseif($isUserAnswer)
+                                                        background: linear-gradient(135deg, rgba(244, 63, 94, 0.15) 0%, rgba(244, 63, 94, 0.05) 100%); border-color: #f43f5e; border-width: 2px;
                                                     @endif">
-                                                    <strong>{{ $option }})</strong> {!! $answer->question->$optionField !!}
-                                                    
-                                                    @if($isCorrect)
-                                                        <span class="badge bg-success ms-2">✓</span>
-                                                    @endif
-                                                    
-                                                    @if($isUserAnswer && !$isCorrect)
-                                                        <span class="badge bg-danger ms-2">✗ Your Answer</span>
-                                                    @endif
+                                                    <div class="d-flex align-items-start">
+                                                        <div class="flex-shrink-0 me-2">
+                                                            <strong style="color: #e2e8f0 !important;">{{ $option }})</strong>
+                                                        </div>
+                                                        <div class="flex-grow-1" style="color: #e2e8f0 !important;">
+                                                            {!! str_replace(['\\(', '\\)', '\\[', '\\]'], ['\(', '\)', '\[', '\]'], html_entity_decode($answer->question->$optionField)) !!}
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         @endif
@@ -521,10 +525,7 @@
                             @else
                                 <i class="bi bi-info-circle display-1 text-info mb-4"></i>
                                 <h4 class="mb-4">Ready to Start?</h4>
-                                <p class="text-muted mb-4">
-                                    This exam contains {{ $exam->questions->count() }} questions and must be completed in {{ $exam->duration }} minutes.
-                                    Choose an option below to proceed:
-                                </p>
+                         
                             @endif
                             
                             <div class="d-flex justify-content-center gap-3 flex-wrap">

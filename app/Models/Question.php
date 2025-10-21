@@ -33,6 +33,13 @@ class Question extends Model
     {
         return $this->hasMany(ExamAnswer::class);
     }
+    
+    // Accessor for correct_answer (alias for correct_option)
+    public function getCorrectAnswerAttribute()
+    {
+        return $this->correct_option;
+    }
+    
     // Accessor for options array
     public function getOptionsAttribute()
     {

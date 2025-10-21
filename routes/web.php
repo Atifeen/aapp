@@ -42,6 +42,9 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class . ':student'])-
         Route::get('/{exam}/take', [ExamController::class, 'take'])->name('take');
         Route::post('/{exam}/submit', [ExamController::class, 'submit'])->name('submit');
     });
+    
+    // Exam attempt result viewing
+    Route::get('/attempts/{attempt}/result', [ExamController::class, 'viewAttemptResult'])->name('attempts.result');
 });
 
 Route::middleware('guest')->group(function () {

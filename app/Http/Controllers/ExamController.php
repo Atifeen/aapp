@@ -443,20 +443,37 @@ class ExamController extends Controller
                 ->with('error', 'This exam has not started yet. Start time: ' . $exam->start_time->format('M d, Y H:i'));
         }
 
-        // For rated exams, check if user has already attempted
-        if ($exam->is_rated) {
+        // For active/live exams (with start_time), check if user has already attempted
+        if (!is_null($exam->start_time)) {
             $existingAttempt = ExamAttempt::where('exam_id', $exam->id)
                 ->where('user_id', auth()->id())
                 ->first();
             
             if ($existingAttempt) {
                 return redirect()->route('exams.show', $exam)
-                    ->with('error', 'You have already attempted this rated exam. You can only take rated exams once.');
+                    ->with('error', 'You have already attempted this exam. Active exams can only be taken once.');
             }
         }
 
         $exam->load(['subject', 'chapter', 'questions']);
-        return view('exams.take', compact('exam'));
+        
+        // Calculate remaining time for active exams (with start_time)
+        $remainingSeconds = null;
+        $isActiveExam = !is_null($exam->start_time);
+        
+        if ($isActiveExam) {
+            $endTime = $exam->start_time->copy()->addMinutes($exam->duration);
+            // ✅ Ensure remainingSeconds is always an integer
+            $remainingSeconds = (int) max(0, now()->diffInSeconds($endTime, false));
+            
+            // ✅ SECURITY: Store when user started taking this exam in session
+            $sessionKey = 'exam_start_' . $exam->id;
+            if (!session()->has($sessionKey)) {
+                session()->put($sessionKey, now()->toDateTimeString());
+            }
+        }
+        
+        return view('exams.take', compact('exam', 'remainingSeconds', 'isActiveExam'));
     }
 
     /**
@@ -465,10 +482,37 @@ class ExamController extends Controller
     public function submit(Request $request, Exam $exam)
     {
         try {
-            // Check if exam is available
-            if (!is_null($exam->start_time) && $exam->start_time > now()) {
-                return redirect()->route('exams.show', $exam)
-                    ->with('error', 'This exam has not started yet.');
+            // ✅ SERVER-SIDE VALIDATION: Check if exam time has expired (CRITICAL SECURITY)
+            if (!is_null($exam->start_time) && $exam->duration) {
+                $endTime = $exam->start_time->copy()->addMinutes($exam->duration);
+                
+                // If exam hasn't started yet
+                if ($exam->start_time > now()) {
+                    return redirect()->route('exams.show', $exam)
+                        ->with('error', 'This exam has not started yet.');
+                }
+                
+                // If exam time has expired (global end time)
+                if (now()->greaterThan($endTime)) {
+                    return redirect()->route('exams.show', $exam)
+                        ->with('error', 'Time has expired for this exam. Your submission cannot be accepted.');
+                }
+                
+                // ✅ ADDITIONAL SECURITY: Check user's individual start time from session
+                $sessionKey = 'exam_start_' . $exam->id;
+                $userStartTime = session()->get($sessionKey);
+                
+                if ($userStartTime) {
+                    $userStartTime = \Carbon\Carbon::parse($userStartTime);
+                    $userMaxEndTime = $userStartTime->copy()->addMinutes($exam->duration);
+                    
+                    // User's individual time expired
+                    if (now()->greaterThan($userMaxEndTime)) {
+                        session()->forget($sessionKey);
+                        return redirect()->route('exams.show', $exam)
+                            ->with('error', 'Your time has expired for this exam. Maximum duration: ' . $exam->duration . ' minutes.');
+                    }
+                }
             }
 
             // Validate answers
@@ -490,45 +534,49 @@ class ExamController extends Controller
 
             foreach ($exam->questions as $question) {
                 $userAnswer = $answers[$question->id] ?? null;
-                if ($userAnswer === $question->correct_answer) {
+                // Only count as correct if user provided an answer AND it matches the correct answer
+                if ($userAnswer !== null && $userAnswer === $question->correct_answer) {
                     $correctAnswers++;
                 }
             }
 
             $score = $totalQuestions > 0 ? round(($correctAnswers / $totalQuestions) * 100, 2) : 0;
 
-            // ✅ NEW: Determine if we should save this attempt
-            // Save if: (exam is rated) OR (exam has assigned users)
-            $shouldSaveAttempt = $exam->is_rated || $exam->assignedUsers()->exists();
+            // ✅ Determine if we should save this attempt
+            // Save if: exam has start_time (active/live exam) OR exam has assigned users
+            $shouldSaveAttempt = !is_null($exam->start_time) || $exam->assignedUsers()->exists();
             
             $attempt = null;
-            $ratingChange = null;
             
             if ($shouldSaveAttempt) {
+                // Get user's start time from session
+                $sessionKey = 'exam_start_' . $exam->id;
+                $userStartTime = session()->get($sessionKey);
+                
                 // Save to exam_attempts table
                 $attempt = ExamAttempt::create([
                     'exam_id' => $exam->id,
                     'user_id' => auth()->id(),
+                    'started_at' => $userStartTime ? \Carbon\Carbon::parse($userStartTime) : now(),
                     'score' => $score,
                     'correct_ans' => $correctAnswers,
                     'wrong_ans' => $totalQuestions - $correctAnswers,
                     'total_ques' => $totalQuestions,
                 ]);
                 
-                // Save individual answers to exam_answers table
+                // Save individual answers to exam_answers table (using correct column names)
                 foreach ($exam->questions as $question) {
+                    $userAnswer = $answers[$question->id] ?? null;
                     ExamAnswer::create([
-                        'exam_attempt_id' => $attempt->id,
+                        'attempt_id' => $attempt->id,  // ✅ Fixed: was exam_attempt_id
                         'question_id' => $question->id,
-                        'user_answer' => $answers[$question->id] ?? null,
-                        'is_correct' => ($answers[$question->id] ?? null) === $question->correct_answer,
+                        'chosen_option' => $userAnswer,  // ✅ Fixed: was user_answer
+                        'is_correct' => $userAnswer !== null && $userAnswer === $question->correct_answer,
                     ]);
                 }
                 
-                // If exam is rated, update rating
-                if ($exam->is_rated) {
-                    $ratingChange = $this->updateRating($exam, auth()->user(), $attempt);
-                }
+                // ✅ Clear session after successful submission
+                session()->forget($sessionKey);
             }
 
             // Prepare detailed results
@@ -538,7 +586,7 @@ class ExamController extends Controller
                 $results[] = [
                     'question' => $question,
                     'user_answer' => $userAnswer,
-                    'is_correct' => $userAnswer === $question->correct_answer
+                    'is_correct' => $userAnswer !== null && $userAnswer === $question->correct_answer
                 ];
             }
 
@@ -548,7 +596,6 @@ class ExamController extends Controller
                 'correctAnswers', 
                 'totalQuestions', 
                 'results',
-                'ratingChange',
                 'attempt'
             ));
             
@@ -564,64 +611,48 @@ class ExamController extends Controller
         }
     }
 
-    private function updateRating(Exam $exam, User $user, ExamAttempt $attempt)
+    /**
+     * View results of a previous exam attempt
+     */
+    public function viewAttemptResult(ExamAttempt $attempt)
     {
-        // Get all attempts for this exam to calculate rank
-        $allAttempts = ExamAttempt::where('exam_id', $exam->id)
-            ->orderBy('score', 'desc')
-            ->orderBy('created_at', 'asc')
-            ->get();
-        
-        $rank = $allAttempts->search(function($att) use ($attempt) {
-            return $att->id === $attempt->id;
-        }) + 1;
-        
-        // Use RatingCalculator service
-        $ratingCalculator = app(RatingCalculator::class);
-        $oldRating = $user->rating;
-        $newRating = $ratingCalculator->calculateNewRating(
-            $oldRating,
-            $exam->difficulty_level ?? 2, // Default to medium difficulty if not set
-            $attempt->score,
-            $rank,
-            $allAttempts->count()
-        );
-        
-        // Save rating change
-        $ratingChange = RatingChange::create([
-            'user_id' => $user->id,
-            'exam_id' => $exam->id,
-            'old_rating' => $oldRating,
-            'new_rating' => $newRating,
-            'rank_in_contest' => $rank,
-        ]);
-        
-        // Update user rating
-        $user->update([
-            'rating' => $newRating,
-            'max_rating' => max($user->max_rating, $newRating),
-            'total_solved' => $user->total_solved + 1,
-        ]);
-        
-        // Update exam statistics
-        $this->updateExamStatistics($exam);
-        
-        return $ratingChange;
-    }
+        // Security: Ensure user can only view their own attempts
+        if ($attempt->user_id !== auth()->id()) {
+            abort(403, 'Unauthorized access to this exam result.');
+        }
 
-    private function updateExamStatistics(Exam $exam)
-    {
-        $attempts = ExamAttempt::where('exam_id', $exam->id)->get();
+        $exam = $attempt->exam;
+        $exam->load(['questions']);
         
-        ExamStatistic::updateOrCreate(
-            ['exam_id' => $exam->id],
-            [
-                'total_participants' => $attempts->count(),
-                'average_score' => $attempts->avg('score'),
-                'highest_score' => $attempts->max('score'),
-                'lowest_score' => $attempts->min('score'),
-            ]
-        );
+        // Get the answers for this attempt
+        $attemptAnswers = $attempt->answers()->with('question')->get()->keyBy('question_id');
+        
+        // Calculate statistics
+        $totalQuestions = $exam->questions->count();
+        $correctAnswers = $attempt->correct_ans;
+        $score = $attempt->score;
+        
+        // Prepare detailed results
+        $results = [];
+        foreach ($exam->questions as $question) {
+            $attemptAnswer = $attemptAnswers->get($question->id);
+            $userAnswer = $attemptAnswer ? $attemptAnswer->chosen_option : null;
+            
+            $results[] = [
+                'question' => $question,
+                'user_answer' => $userAnswer,
+                'is_correct' => $attemptAnswer ? $attemptAnswer->is_correct : false
+            ];
+        }
+
+        return view('exams.result', compact(
+            'exam', 
+            'score', 
+            'correctAnswers', 
+            'totalQuestions', 
+            'results',
+            'attempt'
+        ));
     }
 }
 

@@ -103,7 +103,11 @@
                         <label class="form-label">Custom Criteria</label>
                         <div id="criteriaContainer">
                             @php
-                                $customCriteria = $exam->custom_criteria ?? [];
+                                $customCriteria = $exam->custom_criteria;
+                                // Ensure it's an array
+                                if (!is_array($customCriteria)) {
+                                    $customCriteria = [];
+                                }
                                 $criteriaCount = count($customCriteria);
                             @endphp
                             @if($criteriaCount > 0)

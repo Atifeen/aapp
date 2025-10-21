@@ -7,7 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class ExamAttempt extends Model
 {
     protected $fillable = [
-        'exam_id', 'user_id', 'correct_ans', 'wrong_ans', 'total_ques', 'score'
+        'exam_id', 'user_id', 'started_at', 'correct_ans', 'wrong_ans', 'total_ques', 'score'
+    ];
+
+    protected $casts = [
+        'started_at' => 'datetime',
     ];
 
     // Relationships
@@ -23,7 +27,7 @@ class ExamAttempt extends Model
 
     public function answers()
     {
-        return $this->hasMany(ExamAnswer::class, 'exam_attempt_id');
+        return $this->hasMany(ExamAnswer::class, 'attempt_id');
     }
 
     public function ratingChanges()
