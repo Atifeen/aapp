@@ -32,7 +32,7 @@
                 @csrf
                 <div class="mb-3">
                     <label for="title" class="form-label">Exam Title</label>
-                    <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title" value="{{ old('title') }}" required>
+                    <input type="text" class="form-control @error('title') is-invalid @enderror" id="title" name="title" value="{{ old('title', request('title')) }}" required>
                     @error('title')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -42,9 +42,9 @@
                     <label for="exam_type" class="form-label">Exam Type</label>
                     <select class="form-select @error('exam_type') is-invalid @enderror" id="exam_type" name="exam_type" required>
                         <option value="">Select Type</option>
-                        <option value="board" {{ old('exam_type') == 'board' ? 'selected' : '' }}>Board Exam</option>
-                        <option value="university" {{ old('exam_type') == 'university' ? 'selected' : '' }}>University Exam</option>
-                        <option value="custom" {{ old('exam_type') == 'custom' ? 'selected' : '' }}>Custom Exam</option>
+                        <option value="board" {{ old('exam_type', request('exam_type')) == 'board' ? 'selected' : '' }}>Board Exam</option>
+                        <option value="university" {{ old('exam_type', request('exam_type')) == 'university' ? 'selected' : '' }}>University Exam</option>
+                        <option value="custom" {{ old('exam_type', request('exam_type')) == 'custom' ? 'selected' : '' }}>Custom Exam</option>
                     </select>
                     @error('exam_type')
                         <div class="invalid-feedback">{{ $message }}</div>
@@ -53,34 +53,34 @@
 
                 <div class="mb-3">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="is_rated" name="is_rated" value="1" {{ old('is_rated') ? 'checked' : '' }}>
+                        <input class="form-check-input" type="checkbox" id="is_rated" name="is_rated" value="1" {{ old('is_rated', request('is_rated')) ? 'checked' : '' }}>
                         <label class="form-check-label" for="is_rated">
                             Rated Exam (affects user rating)
                         </label>
                     </div>
                 </div>
 
-                <div class="mb-3 rated-exam-field" style="{{ old('is_rated') ? 'display: block;' : 'display: none;' }}">
+                <div class="mb-3 rated-exam-field" style="{{ old('is_rated', request('is_rated')) ? 'display: block;' : 'display: none;' }}">
                     <label for="difficulty_level" class="form-label">Difficulty Level</label>
                     <select class="form-select" id="difficulty_level" name="difficulty_level">
-                        <option value="1">Easy (800-1200)</option>
-                        <option value="2">Medium (1200-1600)</option>
-                        <option value="3">Hard (1600-2000)</option>
-                        <option value="4">Expert (2000+)</option>
+                        <option value="1" {{ old('difficulty_level', request('difficulty_level')) == '1' ? 'selected' : '' }}>Easy (800-1200)</option>
+                        <option value="2" {{ old('difficulty_level', request('difficulty_level')) == '2' ? 'selected' : '' }}>Medium (1200-1600)</option>
+                        <option value="3" {{ old('difficulty_level', request('difficulty_level')) == '3' ? 'selected' : '' }}>Hard (1600-2000)</option>
+                        <option value="4" {{ old('difficulty_level', request('difficulty_level')) == '4' ? 'selected' : '' }}>Expert (2000+)</option>
                     </select>
                 </div>
 
                 <div id="institutionFields" style="display: none;">
                     <div class="mb-3">
                         <label for="institution_name" class="form-label">Institution Name</label>
-                        <input type="text" class="form-control @error('institution_name') is-invalid @enderror" id="institution_name" name="institution_name" value="{{ old('institution_name') }}">
+                        <input type="text" class="form-control @error('institution_name') is-invalid @enderror" id="institution_name" name="institution_name" value="{{ old('institution_name', request('institution_name')) }}">
                         @error('institution_name')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="mb-3">
                         <label for="year" class="form-label">Year</label>
-                        <input type="number" class="form-control @error('year') is-invalid @enderror" id="year" name="year" value="{{ old('year') }}" min="1900" max="{{ date('Y') + 1 }}">
+                        <input type="number" class="form-control @error('year') is-invalid @enderror" id="year" name="year" value="{{ old('year', request('year')) }}" min="1900" max="{{ date('Y') + 1 }}">
                         @error('year')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -121,7 +121,7 @@
                     <select class="form-select @error('subject_id') is-invalid @enderror" id="subject_id" name="subject_id">
                         <option value="">Select Subject (Optional for custom exams)</option>
                         @foreach($subjects as $subject)
-                            <option value="{{ $subject->id }}">{{ $subject->name }} ({{ $subject->class }})</option>
+                            <option value="{{ $subject->id }}" {{ old('subject_id', request('subject_id')) == $subject->id ? 'selected' : '' }}>{{ $subject->name }} ({{ $subject->class }})</option>
                         @endforeach
                     </select>
                 </div>
@@ -135,7 +135,7 @@
 
                 <div class="mb-3" id="start_time_container">
                     <label for="start_time" class="form-label">Start Time</label>
-                    <input type="datetime-local" class="form-control @error('start_time') is-invalid @enderror" id="start_time" name="start_time" value="{{ old('start_time') }}">
+                    <input type="datetime-local" class="form-control @error('start_time') is-invalid @enderror" id="start_time" name="start_time" value="{{ old('start_time', request('start_time')) }}">
                     <div class="form-text">Required for rated exams. Default is set to tomorrow at 9 AM.</div>
                     @error('start_time')
                         <div class="invalid-feedback">{{ $message }}</div>
@@ -144,7 +144,7 @@
 
                 <div class="mb-3">
                     <label for="duration" class="form-label">Duration (minutes)</label>
-                    <input type="number" class="form-control @error('duration') is-invalid @enderror" id="duration" name="duration" value="{{ old('duration') }}" min="1" required>
+                    <input type="number" class="form-control @error('duration') is-invalid @enderror" id="duration" name="duration" value="{{ old('duration', request('duration')) }}" min="1" required>
                     @error('duration')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -192,6 +192,34 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize start time visibility based on exam type
     startTimeField.style.display = isRatedCheckbox.checked ? 'block' : 'none';
+
+    // Trigger exam type change to show/hide appropriate fields on page load
+    if (examType.value) {
+        examType.dispatchEvent(new Event('change'));
+    }
+
+    // Restore chapter selection if subject_id is in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const savedSubjectId = urlParams.get('subject_id');
+    const savedChapterId = urlParams.get('chapter_id');
+    
+    if (savedSubjectId) {
+        subjectSelect.value = savedSubjectId;
+        // Trigger change to load chapters
+        fetch(`/exams/chapters/${savedSubjectId}`)
+            .then(response => response.json())
+            .then(chapters => {
+                chapterSelect.innerHTML = '<option value="">Select Chapter</option>';
+                chapters.forEach(chapter => {
+                    const option = new Option(chapter.name, chapter.id);
+                    if (savedChapterId && chapter.id == savedChapterId) {
+                        option.selected = true;
+                    }
+                    chapterSelect.add(option);
+                });
+                chapterSelect.disabled = false;
+            });
+    }
 
     // Handle exam type change
     examType.addEventListener('change', function() {
@@ -293,16 +321,79 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Selected class:', selectedClass);
             console.log('Current URL before:', currentUrl.toString());
             
-            if (selectedClass) {
-                currentUrl.searchParams.set('class', selectedClass);
-            } else {
-                currentUrl.searchParams.delete('class');
+            // Get all form values
+            const formData = {};
+            
+            // Get text inputs
+            const titleInput = document.getElementById('title');
+            if (titleInput && titleInput.value) {
+                formData.title = titleInput.value;
             }
             
-            console.log('Current URL after:', currentUrl.toString());
+            const institutionNameInput = document.getElementById('institution_name');
+            if (institutionNameInput && institutionNameInput.value) {
+                formData.institution_name = institutionNameInput.value;
+            }
             
-            // Reload page with class filter
-            window.location.href = currentUrl.toString();
+            const yearInput = document.getElementById('year');
+            if (yearInput && yearInput.value) {
+                formData.year = yearInput.value;
+            }
+            
+            const durationInput = document.getElementById('duration');
+            if (durationInput && durationInput.value) {
+                formData.duration = durationInput.value;
+            }
+            
+            const startTimeInput = document.getElementById('start_time');
+            if (startTimeInput && startTimeInput.value) {
+                formData.start_time = startTimeInput.value;
+            }
+            
+            // Get select values
+            const examTypeSelect = document.getElementById('exam_type');
+            if (examTypeSelect && examTypeSelect.value) {
+                formData.exam_type = examTypeSelect.value;
+            }
+            
+            const subjectSelect = document.getElementById('subject_id');
+            if (subjectSelect && subjectSelect.value) {
+                formData.subject_id = subjectSelect.value;
+            }
+            
+            const chapterSelect = document.getElementById('chapter_id');
+            if (chapterSelect && chapterSelect.value) {
+                formData.chapter_id = chapterSelect.value;
+            }
+            
+            const difficultySelect = document.getElementById('difficulty_level');
+            if (difficultySelect && difficultySelect.value) {
+                formData.difficulty_level = difficultySelect.value;
+            }
+            
+            // Get checkbox value
+            const isRatedCheckbox = document.getElementById('is_rated');
+            if (isRatedCheckbox && isRatedCheckbox.checked) {
+                formData.is_rated = '1';
+            }
+            
+            // Clear existing params except CSRF
+            const newUrl = new URL(currentUrl.origin + currentUrl.pathname);
+            
+            // Set class filter
+            if (selectedClass) {
+                newUrl.searchParams.set('class', selectedClass);
+            }
+            
+            // Add all form data to URL
+            Object.keys(formData).forEach(key => {
+                newUrl.searchParams.set(key, formData[key]);
+            });
+            
+            console.log('Current URL after:', newUrl.toString());
+            
+            // Reload page with all parameters
+            window.location.href = newUrl.toString();
         });
     }
 });

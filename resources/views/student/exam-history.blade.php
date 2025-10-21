@@ -111,7 +111,7 @@
                 </div>
             </div>
             <div class="card-footer bg-white">
-                {{ $attempts->links() }}
+                {{ $attempts->links('custom-pagination') }}
             </div>
         </div>
         @else

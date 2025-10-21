@@ -1,0 +1,263 @@
+[
+  {
+    "question": "কোনটি লুইস অম্ল?",
+    "image": null,
+    "options": [
+      "H₂SO₄",
+      "HCl",
+      "H₂O",
+      "AlCl₃"
+    ],
+    "answer": "ঘ"
+  },
+  {
+    "question": "কোনটি গ্রাহামের ব্যাপন সূত্র?",
+    "image": null,
+    "options": [
+      " \\( r_1\\sqrt{M_1} = r_2\\sqrt{M_2} \\) ",
+      " \\( r \\propto \\frac{1}{M} \\) ",
+      " \\( \\frac{r_1}{r_2} = \\sqrt{\\frac{M_1}{M_2}} \\) ",
+      " \\( r \\propto M \\) "
+    ],
+    "answer": "ক"
+  },
+  {
+    "question": "L-atm এককে R এর মান কোনটি?",
+    "image": null,
+    "options": [
+      "0.0821",
+      "1.987",
+      "8.314",
+      " \\( 8.314 \\times 10^7 \\) "
+    ],
+    "answer": "ক"
+  },
+  {
+    "question": "বয়েলের সূত্রের লেখচিত্র কোন ধরনের?",
+    "image": null,
+    "options": [
+      "আইসোথার্ম",
+      "আইসোবার",
+      "আইসোকোর",
+      "আইসোমেল"
+    ],
+    "answer": "ক"
+  },
+  {
+    "question": "নিচের কোন যৌগে কেন্দ্রীয় মৌলের জারণ মান সর্বনিম্ন?",
+    "image": null,
+    "options": [
+      "HNO₃",
+      "H₂SO₃",
+      "H₂SO₄",
+      "HClO₄"
+    ],
+    "answer": "খ"
+  },
+  {
+    "question": "প্রাইমারি স্ট্যান্ডার্ড পদার্থ কোনটি?",
+    "image": null,
+    "options": [
+      "K₂Cr₂O₇",
+      "KMnO₄",
+      "HCl",
+      "Na₂S₂O₃"
+    ],
+    "answer": "ক"
+  },
+  {
+    "question": "",
+    "image": null,
+    "options": [
+      "i ও ii",
+      "i ও iii",
+      "ii ও iii",
+      "i, ii ও iii"
+    ],
+    "answer": "ক"
+  },
+  {
+    "question": "\\( \\text{Fe(s)/Fe}^{2+}\\text{(aq)} || \\text{Br}_2\\text{(l)/Br}^{-}\\text{(aq), Pt(s)} \\)  তড়িৎ রাসায়নিক কোষের সঠিক কোষ বিক্রিয়া কোনটি?",
+    "image": null,
+    "options": [
+      " \\( \\text{Fe} + \\text{Br}_2 \\longrightarrow \\text{Fe}^{3+} + 2\\text{Br}^- \\) ",
+      " \\( \\text{Fe} + 2\\text{Br}^- \\longrightarrow \\text{Fe}^{2+} + \\text{Br}_2 \\) ",
+      " \\( \\text{Fe}^{2+} + \\text{Br}_2 \\longrightarrow \\text{Fe} + 2\\text{Br}^- \\) ",
+      " \\( \\text{Fe} + \\text{Br}_2 \\longrightarrow \\text{Fe}^{2+} + 2\\text{Br}^- \\) "
+    ],
+    "answer": "ঘ"
+  },
+  {
+    "question": "প্রমাণ হাইড্রোজেন তড়িৎদ্বারের বিভব মান কত?",
+    "image": null,
+    "options": [
+      "+1.0V",
+      "-1.34V",
+      "+0.76V",
+      "0.0V"
+    ],
+    "answer": "ঘ"
+  },
+  {
+    "question": "কোনটি অধিকতর শক্তিশালী জারক?",
+    "image": null,
+    "options": [
+      "H⁺",
+      "Au³⁺",
+      "Ag⁺",
+      "Cu²⁺"
+    ],
+    "answer": "খ"
+  },
+  {
+    "question": "",
+    "image": "https://assets.chorcha.net/FhWqy1UfIvqgfDCOBUs-O.png",
+    "options": [
+      "ক",
+      "খ",
+      "গ",
+      "ঘ",
+      "i ও ii",
+      "i ও iii",
+      "ii ও iii",
+      "i, ii ও iii"
+    ],
+    "answer": "খ"
+  },
+  {
+    "question": "",
+    "image": null,
+    "options": [
+      "i ও ii",
+      "ii ও iii",
+      "i ও iii",
+      "i, ii ও iii"
+    ],
+    "answer": "ঘ"
+  },
+  {
+    "question": "অম্লীয় মাধ্যমে মিথাইল অরেঞ্জের বর্ণ কী?",
+    "image": null,
+    "options": [
+      "হলুদ",
+      "নীল",
+      "গোলাপী",
+      "লাল"
+    ],
+    "answer": "ঘ"
+  },
+  {
+    "question": "অনুবন্ধী অ্যাসিড ও ক্ষারক যুগলের মধ্যে পার্থক্য কী?",
+    "image": null,
+    "options": [
+      "একটি H-পরমাণু",
+      "একটি পানির অণু",
+      "একটি H⁺ আয়ন",
+      "একটি OH⁻ আয়ন"
+    ],
+    "answer": "গ"
+  },
+  {
+    "question": "\\( 29^{\\circ}\\text{C} \\)  তাপমাত্রায়  \\( 3.0\\text{g N}_2 \\)  এর মোট গতি শক্তি কত?",
+    "image": null,
+    "options": [
+      "403.5 J",
+      "806.5 J",
+      "831.5 J",
+      "1612.5 J"
+    ],
+    "answer": "ক"
+  },
+  {
+    "question": "কোনটি নাইট্রোসো মূলকের সংকেত?",
+    "image": null,
+    "options": [
+      "-CN",
+      "-NO₂",
+      "-NO",
+      "-NC"
+    ],
+    "answer": "গ"
+  },
+  {
+    "question": "কোনটি ইলেকট্রনাকর্ষী প্রতিস্থাপন বিক্রিয়ায় অধিক সক্রিয়?",
+    "image": "https://assets.chorcha.net/pK_EJP6wy35I7RBJQKjvl.png",
+    "options": [
+      "ক",
+      "খ",
+      "গ",
+      "ঘ"
+    ],
+    "answer": "খ"
+  },
+  {
+    "question": "নিম্নের কোন যৌগটি আলোক সমাণুতা দেখায়?",
+    "image": null,
+    "options": [
+      " \\( \\text{CH}_2(\\text{NH}_2)\\text{COOH} \\) ",
+      " \\( (\\text{CH}_3)_2\\text{CHCOOH} \\) ",
+      " \\( \\text{CH}_3\\text{CH}(\\text{NH}_2)\\text{COOH} \\) ",
+      " \\( \\text{CH}_3\\text{CH}_2\\text{COOH} \\) "
+    ],
+    "answer": "গ"
+  },
+  {
+    "question": "যৌগটির IUPAC নাম কী?",
+    "image": "https://assets.chorcha.net/ffq2OiQ35QiN3gacZaSHi.png",
+    "options": [
+      "2, 2-ডাইক্লোরো- 3 -অক্সোবিউট্যান্যাল",
+      "3, 3 -ডাইক্লোরো- 2 -অক্সোবিউট্যান্যাল",
+      "2 -অক্সো- 2, 2-ডাইক্লোরোবিউট্যান্যাল",
+      "3 -অক্সো- 2, 2-ডাইক্লোরোবিউট্যান্যাল"
+    ],
+    "answer": "খ"
+  },
+  {
+    "question": "\\( \\text{A} \\xrightarrow{\\text{SOCl}_2} \\text{B} \\xrightarrow{\\text{Na, শুষ্ক ইথার}} \\text{n-বিউটেন} \\)  A ও B যৌগদ্বয়ের সংকেত কোনটি?",
+    "image": null,
+    "options": [
+      " \\( \\text{CH}_3\\text{COOH} \\)  ও  \\( \\text{CH}_3\\text{Cl} \\) ",
+      " \\( \\text{C}_2\\text{H}_5\\text{Cl} \\)  ও  \\( \\text{C}_2\\text{H}_5\\text{ONa} \\) ",
+      " \\( \\text{C}_2\\text{H}_5\\text{OH} \\)  ও  \\( \\text{C}_2\\text{H}_5\\text{Cl} \\) ",
+      " \\( \\text{C}_2\\text{H}_5\\text{Cl} \\)  ও  \\( \\text{CH}_3\\text{OH} \\) "
+    ],
+    "answer": "গ"
+  },
+  {
+    "question": "",
+    "image": null,
+    "options": [
+      "i ও ii",
+      "ii ও iii",
+      "i ও iii",
+      "i, ii ও iii"
+    ],
+    "answer": "গ"
+  },
+  {
+    "question": "",
+    "image": null,
+    "options": [
+      "i ও ii",
+      "ii ও iii",
+      "i ও iii",
+      "i, ii ও iii"
+    ],
+    "answer": "গ"
+  },
+  {
+    "question": "",
+    "image": null,
+    "options": [
+      "i ও ii",
+      "ii ও iii",
+      "i ও iii",
+      "i, ii ও iii",
+      "1M",
+      "0.5M",
+      "0.01M",
+      "0.001M"
+    ],
+    "answer": "ক"
+  }
+]

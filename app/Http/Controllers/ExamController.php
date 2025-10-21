@@ -30,7 +30,7 @@ class ExamController extends Controller
             }
         }
 
-        $exams = $query->paginate(10)->withQueryString();
+        $exams = $query->paginate(30)->withQueryString();
 
         $filterType = request()->get('exam_type');
         
@@ -159,36 +159,39 @@ class ExamController extends Controller
 
     public function selectQuestions(Request $request, Exam $exam)
     {
-        $query = Question::where('subject_id', $exam->subject_id)
-            ->when($exam->chapter_id, function($query) use ($exam) {
-                return $query->where('chapter_id', $exam->chapter_id);
-            });
+        // Start with all questions - let user filter manually
+        $query = Question::query();
+
+        // Apply filters from request
+        if ($request->filled('question_text')) {
+            $query->where('question_text', 'like', '%' . $request->question_text . '%');
+        }
+        
+        if ($request->filled('subject_id')) {
+            $query->where('subject_id', $request->subject_id);
+        }
+        
+        if ($request->filled('chapter_id')) {
+            $query->where('chapter_id', $request->chapter_id);
+        }
+        
+        if ($request->filled('year')) {
+            $query->where('year', $request->year);
+        }
+        
+        if ($request->filled('source_name')) {
+            $query->where('source_name', 'like', '%' . $request->source_name . '%');
+        }
+        
+        if ($request->filled('source_type')) {
+            $query->where('source_type', 'like', '%' . $request->source_type . '%');
+        }
 
         // Class filter - filter questions by subject class
         if ($request->filled('class')) {
             $query->whereHas('subject', function($q) use ($request) {
                 $q->where('class', $request->class);
             });
-        }
-
-        // Apply filters
-        if ($request->filled('question_text')) {
-            $query->where('question_text', 'like', '%' . $request->question_text . '%');
-        }
-        if ($request->filled('subject_id')) {
-            $query->where('subject_id', $request->subject_id);
-        }
-        if ($request->filled('chapter_id')) {
-            $query->where('chapter_id', $request->chapter_id);
-        }
-        if ($request->filled('year')) {
-            $query->where('year', $request->year);
-        }
-        if ($request->filled('source_name')) {
-            $query->where('source_name', 'like', '%' . $request->source_name . '%');
-        }
-        if ($request->filled('source_type')) {
-            $query->where('source_type', 'like', '%' . $request->source_type . '%');
         }
 
         $questions = $query->with(['subject', 'chapter'])->paginate(50);

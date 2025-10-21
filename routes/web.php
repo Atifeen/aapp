@@ -6,6 +6,7 @@ use App\Http\Controllers\ExamController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\QuestionImportController;
+use App\Http\Controllers\UserController;
 
 // ----------------------------
 // Guest routes (unauthenticated)
@@ -91,6 +92,10 @@ Route::middleware('auth')->group(function () {
 // Admin-only routes
 // ----------------------------
 Route::middleware(['auth', \App\Http\Middleware\CheckRole::class . ':admin'])->group(function () {
+    // Student Management
+    Route::get('/students', [UserController::class, 'index'])->name('students.index');
+    Route::delete('/students/{user}', [UserController::class, 'destroy'])->name('students.destroy');
+    
     // Questions CRUD
     Route::get('/questions', [QuestionController::class, 'index'])->name('questions.index');
     Route::post('/questions', [QuestionController::class, 'store'])->name('questions.store');

@@ -44,7 +44,7 @@
                 @elseif($filterType === 'university')
                     <i class="bi bi-building me-2"></i>University Exams
                 @elseif($filterType === 'custom')
-                    <i class="bi bi-gear me-2"></i>Custom Exams (Contests)
+                    <i class="bi bi-gear me-2"></i>Custom Exams
                 @else
                     <i class="bi bi-folder2-open me-2"></i>All Exams
                 @endif
@@ -132,7 +132,9 @@
             </div>
 
             <div class="d-flex justify-content-center mt-4">
-                {{ $exams->links() }}
+                            @if($exams->hasPages())
+                {{ $exams->links('custom-pagination') }}
+            @endif
             </div>
         </div>
     </div>
@@ -149,6 +151,10 @@
     .hover-row td {
         background-color: transparent !important;
         color: #e2e8f0 !important;
+        padding: 1rem !important;
+    }
+    .table thead th {
+        padding: 1rem !important;
     }
     .table > :not(caption) > * > * {
         border-color: #475569 !important;

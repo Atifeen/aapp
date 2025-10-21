@@ -1,0 +1,277 @@
+[
+  {
+    "question": "নিরাপদ খাদ্য সংরক্ষক কোনটি?",
+    "image": null,
+    "options": [
+      "ভিনেগার",
+      "সোডিয়াম নাইট্রেট",
+      "মিথাইল প্যারাবেন",
+      "ক্যালসিয়াম কার্বাইড"
+    ],
+    "answer": "ক"
+  },
+  {
+    "question": "1%  \\(H_2SO_4\\)  দ্রবণের  \\(pH\\)  মান কত?",
+    "image": null,
+    "options": [
+      "0.69",
+      "0.99",
+      "1.09",
+      "2.09"
+    ],
+    "answer": "ক"
+  },
+  {
+    "question": "ভরক্রিয়া সূত্র কে আবিষ্কার করেন?",
+    "image": null,
+    "options": [
+      "গুলবার্গ ও ওয়েজ",
+      "হেয়ারসন ও সোরেনসেন",
+      "মোসলে ও ওয়েজ",
+      "লা-শ্যাতেলিয়ে ও উলবার্খ"
+    ],
+    "answer": "ক"
+  },
+  {
+    "question": "হাইড্রোজেন পরমাণবিক বর্ণালীর বামার সিরিজের ২য় লাইন এর তরঙ্গদৈর্ঘ্য কত?",
+    "image": null,
+    "options": [
+      "400 nm",
+      "486 nm",
+      "620 nm",
+      "750 nm"
+    ],
+    "answer": "খ"
+  },
+  {
+    "question": "কোন বিক্রিয়ার ক্ষেত্রে  \\(K_p > K_c\\)  হবে?",
+    "image": null,
+    "options": [
+      " \\(N_2(g) + 3H_2(g) \\rightleftharpoons 2NH_3(g)\\) ",
+      " \\(2SO_2(g) + O_2(g) \\rightleftharpoons 2SO_3(g)\\) ",
+      " \\(H_2(g) + I_2(g) \\rightleftharpoons 2HI(g)\\) ",
+      " \\(PCl_5(g) \\rightleftharpoons PCl_3(g) + Cl_2(g)\\) "
+    ],
+    "answer": "ঘ"
+  },
+  {
+    "question": "সবুজ রসায়নের মূলনীতি কয়টি?",
+    "image": null,
+    "options": [
+      "8",
+      "10",
+      "12",
+      "14"
+    ],
+    "answer": "গ"
+  },
+  {
+    "question": "এসিডের তীব্রতার ক্রমানুসারে কোনটি সঠিক?",
+    "image": null,
+    "options": [
+      " \\( \\text{HNO}_3 > \\text{H}_3\\text{PO}_3 > \\text{HNO}_2 > \\text{HClO}_3 \\) ",
+      " \\( \\text{HNO}_3 > \\text{HClO}_3 > \\text{HNO}_2 > \\text{H}_3\\text{PO}_3 \\) ",
+      " \\( \\text{H}_3\\text{PO}_3 > \\text{HNO}_2 > \\text{HNO}_3 > \\text{HClO}_3 \\) ",
+      " \\( \\text{HClO}_3 > \\text{HNO}_3 > \\text{H}_3\\text{PO}_3 > \\text{HNO}_2 \\) "
+    ],
+    "answer": "খ"
+  },
+  {
+    "question": "[Ar]  \\( 3d^{10}4s^0 \\)  ইলেকট্রন বিন্যাসটি হলো—\ni.  \\( \\text{Cu}^+ \\)  আয়নের\nii.  \\( \\text{Zn}^{2+} \\)  আয়নের\niii.  \\( \\text{Ni}^{2+} \\)  আয়নের",
+    "image": null,
+    "options": [
+      " \\( i \\)  ও  \\( ii \\) ",
+      " \\( i \\)  ও  \\( iii \\) ",
+      " \\( ii \\)  ও  \\( iii \\) ",
+      " \\( i, ii \\)  ও  \\( iii \\) "
+    ],
+    "answer": "ক"
+  },
+  {
+    "question": "কোনটি অ্যান্টিঅক্সিডেন্ট?",
+    "image": null,
+    "options": [
+      "সোডিয়াম বেনজোয়েট",
+      "সুক্রোজ",
+      "বিউটাইলেটেড হাইড্রোক্সি টলুইন",
+      "ভিনেগার"
+    ],
+    "answer": "গ"
+  },
+  {
+    "question": "টাকায় নিরাপত্তা ব্যবস্থা হিসাবে কোন রাসায়নিক পদার্থটি ব্যবহার করা হয়?",
+    "image": null,
+    "options": [
+      "সিলভার নাইট্রেট",
+      "ফ্লোরোসেন্ট ফসফোর",
+      "পটাশিয়াম আয়োডাইড",
+      "সোডিয়াম ফসফেট"
+    ],
+    "answer": "খ"
+  },
+  {
+    "question": "খেজুরের রসে কতভাগ সুক্রোজ থাকে?",
+    "image": null,
+    "options": [
+      "5–10%",
+      "16–20%",
+      "21–25%",
+      "30–40%"
+    ],
+    "answer": "খ"
+  },
+  {
+    "question": "উদ্দীপক বিক্রিয়ার মাধ্যমে কোন আয়নটি শনাক্ত করা যায়?",
+    "image": "https://assets.chorcha.net/EhLI5vZt8XIPEk3WEUXVx.png",
+    "options": [
+      "Cu²⁺",
+      "Na⁺",
+      "Al³⁺",
+      "NH₄⁺"
+    ],
+    "answer": "গ"
+  },
+  {
+    "question": "উদ্দীপকে উল্লিখিত ক্ষারে অবস্থিত মৌলটির সর্বশেষ ইলেকট্রনের জন্য কোয়ান্টাম সংখ্যার মানের সঠিক সেট কোনটি?",
+    "image": "https://assets.chorcha.net/aAgrlUzX85J83ZBiMiwCd.png",
+    "options": [
+      "3, 2, -2, - \\( \\frac{1}{2} \\) ",
+      "3, 2, -1, - \\( \\frac{1}{2} \\) ",
+      "3, 1, -1, + \\( \\frac{1}{2} \\) ",
+      "3, 0, 0, + \\( \\frac{1}{2} \\) "
+    ],
+    "answer": "গ"
+  },
+  {
+    "question": "H-বন্ধনের শক্তিক্রমের ক্ষেত্রে কোনটি সঠিক?",
+    "image": null,
+    "options": [
+      "H ...... F > H ...... N > H ...... O",
+      "H ...... O > H ...... F > H ...... N",
+      "H ...... F > H ...... O > H ...... N",
+      "H ...... N > H ...... O > H ...... F"
+    ],
+    "answer": "গ"
+  },
+  {
+    "question": "কোন যৌগটিতে সর্বোচ্চ পোলারায়ণ ঘটে?",
+    "image": null,
+    "options": [
+      "MgCl₂",
+      "NaCl",
+      "LiCl",
+      "BeCl₂"
+    ],
+    "answer": "ঘ"
+  },
+  {
+    "question": "ক্ষারীয় বাফার তৈরিতে কোনটি ব্যবহৃত হয়?",
+    "image": null,
+    "options": [
+      "Na₂SO₄ ও H₂SO₄",
+      "NH₄Cl ও NH₄OH",
+      "NaOH ও NaCl",
+      "CH₃COOH ও CH₃COONa"
+    ],
+    "answer": "খ"
+  },
+  {
+    "question": "ভিনেগার-\ni. পানি অপেক্ষা কম স্ফুটনাঙ্ক বিশিষ্ট তরল\nii. পানিতে যে কোনো অনুপাতে দ্রবণীয়\niii. একটি মৃদু এসিড",
+    "image": null,
+    "options": [
+      "i ও ii",
+      "i ও iii",
+      "ii ও iii",
+      "i, ii ও iii"
+    ],
+    "answer": "গ"
+  },
+  {
+    "question": "90 mL. 0.12 M CH3COOH দ্রবণে 75 mL 0.12 M NaOH দ্রবণ যোগ করা হল।উদ্দীপক দ্রবণে কোনটি অতিরিক্ত থাকবে?",
+    "image": null,
+    "options": [
+      "15.0 mL 0.12 M CH₃COOH",
+      "15.0 mL 0.10 M NaOH",
+      "10.2 mL 1.0 M NaOH",
+      "2.7 mL 1.0 M CH₃COOH"
+    ],
+    "answer": "ক"
+  },
+  {
+    "question": "90 mL. 0.12 M CH3COOH দ্রবণে 75 mL 0.12 M NaOH দ্রবণ যোগ করা হল।উদ্দীপক দ্রবণে সামান্য NaOH যোগ করলে কী ঘটবে?",
+    "image": null,
+    "options": [
+      "pH কমবে",
+      "pOH বাড়বে",
+      "pH স্থির থাকবে",
+      "OH⁻ এর ঘনমাত্রা বাড়বে"
+    ],
+    "answer": "গ"
+  },
+  {
+    "question": "কোনটির শক্তি কম?",
+    "image": null,
+    "options": [
+      "রেডিও ওয়েভ",
+      "অবলোহিত রশ্মি",
+      "X-রশ্মি",
+      "γ-রশ্মি"
+    ],
+    "answer": "ক"
+  },
+  {
+    "question": "কোন মৌলের আয়নীকরণ শক্তি বেশি?",
+    "image": null,
+    "options": [
+      "B",
+      "N",
+      "O",
+      "C"
+    ],
+    "answer": "খ"
+  },
+  {
+    "question": "কোনটির বন্ধন কোণ বেশি?",
+    "image": null,
+    "options": [
+      "NH₃",
+      "PH₃",
+      "H₂O",
+      "H₂S"
+    ],
+    "answer": "ক"
+  },
+  {
+    "question": "কোনটির সর্ববহিঃস্থ স্তরে সমান সংখ্যক ইলেকট্রন বিদ্যমান?",
+    "image": null,
+    "options": [
+      "N, P",
+      "Li, B",
+      "Be, Al",
+      "C, S"
+    ],
+    "answer": "ক"
+  },
+  {
+    "question": "পানিতে দ্রাব্যতার সঠিক ক্রম কোনটি?",
+    "image": null,
+    "options": [
+      "SiCl₄ > AlCl₃ > MgCl₂ > NaCl",
+      "NaCl > MgCl₂ > AlCl₃ > SiCl₄",
+      "AlCl₃ > SiCl₄ > NaCl > MgCl₂",
+      "MgCl₂ > AlCl₃ > SiCl₄ > NaCl"
+    ],
+    "answer": "খ"
+  },
+  {
+    "question": "অর্থো নাইট্রো ফেনলে বিদ্যমান—\ni. হাইড্রোজেন বন্ধন\nii. সন্নিবেশ বন্ধন\niii. সমযোজী বন্ধন",
+    "image": null,
+    "options": [
+      "i ও ii",
+      "i ও iii",
+      "ii ও iii",
+      "i, ii ও iii"
+    ],
+    "answer": "ঘ"
+  }
+]

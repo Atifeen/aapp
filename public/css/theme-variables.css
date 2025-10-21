@@ -1,0 +1,194 @@
+:root {
+    /* Main Background Colors */
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-tertiary: #334155;
+    --bg-hover: #2d3748;
+    
+    /* Border Colors */
+    --border-primary: #475569;
+    --border-secondary: #64748b;
+    
+    /* Text Colors */
+    --text-primary: #e2e8f0;
+    --text-secondary: #f1f5f9;
+    --text-muted: #94a3b8;
+    
+    /* Accent Colors */
+    --accent-green: #15803d;
+    --accent-green-hover: #166534;
+    --accent-green-light: #22c55e;
+    
+    --accent-red: #dc2626;
+    --accent-red-hover: #b91c1c;
+    
+    --accent-blue: #3b82f6;
+    --accent-yellow: #fbbf24;
+    --accent-orange: #ca8a04;
+    
+    /* Shadow */
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 15px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.3);
+    
+    /* Transitions */
+    --transition-default: all 0.3s ease;
+}
+
+/* Global Styles */
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+/* Card Styles */
+.card {
+    background-color: var(--bg-secondary) !important;
+    border: 1px solid var(--border-primary) !important;
+    color: var(--text-primary) !important;
+}
+
+.card-header {
+    background-color: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+    border-bottom: 1px solid var(--border-primary);
+}
+
+.card-body {
+    background-color: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Button Styles */
+.btn-primary, .btn-success, .btn-info {
+    background-color: var(--accent-green) !important;
+    border-color: var(--accent-green) !important;
+    color: white !important;
+    box-shadow: none !important;
+}
+
+.btn-primary:hover, .btn-success:hover, .btn-info:hover {
+    background-color: var(--accent-green-hover) !important;
+    border-color: var(--accent-green-hover) !important;
+}
+
+.btn-danger {
+    background-color: var(--accent-red) !important;
+    border-color: var(--accent-red) !important;
+}
+
+.btn-danger:hover {
+    background-color: var(--accent-red-hover) !important;
+    border-color: var(--accent-red-hover) !important;
+}
+
+.btn-outline-secondary {
+    background-color: var(--bg-tertiary) !important;
+    border-color: var(--border-primary) !important;
+    color: var(--text-primary) !important;
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--border-primary) !important;
+    border-color: var(--border-primary) !important;
+    color: white !important;
+}
+
+/* Badge Styles */
+.badge {
+    background-color: var(--accent-green) !important;
+    color: white !important;
+}
+
+/* Form Styles */
+.form-control, .form-select {
+    background-color: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-primary) !important;
+}
+
+.form-control:focus, .form-select:focus {
+    background-color: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--accent-green) !important;
+    box-shadow: 0 0 0 0.2rem rgba(21, 128, 61, 0.25) !important;
+}
+
+.form-control::placeholder {
+    color: var(--text-muted);
+}
+
+.form-select option {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+/* Table Styles */
+.table {
+    background-color: var(--bg-secondary) !important;
+}
+
+.table thead th {
+    background-color: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+    border: none;
+}
+
+.table tbody tr {
+    background-color: var(--bg-secondary) !important;
+}
+
+.table tbody tr:hover {
+    background-color: var(--bg-hover) !important;
+}
+
+.table tbody tr td {
+    background-color: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+    border-bottom: 1px solid var(--border-primary);
+}
+
+/* Alert Styles */
+.alert-success {
+    background-color: var(--accent-green) !important;
+    border-color: var(--accent-green) !important;
+    color: white !important;
+}
+
+.alert-danger {
+    background-color: var(--accent-red) !important;
+    border-color: var(--accent-red) !important;
+    color: white !important;
+}
+
+.alert-warning {
+    background-color: var(--accent-orange) !important;
+    border-color: var(--accent-orange) !important;
+    color: white !important;
+}
+
+.alert-info {
+    background-color: var(--bg-tertiary) !important;
+    border-color: var(--border-primary) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Text Styles */
+h1, h2, h3, h4, h5, h6, p, strong, label {
+    color: var(--text-primary) !important;
+}
+
+.text-muted {
+    color: var(--text-muted) !important;
+}
+
+/* Border Styles */
+.border {
+    border-color: var(--border-primary) !important;
+}
+
+/* Background Overrides */
+.bg-light {
+    background-color: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+}

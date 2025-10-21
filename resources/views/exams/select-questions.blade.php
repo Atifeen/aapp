@@ -11,7 +11,7 @@
         color: #e2e8f0 !important;
     }
     .main-header {
-        background: #334155;
+         
         color: white;
         padding: 2rem 0;
         margin-bottom: 2rem;
@@ -55,7 +55,7 @@
         color: #e2e8f0 !important;
     }
     .table td {
-        background-color: #1e293b !important;
+        background-color: var(--bg-primary) !important;
         color: #e2e8f0 !important;
         border: none;
         border-bottom: 1px solid #475569;
@@ -66,7 +66,7 @@
     }
     .question-image {
         transition: all 0.3s ease;
-        background: #334155;
+        background-color: transparent !important;
         padding: 10px;
         border-radius: 8px;
         text-align: center;
@@ -104,7 +104,7 @@
     }
     .question-card:hover {
         box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        background: #2d3748 !important;
+        background: var(--bg-primary) !important;
     }
     
     /* Custom Pagination Styles */
@@ -343,6 +343,11 @@
         color: #e2e8f0 !important;
     }
     
+    /* Table hover effect */
+    .table-hover tbody tr:hover td {
+        background-color: var(--bg-primary) !important;
+    }
+    
     /* Override Bootstrap default colors */
     .bg-light {
         background-color: #1e293b !important;
@@ -354,26 +359,24 @@
         color: #e2e8f0 !important;
     }
     
-    /* Question card hover effect - remove green border */
-    .question-card:hover {
-        background-color: #2d3748 !important;
-        border-color: #475569 !important;
-    }
+    /* Question card hover effect */
+    /* .question-card:hover {
+        background-color: var(--bg-primary) !important;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    } */
     
     /* Empty state text */
     .text-center i, .text-center h5, .text-center p {
         color: #94a3b8 !important;
     }
+ 
 </style>
-
+   
 <body>
 <div class="main-header">
     <div class="container">
         <div class="d-flex justify-content-between align-items-center">
-            <div>
-                <h1 class="mb-1"><i class="bi bi-question-circle me-3"></i>Select Questions for: {{ $exam->title }}</h1>
-                <p class="mb-0">Choose questions to include in your exam</p>
-            </div>
+            
             <div class="text-end">
                 <span class="badge" style="background-color: #334155 !important; color: white !important;">
                     <i class="bi bi-list-check me-2"></i><span id="selectedCount">{{ $exam->questions->count() }}</span> selected
@@ -418,7 +421,7 @@
                     </button>
                 </div>
                 <div class="col-md-6">
-                    <small class="text-light">Select a random set of questions from the current filtered results</small>
+                    <!-- <small class="text-light">Select a random set of questions from the current filtered results</small> -->
                 </div>
             </div>
         </div>
@@ -586,7 +589,7 @@
                                 <div id="img-{{ $question->id }}" class="question-image" style="display: block;">
                                     <img src="{{ $question->image }}" alt="Question Image" 
                                          class="img-fluid rounded border shadow-sm" 
-                                         style="max-width: 100%; max-height: 300px; object-fit: contain;"
+                                         style="max-width: 100%; max-height: 300px; object-fit: contain; background-color: white !important;"
                                          loading="lazy">
                                 </div>
                             </div>
@@ -610,9 +613,9 @@
                                     @foreach($options as $option)
                                         @if($question->{'option_' . $option})
                                             <div class="col-md-6">
-                                                <div class="option-item p-2 rounded" style="background-color: {{ $question->correct_option === $option ? '#166534' : '#1e293b' }} !important; border: 1px solid {{ $question->correct_option === $option ? '#15803d' : '#475569' }} !important; color: #e2e8f0 !important;">
+                                                <div class="option-item p-2 rounded" style="background-color: {{ strtoupper($question->correct_option) === strtoupper($option) ? '#166534' : '#1e293b' }} !important; border: 1px solid {{ strtoupper($question->correct_option) === strtoupper($option) ? '#15803d' : '#475569' }} !important; color: #e2e8f0 !important;">
                                                     <strong>{{ strtoupper($option) }})</strong> {{ $question->{'option_' . $option} }}
-                                                    @if($question->correct_option === $option)
+                                                    @if(strtoupper($question->correct_option) === strtoupper($option))
                                                         <i class="bi bi-check-circle-fill ms-2"></i>
                                                     @endif
                                                 </div>

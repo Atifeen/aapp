@@ -1,0 +1,256 @@
+[
+  {
+    "question": "\\( x = a \\cos \\theta \\) ,  \\( y = a \\sin \\theta \\)  হলে,  \\( \\frac{dy}{dx} \\)  = কত?",
+    "image": null,
+    "options": [
+      " \\( \\frac{y}{x} \\) ",
+      " \\( \\frac{x}{y} \\) ",
+      " \\( -\\frac{y}{x} \\) ",
+      " \\( -\\frac{x}{y} \\) "
+    ],
+    "answer": "ঘ"
+  },
+  {
+    "question": "\\( y = -\\sqrt{4 - x^2} \\)  এবং  \\( y = 0 \\)  দ্বারা আবদ্ধ ক্ষেত্রের ক্ষেত্রফল কোনটি?",
+    "image": null,
+    "options": [
+      " \\( 4\\pi \\) ",
+      " \\( 2\\pi \\) ",
+      " \\( \\pi \\) ",
+      " \\( \\frac{\\pi}{2} \\) "
+    ],
+    "answer": "খ"
+  },
+  {
+    "question": "\\( \\int e^x (\\cos x - \\sin x) dx = f(x) + c \\)  হলে,  \\( f(x) \\)  = কত?",
+    "image": null,
+    "options": [
+      " \\( e^x \\sin x \\) ",
+      " \\( -e^x \\sin x \\) ",
+      " \\( e^x \\cos x \\) ",
+      " \\( -e^x \\cos x \\) "
+    ],
+    "answer": "গ"
+  },
+  {
+    "question": "\\( \\int_{2}^{3} \\frac{2x - 1}{x(x - 1)} dx \\)  = কত?",
+    "image": null,
+    "options": [
+      " \\( \\ln 4 \\) ",
+      " \\( \\ln 2 \\) ",
+      " \\( 2 \\ln 3 \\) ",
+      " \\( \\ln 3 \\) "
+    ],
+    "answer": "ঘ"
+  },
+  {
+    "question": "\\( \\int \\sin x^{\\circ} dx \\)  = কত?",
+    "image": null,
+    "options": [
+      " \\( \\cos x^{\\circ} + c \\) ",
+      " \\( -\\cos x^{\\circ} + c \\) ",
+      " \\( -\\frac{180}{\\pi} \\cos x^{\\circ} + c \\) ",
+      " \\( \\frac{180}{\\pi} \\cos x^{\\circ} + c \\) "
+    ],
+    "answer": "গ"
+  },
+  {
+    "question": "যদি  \\( A, B, C \\)  ম্যাট্রিক্স তিনটির আকার যথাক্রমে  \\( 3\\times 4 \\) ,  \\( 4\\times 3 \\)  এবং  \\( 3\\times 2 \\)  হয় তবে  \\( (A^T + B)C \\)  ম্যাট্রিক্সটির আকার কত?",
+    "image": null,
+    "options": [
+      " \\( 4\\times 3 \\) ",
+      " \\( 3\\times 4 \\) ",
+      " \\( 2\\times 4 \\) ",
+      " \\( 4\\times 2 \\) "
+    ],
+    "answer": "ঘ"
+  },
+  {
+    "question": "\\( A = \\begin{bmatrix} 0 & 3 & -2 \\\\ -3 & 0 & 7 \\\\ 2 & -7 & 0 \\end{bmatrix} \\)  হলে –\ni.  \\( A \\)  একটি বিপ্রতিসম ম্যাট্রিক্স\nii.  \\( A \\)  একটি স্কেলার ম্যাট্রিক্স\niii.  \\( AB \\)  এর ক্রম  \\( 3\\times 1 \\)  হলে,  \\( B \\)  এর ক্রম  \\( 3\\times 1 \\) \nনিচের কোনটি সঠিক?",
+    "image": null,
+    "options": [
+      "i ও ii",
+      "i ও iii",
+      "ii ও iii",
+      "i, ii ও iii"
+    ],
+    "answer": "খ"
+  },
+  {
+    "question": "\\( A = 3 \\begin{bmatrix} 1 & 2 \\\\ 4 & -3 \\end{bmatrix} \\)",
+    "image": null,
+    "options": [
+      " \\( 33 \\) ",
+      " \\( -11 \\) ",
+      " \\( -33 \\) ",
+      " \\( -99 \\) ",
+      " \\( -\\frac{1}{11} \\begin{bmatrix} -3 & -2 \\\\ -4 & 1 \\end{bmatrix} \\) ",
+      " \\( \\frac{1}{11} \\begin{bmatrix} -3 & -2 \\\\ -4 & 1 \\end{bmatrix} \\) ",
+      " \\( -\\frac{1}{11} \\begin{bmatrix} -3 & -4 \\\\ -2 & 1 \\end{bmatrix} \\) ",
+      " \\( \\frac{1}{11} \\begin{bmatrix} -3 & -4 \\\\ -2 & 1 \\end{bmatrix} \\) "
+    ],
+    "answer": "ক"
+  },
+  {
+    "question": "নিচের কোনটি ব্যতিক্রমী ম্যাট্রিক্স?",
+    "image": null,
+    "options": [
+      " \\( \\begin{bmatrix} 1 & 0 \\\\ 0 & 1 \\end{bmatrix} \\) ",
+      " \\( \\begin{bmatrix} 2 & -1 \\\\ 6 & 3 \\end{bmatrix} \\) ",
+      " \\( \\begin{bmatrix} 1 & 2 \\\\ 2 & -4 \\end{bmatrix} \\) ",
+      " \\( \\begin{bmatrix} 3 & 6 \\\\ 2 & 4 \\end{bmatrix} \\) "
+    ],
+    "answer": "ঘ"
+  },
+  {
+    "question": "\\( a \\)  এর কোন মানের জন্য  \\( (a-1)x + (a+1)y = 7 \\)  রেখাটি  \\( 3x + 5y = -7 \\)  রেখার সমান্তরাল হবে?",
+    "image": null,
+    "options": [
+      " \\( -7 \\) ",
+      " \\( -4 \\) ",
+      " \\( 4 \\) ",
+      " \\( 7 \\) "
+    ],
+    "answer": "গ"
+  },
+  {
+    "question": "\\( y + x = 0 \\)  সরলরেখাটি  \\( x \\)  -অক্ষের ধনাত্মক দিকের সাথে কত কোণ উৎপন্ন করে?",
+    "image": null,
+    "options": [
+      " \\( 45^{\\circ} \\) ",
+      " \\( 135^{\\circ} \\) ",
+      " \\( 225^{\\circ} \\) ",
+      " \\( 315^{\\circ} \\) "
+    ],
+    "answer": "খ"
+  },
+  {
+    "question": "",
+    "image": "https://assets.chorcha.net/C-81abnz1_3arQWws-UUV.png",
+    "options": [
+      " \\( \\sqrt{3}x + y = 6 \\) ",
+      " \\( \\sqrt{3}x - y = 6 \\) ",
+      " \\( x - \\sqrt{3}y = 6 \\) ",
+      " \\( x + \\sqrt{3}y = 6 \\) ",
+      " \\( 3\\sqrt{6} \\) ",
+      " \\( 6\\sqrt{3} \\) ",
+      " \\( 9\\sqrt{3} \\) ",
+      " \\( 12\\sqrt{3} \\) "
+    ],
+    "answer": "খ"
+  },
+  {
+    "question": "\\( (-2, -2) \\)  বিন্দুর পোলার স্থানাঙ্ক কোনটি?",
+    "image": null,
+    "options": [
+      " \\( (2\\sqrt{2}, \\frac{\\pi}{4}) \\) ",
+      " \\( (2\\sqrt{2}, \\frac{3\\pi}{4}) \\) ",
+      " \\( (2\\sqrt{2}, \\frac{5\\pi}{4}) \\) ",
+      " \\( (2\\sqrt{2}, \\frac{7\\pi}{4}) \\) "
+    ],
+    "answer": "গ"
+  },
+  {
+    "question": "\\( 3x^2 + 3y^2 + 6x + 12y - 1 = 0 \\)  বৃত্তের কেন্দ্র কোনটি?",
+    "image": null,
+    "options": [
+      " \\( (-3, -6) \\) ",
+      " \\( (-1, -2) \\) ",
+      " \\( (1, 2) \\) ",
+      " \\( (3, 6) \\) "
+    ],
+    "answer": "খ"
+  },
+  {
+    "question": "\\( (2, 4) \\)  কেন্দ্রবিশিষ্ট ও  \\( x \\)  -অক্ষকে স্পর্শ করে এরূপ বৃত্তের সমীকরণ—",
+    "image": null,
+    "options": [
+      " \\( x^2 + y^2 - 4x - 8y + 16 = 0 \\) ",
+      " \\( x^2 + y^2 - 4x - 8y + 4 = 0 \\) ",
+      " \\( x^2 + y^2 - 8x - 4y + 16 = 0 \\) ",
+      " \\( x^2 + y^2 - 8x - 4y + 4 = 0 \\) "
+    ],
+    "answer": "খ"
+  },
+  {
+    "question": "\\( y = mx + c \\)  সরলরেখাটি  \\( x^2 + y^2 = 25 \\)  বৃত্তকে স্পর্শ করার শর্ত—",
+    "image": null,
+    "options": [
+      " \\( c = \\pm 5\\sqrt{1 + m^2} \\) ",
+      " \\( c = \\pm 5\\sqrt{1 - m^2} \\) ",
+      " \\( c = \\pm 25\\sqrt{1 + m^2} \\) ",
+      " \\( c = \\pm 25\\sqrt{1 - m^2} \\) "
+    ],
+    "answer": "ক"
+  },
+  {
+    "question": "\\( \\triangle ABC \\)  এর  \\( a : b : c = 1 : \\sqrt{3} : 2 \\)  হলে  \\( \\angle C \\)  এর মান কত?",
+    "image": null,
+    "options": [
+      " \\( 90^{\\circ} \\) ",
+      " \\( 60^{\\circ} \\) ",
+      " \\( 45^{\\circ} \\) ",
+      " \\( 30^{\\circ} \\) "
+    ],
+    "answer": "ক"
+  },
+  {
+    "question": "\\( \\sin 5^{\\circ} = P \\)  হলে  \\( \\sin 10^{\\circ} \\)  এর মান কোনটি?",
+    "image": null,
+    "options": [
+      " \\( 2P\\sqrt{1-P^2} \\) ",
+      " \\( 2\\sqrt{1-P^2} \\) ",
+      " \\( 2P\\sqrt{P^2-1} \\) ",
+      " \\( 2P \\) "
+    ],
+    "answer": "ক"
+  },
+  {
+    "question": "",
+    "image": "https://assets.chorcha.net/PGuHXOl-2N8ExE7Vczbum.png",
+    "options": [
+      " \\( \\frac{1}{\\sqrt{3}} \\) ",
+      " \\( \\frac{2}{\\sqrt{3}} \\) ",
+      " \\( 2\\sqrt{3} \\) ",
+      " \\( 3\\sqrt{3} \\) ",
+      " \\( 1 \\) ",
+      " \\( 2 \\) ",
+      " \\( \\frac{2}{\\sqrt{3}} \\) ",
+      " \\( 4 \\) "
+    ],
+    "answer": "খ"
+  },
+  {
+    "question": "\\( y = \\cot^{-1} \\frac{1-x}{1+x} \\)  হলে,  \\( \\frac{dy}{dx} \\)  = ?",
+    "image": null,
+    "options": [
+      " \\( \\frac{1}{1+x^2} \\) ",
+      " \\( \\frac{-1}{1+x^2} \\) ",
+      " \\( \\frac{1}{1+x} \\) ",
+      " \\( \\frac{-1}{1+x} \\) "
+    ],
+    "answer": "ক"
+  },
+  {
+    "question": "\\( (0, 1) \\)  বিন্দুতে  \\( y = e^x \\)  বক্ররেখার—\ni. স্পর্শকের সমীকরণ  \\( x - y + 1 = 0 \\) \nii. অভিলম্বের সমীকরণ  \\( x + y - 1 = 0 \\) \niii. ঢাল =  \\( 1 \\) \nনিচের কোনটি সঠিক?",
+    "image": null,
+    "options": [
+      "i ও ii",
+      "i ও iii",
+      "ii ও iii",
+      "i, ii ও iii"
+    ],
+    "answer": "ঘ"
+  },
+  {
+    "question": "\\( \\cos 3x \\)  এর  \\( n \\)  -তম অন্তরজ কোনটি?",
+    "image": null,
+    "options": [
+      " \\( 3^n \\cos 3x \\) ",
+      " \\( 3^n \\sin 3x \\) ",
+      " \\( 3^n \\cos \\left(\\frac{n\\pi}{2} + 3x\\right) \\) ",
+      " \\( 3^n \\sin \\left(\\frac{n\\pi}{2} + 3x\\right) \\) "
+    ],
+    "answer": "গ"
+  }
+]

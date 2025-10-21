@@ -105,7 +105,7 @@
                 </div>
             </div>
             <div class="card-footer bg-white">
-                {{ $students->links() }}
+                {{ $students->links('custom-pagination') }}
             </div>
         </div>
     </div>

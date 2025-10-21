@@ -1,0 +1,277 @@
+[
+  {
+    "question": "\\( (3, \\frac{3\\sqrt{3}}{2}) \\)  বিন্দুর পোলার স্থানাঙ্ক কোনটি?",
+    "image": null,
+    "options": [
+      " \\( (3, -\\frac{\\pi}{3}) \\) ",
+      " \\( (\\sqrt{3}, \\frac{\\pi}{3}) \\) ",
+      " \\( (-3, -\\frac{\\pi}{3}) \\) ",
+      " \\( (3, \\frac{\\pi}{3}) \\) "
+    ],
+    "answer": "ঘ"
+  },
+  {
+    "question": "\\( A = \\begin{bmatrix} a & -a \\\\ a & -a \\end{bmatrix} \\)  হলে,  \\( A^2 \\)  একটি—",
+    "image": null,
+    "options": [
+      "অভেদঘাতী ম্যাট্রিক্স",
+      "সমঘাতী ম্যাট্রিক্স",
+      "শূন্যঘাতী ম্যাট্রিক্স",
+      "অভেদক ম্যাট্রিক্স"
+    ],
+    "answer": "গ"
+  },
+  {
+    "question": "\\( \\frac{d}{dx} (e^{\\ln x}) \\)  = কত?",
+    "image": null,
+    "options": [
+      " \\( e^x \\) ",
+      "1",
+      " \\( e^{\\ln x} \\) ",
+      "0"
+    ],
+    "answer": "খ"
+  },
+  {
+    "question": "\\( A(-1,1), B(1,2), C(3,1) \\)  তিনটি বিন্দু হলে,  \\( \\triangle ABC \\)  এর ক্ষেত্রফল কত?",
+    "image": null,
+    "options": [
+      "1 বর্গ একক",
+      "2 বর্গ একক",
+      "3 বর্গ একক",
+      "4 বর্গ একক"
+    ],
+    "answer": "খ"
+  },
+  {
+    "question": "\\( y=\\frac{1}{x} \\)  হলে,  \\( y_3 \\)  = কত?",
+    "image": null,
+    "options": [
+      " \\( -\\frac{3!}{x^4} \\) ",
+      " \\( \\frac{3!}{x^4} \\) ",
+      " \\( -\\frac{1}{x^4} \\) ",
+      " \\( \\frac{1}{x^4} \\) "
+    ],
+    "answer": "ক"
+  },
+  {
+    "question": "\\( m=\\sin 20^\\circ \\)  হলে,  \\( \\sin 40^\\circ \\)  এর মান কোনটি?",
+    "image": null,
+    "options": [
+      " \\( 2m\\sqrt{1-m^2} \\) ",
+      " \\( 2m \\) ",
+      " \\( 2m\\sqrt{m^2-1} \\) ",
+      " \\( 2\\sqrt{1-m^2} \\) "
+    ],
+    "answer": "ক"
+  },
+  {
+    "question": "\\( A^{-1} = \\begin{bmatrix} 3 & -5 \\\\ -1 & 2 \\end{bmatrix} \\)  হলে,  \\( A \\)  হলো—",
+    "image": null,
+    "options": [
+      " \\( \\begin{bmatrix} -2 & 5 \\\\ 1 & 3 \\end{bmatrix} \\) ",
+      " \\( \\begin{bmatrix} 2 & 5 \\\\ 1 & 3 \\end{bmatrix} \\) ",
+      " \\( \\begin{bmatrix} 2 & -5 \\\\ 1 & 3 \\end{bmatrix} \\) ",
+      " \\( \\begin{bmatrix} -2 & 5 \\\\ 1 & -3 \\end{bmatrix} \\) "
+    ],
+    "answer": "খ"
+  },
+  {
+    "question": "\\( \\sec^2 \\frac{14\\pi}{17} - \\cot^2 \\frac{23\\pi}{34} \\)  = কত?",
+    "image": null,
+    "options": [
+      "-2",
+      "-1",
+      "1",
+      "2"
+    ],
+    "answer": "গ"
+  },
+  {
+    "question": "চিত্রে  \\( C \\)  বিন্দুর স্থানাঙ্ক কোনটি?",
+    "image": "https://assets.chorcha.net/6BDUC72rSvpTTO1b2mLms.png",
+    "options": [
+      " \\( (3,1) \\) ",
+      " \\( (1, -3) \\) ",
+      " \\( (3, -1) \\) ",
+      " \\( (-1, -3) \\) "
+    ],
+    "answer": "ক"
+  },
+  {
+    "question": "\\( x^2+y^2+2gx+2fy+c=0 \\)  বৃত্তের ক্ষেত্রে—\ni.  \\( f=0 \\)  হলে, বৃত্তটির কেন্দ্র  \\( x \\) -অক্ষের উপর অবস্থিত\nii.  \\( g^2=c \\)  হলে, বৃত্তটি  \\( y \\) -অক্ষকে স্পর্শ করে\niii.  \\( c=0 \\)  হলে, বৃত্তটি মূলবিন্দুগামী\nনিচের কোনটি সঠিক?",
+    "image": null,
+    "options": [
+      "i ও ii",
+      "i ও iii",
+      "ii ও iii",
+      "i, ii ও iii"
+    ],
+    "answer": "খ"
+  },
+  {
+    "question": "",
+    "image": "https://assets.chorcha.net/zPx1FBGLO8cppSqxeFR1e.png",
+    "options": [
+      " \\( 95^\\circ \\) ",
+      " \\( 100^\\circ \\) ",
+      " \\( 110^\\circ \\) ",
+      " \\( 120^\\circ \\) "
+    ],
+    "answer": "ঘ"
+  },
+  {
+    "question": "",
+    "image": "https://assets.chorcha.net/zPx1FBGLO8cppSqxeFR1e.png",
+    "options": [
+      "8.68",
+      "8.86",
+      "8.76",
+      "8.67"
+    ],
+    "answer": "ঘ"
+  },
+  {
+    "question": "\\( x-\\sqrt{3}y=6 \\)  একটি সরলরেখা।",
+    "image": null,
+    "options": [
+      " \\( 30^\\circ \\) ",
+      " \\( 45^\\circ \\) ",
+      " \\( 60^\\circ \\) ",
+      " \\( 120^\\circ \\) "
+    ],
+    "answer": "ক"
+  },
+  {
+    "question": "\\( \\begin{vmatrix} 1 & 1 & 1 \\\\ 3 & 2 & 1 \\\\ a & 2 & 1 \\end{vmatrix} = 2 \\)  হলে,  \\( a \\)  এর মান কত?",
+    "image": null,
+    "options": [
+      "-2",
+      "-1",
+      "1",
+      "2"
+    ],
+    "answer": "গ"
+  },
+  {
+    "question": "\\( \\int_2^4 \\ln x dx \\)  = কত?",
+    "image": null,
+    "options": [
+      "6 ln 2 - 2",
+      "2 - 6 ln 2",
+      "2 + 6 ln 2",
+      "4 ln 2 - 2"
+    ],
+    "answer": "ক"
+  },
+  {
+    "question": "\\( \\lim_{x \\to 0} \\frac{\\sin 2x}{5x} \\)  = কত?",
+    "image": null,
+    "options": [
+      "2",
+      "5",
+      " \\( \\frac{5}{2} \\) ",
+      " \\( \\frac{2}{5} \\) "
+    ],
+    "answer": "ঘ"
+  },
+  {
+    "question": "\\( \\int \\frac{5x^4}{\\sqrt[3]{x}} dx \\)  = কত?",
+    "image": null,
+    "options": [
+      " \\( -\\frac{14}{15} x^{\\frac{14}{3}} + c \\) ",
+      " \\( \\frac{15}{14} x^{\\frac{14}{3}} + c \\) ",
+      " \\( \\frac{14}{15} x^{\\frac{14}{3}} + c \\) ",
+      " \\( -\\frac{15}{14} x^{\\frac{14}{3}} + c \\) "
+    ],
+    "answer": "খ"
+  },
+  {
+    "question": "\\( \\int_0^1 \\frac{e^x}{2+e^x} dx \\)  = কত?",
+    "image": null,
+    "options": [
+      " \\( \\ln(2+e^x) \\) ",
+      " \\( \\ln(e^x) \\) ",
+      " \\( \\ln(2+e) \\) ",
+      " \\( \\ln\\left(\\frac{2+e}{3}\\right) \\) "
+    ],
+    "answer": "ঘ"
+  },
+  {
+    "question": "\\( x-\\sqrt{3}y=6 \\)  একটি সরলরেখা।",
+    "image": null,
+    "options": [
+      " \\( \\sqrt{3}x+y+5=0 \\) ",
+      " \\( \\sqrt{3}x+y=5 \\) ",
+      " \\( x+\\sqrt{3}y=5 \\) ",
+      " \\( x+\\sqrt{3}y+5=0 \\) "
+    ],
+    "answer": "খ"
+  },
+  {
+    "question": "\\( (-5,1) \\)  বিন্দু থেকে  \\( x^2+y^2-6x=0 \\)  বৃত্তে অঙ্কিত স্পর্শকের দৈর্ঘ্য কত একক?",
+    "image": null,
+    "options": [
+      "2",
+      " \\( \\sqrt{14} \\) ",
+      " \\( 2\\sqrt{14} \\) ",
+      "14"
+    ],
+    "answer": "গ"
+  },
+  {
+    "question": "\\( \\begin{vmatrix} l+m & 1 & n \\\\ m+n & 1 & l \\\\ n+l & 1 & m \\end{vmatrix} \\)  এর মান কত?",
+    "image": null,
+    "options": [
+      " \\( (l+m)(m+n) \\) ",
+      " \\( (l+m)(m+n)(n+l) \\) ",
+      "1",
+      "0"
+    ],
+    "answer": "ঘ"
+  },
+  {
+    "question": "\\( \\int \\tan x dx \\)  এর মান—\ni.  \\( -\\ln|\\cos x|+c \\) \nii.  \\( \\ln|\\sec x|+c \\) \niii.  \\( \\ln|\\cot x|+c \\) \nনিচের কোনটি সঠিক?",
+    "image": null,
+    "options": [
+      "i ও ii",
+      "i ও iii",
+      "ii ও iii",
+      "i, ii ও iii"
+    ],
+    "answer": "ক"
+  },
+  {
+    "question": "\\( \\frac{d}{dx}(xe^x) \\)  = কত?",
+    "image": null,
+    "options": [
+      " \\( e^x \\) ",
+      " \\( (1+x)e^x \\) ",
+      " \\( xe^x \\) ",
+      " \\( (1-x)e^x \\) "
+    ],
+    "answer": "খ"
+  },
+  {
+    "question": "\\( x^2+y^2-4x-6y+4=0 \\)  বৃত্তটি  \\( x \\) -অক্ষকে স্পর্শ করলে স্পর্শ বিন্দুর স্থানাঙ্ক কোনটি?",
+    "image": null,
+    "options": [
+      " \\( (-4,0) \\) ",
+      " \\( (-2,0) \\) ",
+      " \\( (2,0) \\) ",
+      " \\( (4,0) \\) "
+    ],
+    "answer": "গ"
+  },
+  {
+    "question": "\\( x^2+y^2=9 \\)  বৃত্তের কোন স্পর্শক  \\( x \\) -অক্ষের ধনাত্মক দিকের সাথে  \\( 30^\\circ \\)  কোণ উৎপন্ন করে?",
+    "image": null,
+    "options": [
+      " \\( \\sqrt{3}x-y \\pm 3=0 \\) ",
+      " \\( \\sqrt{3}x+y \\pm 6=0 \\) ",
+      " \\( x-\\sqrt{3}y \\pm 6=0 \\) ",
+      " \\( x-\\sqrt{3}y \\pm 3=0 \\) "
+    ],
+    "answer": "গ"
+  }
+]
