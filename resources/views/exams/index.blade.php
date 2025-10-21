@@ -1,10 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+@if(auth()->user()->role === 'student')
+    @include('components.student-nav')
+@else
+    @include('components.admin-nav')
+@endif
+
+<div class="container py-4">
     @if(isset($stats) && !empty($stats))
         <!-- Stats Section -->
-        <div class="row g-3 mb-4" style="margin-top: 2rem;">
+        <div class="row g-3 mb-4">
             <div class="col-md-4">
                 <div class="card border-0 shadow-sm" style="background-color: #334155;">
                     <div class="card-body text-center py-4">
@@ -93,9 +99,11 @@
                     <i class="bi bi-folder2-open me-2"></i>All Exams
                 @endif
             </h3>
-            <a href="{{ route('exams.create') }}" class="btn btn-success">
-                <i class="bi bi-plus-circle me-1"></i>Create New Exam
-            </a>
+            @if(auth()->user()->role === 'admin')
+                <a href="{{ route('exams.create') }}" class="btn btn-success">
+                    <i class="bi bi-plus-circle me-1"></i>Create New Exam
+                </a>
+            @endif
         </div>
         <div class="card-body" style="background-color: #1e293b;">
             @if(session('success'))
@@ -157,16 +165,22 @@
                                         <a href="{{ route('exams.show', $exam) }}" class="btn btn-sm btn-success me-1" title="View Exam">
                                             <i class="bi bi-eye"></i> View
                                         </a>
-                                        <a href="{{ route('exams.edit', $exam) }}" class="btn btn-sm btn-success me-1" title="Edit Exam">
-                                            <i class="bi bi-pencil"></i> Edit
-                                        </a>
-                                        <form action="{{ route('exams.destroy', $exam) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this exam? This action cannot be undone.');" style="display:inline-block; margin-left:4px;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger" title="Delete Exam">
-                                                <i class="bi bi-trash"></i> Delete
-                                            </button>
-                                        </form>
+                                        @if(auth()->user()->role === 'admin')
+                                            <a href="{{ route('exams.edit', $exam) }}" class="btn btn-sm btn-success me-1" title="Edit Exam">
+                                                <i class="bi bi-pencil"></i> Edit
+                                            </a>
+                                            <form action="{{ route('exams.destroy', $exam) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this exam? This action cannot be undone.');" style="display:inline-block; margin-left:4px;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger" title="Delete Exam">
+                                                    <i class="bi bi-trash"></i> Delete
+                                                </button>
+                                            </form>
+                                        @else
+                                            <!-- <a href="{{ route('exams.preview', $exam) }}" class="btn btn-sm btn-primary me-1" title="Start Exam">
+                                                <i class="bi bi-play-circle"></i> Start
+                                            </a> -->
+                                        @endif
                                     </div>
                                 </td>
                             </tr>

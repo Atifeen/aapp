@@ -51,27 +51,8 @@
                     @enderror
                 </div>
 
-                <div class="mb-3">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="is_rated" name="is_rated" value="1" {{ old('is_rated', request('is_rated')) ? 'checked' : '' }}>
-                        <label class="form-check-label" for="is_rated">
-                            Rated Exam (affects user rating)
-                        </label>
-                    </div>
-                </div>
-
-                <div class="mb-3 rated-exam-field" style="{{ old('is_rated', request('is_rated')) ? 'display: block;' : 'display: none;' }}">
-                    <label for="difficulty_level" class="form-label">Difficulty Level</label>
-                    <select class="form-select" id="difficulty_level" name="difficulty_level">
-                        <option value="1" {{ old('difficulty_level', request('difficulty_level')) == '1' ? 'selected' : '' }}>Easy (800-1200)</option>
-                        <option value="2" {{ old('difficulty_level', request('difficulty_level')) == '2' ? 'selected' : '' }}>Medium (1200-1600)</option>
-                        <option value="3" {{ old('difficulty_level', request('difficulty_level')) == '3' ? 'selected' : '' }}>Hard (1600-2000)</option>
-                        <option value="4" {{ old('difficulty_level', request('difficulty_level')) == '4' ? 'selected' : '' }}>Expert (2000+)</option>
-                    </select>
-                </div>
-
                 <!-- Board Exam Fields -->
-                <div id="boardFields" style="display: none;">
+                <div id="boardFields" style="display: {{ old('exam_type', request('exam_type')) == 'board' ? 'block' : 'none' }};">
                     <div class="mb-3">
                         <label for="board_name" class="form-label">Board Name</label>
                         <select class="form-select @error('board_name') is-invalid @enderror" id="board_name" name="board_name">
@@ -94,7 +75,7 @@
                 </div>
 
                 <!-- University Exam Fields -->
-                <div id="universityFields" style="display: none;">
+                <div id="universityFields" style="display: {{ old('exam_type', request('exam_type')) == 'university' ? 'block' : 'none' }};">
                     <div class="mb-3">
                         <label for="university_name" class="form-label">University Name</label>
                         <select class="form-select @error('university_name') is-invalid @enderror" id="university_name" name="university_name">
@@ -116,7 +97,7 @@
                     </div>
                 </div>
 
-                <div id="customFields" style="display: none;">
+                <div id="customFields" style="display: {{ old('exam_type', request('exam_type')) == 'custom' ? 'block' : 'none' }};">
                     <div class="mb-3">
                         <label class="form-label">Custom Criteria</label>
                         <div id="criteriaContainer">
@@ -162,10 +143,10 @@
                     </select>
                 </div>
 
-                <div class="mb-3" id="start_time_container">
-                    <label for="start_time" class="form-label">Start Time</label>
+                <div class="mb-3">
+                    <label for="start_time" class="form-label">Start Time <small class="text-muted">(optional - leave blank for anytime availability)</small></label>
                     <input type="datetime-local" class="form-control @error('start_time') is-invalid @enderror" id="start_time" name="start_time" value="{{ old('start_time', request('start_time')) }}">
-                    <div class="form-text">Required for rated exams. Default is set to tomorrow at 9 AM.</div>
+                    <div class="form-text">Leave blank to make the exam available anytime.</div>
                     @error('start_time')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -193,34 +174,8 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const examType = document.getElementById('exam_type');
-    const institutionFields = document.getElementById('institutionFields');
-    const customFields = document.getElementById('customFields');
     const subjectSelect = document.getElementById('subject_id');
     const chapterSelect = document.getElementById('chapter_id');
-    const isRatedCheckbox = document.getElementById('is_rated');
-    const ratedFields = document.querySelector('.rated-exam-field');
-    const startTimeField = document.getElementById('start_time_container');
-    const startTimeInput = document.getElementById('start_time');
-    const difficultyLevelInput = document.getElementById('difficulty_level');
-
-    // Set default start time to tomorrow at 9 AM if not already set
-    if (!startTimeInput.value) {
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        tomorrow.setHours(9, 0, 0, 0);
-        startTimeInput.value = tomorrow.toISOString().slice(0, 16);
-    }
-
-    // Initialize fields based on initial rated status
-    if (isRatedCheckbox.checked) {
-        ratedFields.style.display = 'block';
-        startTimeField.style.display = 'block';
-        startTimeInput.required = true;
-        difficultyLevelInput.required = true;
-    }
-
-    // Initialize start time visibility based on exam type
-    startTimeField.style.display = isRatedCheckbox.checked ? 'block' : 'none';
 
     // Trigger exam type change to show/hide appropriate fields on page load
     if (examType.value) {
@@ -281,19 +236,6 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             subjectField.required = false;
             chapterField.required = false;
-        }
-    });
-
-    // Handle rated exam checkbox
-    isRatedCheckbox.addEventListener('change', function() {
-        ratedFields.style.display = this.checked ? 'block' : 'none';
-        startTimeField.style.display = this.checked ? 'block' : 'none';
-        if (this.checked) {
-            document.getElementById('start_time').required = true;
-            document.getElementById('difficulty_level').required = true;
-        } else {
-            document.getElementById('start_time').required = false;
-            document.getElementById('difficulty_level').required = false;
         }
     });
 
@@ -362,14 +304,26 @@ document.addEventListener('DOMContentLoaded', function() {
                 formData.title = titleInput.value;
             }
             
-            const institutionNameInput = document.getElementById('institution_name');
-            if (institutionNameInput && institutionNameInput.value) {
-                formData.institution_name = institutionNameInput.value;
+            // Get board fields if visible
+            const boardNameSelect = document.getElementById('board_name');
+            if (boardNameSelect && boardNameSelect.value) {
+                formData.board_name = boardNameSelect.value;
             }
             
-            const yearInput = document.getElementById('year');
-            if (yearInput && yearInput.value) {
-                formData.year = yearInput.value;
+            const boardYearInput = document.getElementById('board_year');
+            if (boardYearInput && boardYearInput.value) {
+                formData.year = boardYearInput.value;
+            }
+            
+            // Get university fields if visible
+            const universityNameSelect = document.getElementById('university_name');
+            if (universityNameSelect && universityNameSelect.value) {
+                formData.university_name = universityNameSelect.value;
+            }
+            
+            const universityYearInput = document.getElementById('university_year');
+            if (universityYearInput && universityYearInput.value) {
+                formData.year = universityYearInput.value;
             }
             
             const durationInput = document.getElementById('duration');

@@ -88,7 +88,14 @@
         margin-bottom: 1rem;
     }
 </style>
-<div class="container mt-4">
+
+@if(auth()->user()->role === 'student')
+    @include('components.student-nav')
+@else
+    @include('components.admin-nav')
+@endif
+
+<div class="container py-4">
     <div class="row">
         <div class="col-md-12">
             <!-- Exam Details Card -->
@@ -183,23 +190,44 @@
                     <div class="row">
                         <div class="col-md-6">
                             <dl class="row">
-                                <dt class="col-sm-4">Subject</dt>
-                                <dd class="col-sm-8">{{ $exam->subject->name }}</dd>
-
                                 <dt class="col-sm-4">Type</dt>
                                 <dd class="col-sm-8">{{ ucfirst($exam->exam_type) }}</dd>
 
+                                @if($exam->subject)
+                                    <dt class="col-sm-4">Subject</dt>
+                                    <dd class="col-sm-8">{{ $exam->subject->name }}</dd>
+                                @endif
+
+                                @if($exam->exam_type == 'board')
+                                    <dt class="col-sm-4">Board</dt>
+                                    <dd class="col-sm-8">{{ $exam->board_name }}</dd>
+
+                                    <dt class="col-sm-4">Year</dt>
+                                    <dd class="col-sm-8">{{ $exam->year }}</dd>
+                                @endif
+
                                 @if($exam->exam_type == 'university')
-                                    <dt class="col-sm-4">Institution</dt>
-                                    <dd class="col-sm-8">{{ $exam->institution_name }}</dd>
+                                    <dt class="col-sm-4">University</dt>
+                                    <dd class="col-sm-8">{{ $exam->university_name }}</dd>
 
                                     <dt class="col-sm-4">Year</dt>
                                     <dd class="col-sm-8">{{ $exam->year }}</dd>
                                 @endif
 
                                 @if($exam->exam_type == 'custom')
-                                    <dt class="col-sm-4">Chapter</dt>
-                                    <dd class="col-sm-8">{{ $exam->chapter->name ?? 'All Chapters' }}</dd>
+                                    @if($exam->chapter)
+                                        <dt class="col-sm-4">Chapter</dt>
+                                        <dd class="col-sm-8">{{ $exam->chapter->name }}</dd>
+                                    @endif
+
+                                    @if($exam->custom_criteria)
+                                        <dt class="col-sm-4">Criteria</dt>
+                                        <dd class="col-sm-8">
+                                            @foreach($exam->custom_criteria as $key => $value)
+                                                <span class="badge bg-secondary me-1">{{ $key }}: {{ $value }}</span>
+                                            @endforeach
+                                        </dd>
+                                    @endif
                                 @endif
                             </dl>
                         </div>
@@ -211,15 +239,15 @@
                                 <dt class="col-sm-4">Questions</dt>
                                 <dd class="col-sm-8">{{ $exam->questions->count() }}</dd>
 
-                                @if($exam->is_rated)
-                                    <dt class="col-sm-4">Rated</dt>
-                                    <dd class="col-sm-8">
-                                        <span class="badge bg-success">Yes</span>
-                                        <span class="ms-2">Level {{ $exam->difficulty_level }}</span>
-                                    </dd>
-
+                                @if($exam->start_time)
                                     <dt class="col-sm-4">Start Time</dt>
-                                    <dd class="col-sm-8">{{ $exam->start_time ? $exam->start_time->format('M d, Y H:i') : 'Not set' }}</dd>
+                                    <dd class="col-sm-8">{{ $exam->start_time->format('M d, Y H:i') }}</dd>
+
+                                    <dt class="col-sm-4">End Time</dt>
+                                    <dd class="col-sm-8">{{ $exam->end_time->format('M d, Y H:i') }}</dd>
+                                @else
+                                    <dt class="col-sm-4">Availability</dt>
+                                    <dd class="col-sm-8"><span class="badge bg-success">Available Anytime</span></dd>
                                 @endif
                             </dl>
                         </div>
@@ -502,21 +530,13 @@
                             <div class="d-flex justify-content-center gap-3 flex-wrap">
                                 @if($canShowQuestions)
                                     <a href="{{ route('exams.preview', $exam) }}" class="btn btn-info btn-lg">
-                                        <i class="bi bi-eye me-2"></i>Show Questions
-                                        <small class="d-block mt-1">
-                                            @if($exam->exam_type === 'board')
-                                                Board exam - Preview available
-                                            @else
-                                                Review with answers
-                                            @endif
-                                        </small>
-                                    </a>
+                                        <i class="bi bi-eye me-2"></i>Show Questions</a>
                                 @endif
                                 
                                 @if($canTakeExam)
                                     <a href="{{ route('exams.take', $exam) }}" class="btn btn-success btn-lg">
                                         <i class="bi bi-pencil-square me-2"></i>Give Exam
-                                        <small class="d-block mt-1">Start the test</small>
+                                        
                                     </a>
                                 @elseif(!$isFinished && $exam->start_time && $exam->start_time > now())
                                     <!-- Upcoming Exam with Countdown -->

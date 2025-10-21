@@ -3,7 +3,7 @@
 @section('title', 'Take Exam - ' . $exam->title)
 
 @section('content')
-<div class="container-fluid py-4">
+<div class="container-fluid py-4 mt-5">
     <div class="row justify-content-center">
         <div class="col-lg-10">
             <!-- Back Button -->

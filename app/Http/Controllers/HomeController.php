@@ -26,69 +26,42 @@ class HomeController extends Controller
     {
         $user = auth()->user();
         
-        // Get available exams with updated logic
-        $availableExams = Exam::with(['subject', 'questions'])
-            ->where(function($query) use ($user) {
-                $query->where(function($q) {
-                    // Board and university exams (always available)
-                    $q->whereIn('exam_type', ['board', 'university']);
-                })
-                ->orWhere(function($q) {
-                    // Custom unrated exams with no start time
-                    $q->where('exam_type', 'custom')
-                      ->where('is_rated', false)
-                      ->whereNull('start_time');
-                })
-                ->orWhere(function($q) {
-                    // Rated exams (show all future and recent rated exams)
-                    $q->where('is_rated', true)
-                      ->where(function($subQ) {
-                          $subQ->whereNull('start_time')
-                               ->orWhere('start_time', '>=', now()->subDays(1)); // Show rated exams from last 24 hours
-                      });
-                })
-                ->orWhereHas('assignedUsers', function($q) use ($user) {
-                    // Exams assigned to this user
-                    $q->where('user_id', $user->id);
-                });
+        // Get board exams
+        $boardExams = Exam::with(['subject', 'questions'])
+            ->where('exam_type', 'board')
+            ->orderBy('year', 'desc')
+            ->orderBy('title')
+            ->get();
+        
+        // Get university exams
+        $universityExams = Exam::with(['subject', 'questions'])
+            ->where('exam_type', 'university')
+            ->orderBy('year', 'desc')
+            ->orderBy('title')
+            ->get();
+        
+        // Get custom exams (available ones)
+        $customExams = Exam::with(['subject', 'questions'])
+            ->where('exam_type', 'custom')
+            ->where(function($q) use ($user) {
+                $q->whereNull('start_time') // Available anytime
+                  ->orWhere(function($subQ) {
+                      // Active or upcoming custom exams
+                      $subQ->whereNotNull('start_time')
+                           ->where('start_time', '>=', now()->subDays(1));
+                  })
+                  ->orWhereHas('assignedUsers', function($assignQ) use ($user) {
+                      // Assigned to this user
+                      $assignQ->where('user_id', $user->id);
+                  });
             })
             ->orderByRaw('start_time IS NULL DESC, start_time ASC')
             ->get();
-        
-        // Get student's rating and rank
-        $currentRating = $user->rating;
-        $maxRating = $user->max_rating;
-        $totalSolved = $user->total_solved;
-        
-        // Calculate rank (number of students with higher rating + 1)
-        $rank = User::where('role', 'student')
-            ->where('rating', '>', $currentRating)
-            ->count() + 1;
-        
-        // Update user's rank
-        $user->update(['rank' => $rank]);
-        
-        // Get recent attempts
-        $recentAttempts = ExamAttempt::with('exam')
-            ->where('user_id', $user->id)
-            ->latest()
-            ->take(5)
-            ->get();
-        
-        // Legacy statistics for compatibility
-        $totalParticipations = $user->attempts()->count();
-        $successRate = $user->attempts()->avg('score') ?? 0;
-        $successRate = round($successRate);
 
         return view('student.dashboard', compact(
-            'availableExams',
-            'currentRating',
-            'maxRating',
-            'rank',
-            'totalSolved',
-            'recentAttempts',
-            'totalParticipations',
-            'successRate'
+            'boardExams',
+            'universityExams',
+            'customExams'
         ));
     }
 

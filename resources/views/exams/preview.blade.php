@@ -48,7 +48,7 @@
     }
     
     .btn-primary, .btn-success, .btn-info {
-        background-color: #15803d !important;
+        background-color: var(--accent-green) !important;
         border-color: #15803d !important;
         color: white !important;
         box-shadow: none !important;
@@ -56,7 +56,7 @@
     
     .btn-primary:hover, .btn-success:hover, .btn-info:hover {
         background-color: #166534 !important;
-        border-color: #166534 !important;
+ 
     }
     
     .btn-outline-secondary {

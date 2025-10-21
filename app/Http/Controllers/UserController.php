@@ -24,12 +24,6 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        // Check if the user is a student
-        if ($user->role !== 'student') {
-            return redirect()->route('students.index')
-                ->with('error', 'Only students can be deleted from this page.');
-        }
-
         $userName = $user->name;
         $user->delete();
 

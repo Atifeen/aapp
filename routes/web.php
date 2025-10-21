@@ -15,7 +15,6 @@ use App\Http\Controllers\UserController;
 Route::middleware(['auth', \App\Http\Middleware\CheckRole::class . ':admin'])->group(function () {
     // Exam Management
     Route::prefix('exams')->name('exams.')->group(function () {
-        Route::get('/', [ExamController::class, 'index'])->name('index');
         Route::get('/create', [ExamController::class, 'create'])->name('create');
         Route::post('/', [ExamController::class, 'store'])->name('store');
         Route::get('/chapters/{subject}', [ExamController::class, 'getChapters'])->name('chapters');
@@ -31,6 +30,7 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class . ':admin'])->g
 // Shared exam routes (both admin and student)
 Route::middleware(['auth'])->group(function () {
     Route::prefix('exams')->name('exams.')->group(function () {
+        Route::get('/', [ExamController::class, 'index'])->name('index');
         Route::get('/{exam}', [ExamController::class, 'show'])->name('show');
     });
 });

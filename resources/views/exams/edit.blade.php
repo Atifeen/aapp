@@ -52,17 +52,46 @@
                     @enderror
                 </div>
 
-                <div id="institutionFields" style="{{ (old('exam_type', $exam->exam_type) == 'university') ? 'display:block;' : 'display:none;' }}">
+                <!-- Board Exam Fields -->
+                <div id="boardFields" style="display: {{ old('exam_type', $exam->exam_type) == 'board' ? 'block' : 'none' }};">
                     <div class="mb-3">
-                        <label for="institution_name" class="form-label">Institution Name</label>
-                        <input type="text" class="form-control @error('institution_name') is-invalid @enderror" id="institution_name" name="institution_name" value="{{ old('institution_name', $exam->institution_name) }}">
-                        @error('institution_name')
+                        <label for="board_name" class="form-label">Board Name</label>
+                        <select class="form-select @error('board_name') is-invalid @enderror" id="board_name" name="board_name">
+                            <option value="">Select Board</option>
+                            @foreach($boards as $board)
+                                <option value="{{ $board->name }}" {{ old('board_name', $exam->board_name) == $board->name ? 'selected' : '' }}>{{ $board->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('board_name')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label for="year" class="form-label">Year</label>
-                        <input type="number" class="form-control @error('year') is-invalid @enderror" id="year" name="year" value="{{ old('year', $exam->year) }}" min="1900" max="{{ date('Y') + 1 }}">
+                        <label for="board_year" class="form-label">Year</label>
+                        <input type="number" class="form-control @error('year') is-invalid @enderror" id="board_year" name="year" value="{{ old('year', $exam->year) }}" min="1900" max="{{ date('Y') + 1 }}">
+                        @error('year')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+
+                <!-- University Exam Fields -->
+                <div id="universityFields" style="display: {{ old('exam_type', $exam->exam_type) == 'university' ? 'block' : 'none' }};">
+                    <div class="mb-3">
+                        <label for="university_name" class="form-label">University Name</label>
+                        <select class="form-select @error('university_name') is-invalid @enderror" id="university_name" name="university_name">
+                            <option value="">Select University</option>
+                            @foreach($universities as $university)
+                                <option value="{{ $university->name }}" {{ old('university_name', $exam->university_name) == $university->name ? 'selected' : '' }}>{{ $university->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('university_name')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label for="university_year" class="form-label">Year</label>
+                        <input type="number" class="form-control @error('year') is-invalid @enderror" id="university_year" name="year" value="{{ old('year', $exam->year) }}" min="1900" max="{{ date('Y') + 1 }}">
                         @error('year')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -74,7 +103,7 @@
                         <label class="form-label">Custom Criteria</label>
                         <div id="criteriaContainer">
                             @php
-                                $customCriteria = $exam->custom_criteria ? json_decode($exam->custom_criteria, true) : [];
+                                $customCriteria = $exam->custom_criteria ?? [];
                                 $criteriaCount = count($customCriteria);
                             @endphp
                             @if($criteriaCount > 0)
@@ -150,36 +179,11 @@
                     </select>
                 </div>
 
-                <div class="mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="is_rated" name="is_rated" value="1" 
-                        {{ old('is_rated', $exam->is_rated) ? 'checked' : '' }}>
-                    <label class="form-check-label" for="is_rated">
-                        Rated Exam
-                    </label>
-                    <div class="form-text">Check this if the exam affects student ratings</div>
-                </div>
-
-                <div class="rated-exam-field" style="{{ old('is_rated', $exam->is_rated) ? 'display:block;' : 'display:none;' }}">
-                    <div class="mb-3">
-                        <label for="difficulty_level" class="form-label">Difficulty Level</label>
-                        <select class="form-select @error('difficulty_level') is-invalid @enderror" id="difficulty_level" name="difficulty_level">
-                            <option value="">Select Difficulty</option>
-                            <option value="1" {{ old('difficulty_level', $exam->difficulty_level) == '1' ? 'selected' : '' }}>Beginner (1)</option>
-                            <option value="2" {{ old('difficulty_level', $exam->difficulty_level) == '2' ? 'selected' : '' }}>Intermediate (2)</option>
-                            <option value="3" {{ old('difficulty_level', $exam->difficulty_level) == '3' ? 'selected' : '' }}>Advanced (3)</option>
-                            <option value="4" {{ old('difficulty_level', $exam->difficulty_level) == '4' ? 'selected' : '' }}>Expert (4)</option>
-                        </select>
-                        @error('difficulty_level')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                </div>
-
-                <div class="mb-3" id="start_time_container" style="{{ old('is_rated', $exam->is_rated) ? 'display:block;' : 'display:none;' }}">
-                    <label for="start_time" class="form-label">Start Time</label>
+                <div class="mb-3">
+                    <label for="start_time" class="form-label">Start Time <small class="text-muted">(optional - leave blank for anytime availability)</small></label>
                     <input type="datetime-local" class="form-control @error('start_time') is-invalid @enderror" id="start_time" name="start_time" 
                         value="{{ old('start_time', $exam->start_time ? $exam->start_time->format('Y-m-d\TH:i') : '') }}">
-                    <div class="form-text">Required for rated exams.</div>
+                    <div class="form-text">Leave blank to make the exam available anytime.</div>
                     @error('start_time')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -208,51 +212,32 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const examType = document.getElementById('exam_type');
-    const institutionFields = document.getElementById('institutionFields');
+    const boardFields = document.getElementById('boardFields');
+    const universityFields = document.getElementById('universityFields');
     const customFields = document.getElementById('customFields');
     const subjectSelect = document.getElementById('subject_id');
     const chapterSelect = document.getElementById('chapter_id');
-    const isRatedCheckbox = document.getElementById('is_rated');
-    const ratedFields = document.querySelector('.rated-exam-field');
-    const startTimeField = document.getElementById('start_time_container');
-    const startTimeInput = document.getElementById('start_time');
-    const difficultyLevelInput = document.getElementById('difficulty_level');
-
-    // Handle rated exam toggle
-    isRatedCheckbox.addEventListener('change', function() {
-        if (this.checked) {
-            ratedFields.style.display = 'block';
-            startTimeField.style.display = 'block';
-            startTimeInput.required = true;
-            difficultyLevelInput.required = true;
-        } else {
-            ratedFields.style.display = 'none';
-            startTimeField.style.display = 'none';
-            startTimeInput.required = false;
-            difficultyLevelInput.required = false;
-        }
-    });
 
     // Handle exam type change
     examType.addEventListener('change', function() {
         const subjectField = document.getElementById('subject_id');
         const chapterField = document.getElementById('chapter_id');
         
+        // Hide all conditional fields first
+        boardFields.style.display = 'none';
+        universityFields.style.display = 'none';
+        customFields.style.display = 'none';
+        
         if (this.value === 'university') {
-            institutionFields.style.display = 'block';
-            customFields.style.display = 'none';
+            universityFields.style.display = 'block';
             subjectField.required = true;
         } else if (this.value === 'custom') {
-            institutionFields.style.display = 'none';
             customFields.style.display = 'block';
             subjectField.required = false;
         } else if (this.value === 'board') {
-            institutionFields.style.display = 'none';
-            customFields.style.display = 'none';
+            boardFields.style.display = 'block';
             subjectField.required = true;
         } else {
-            institutionFields.style.display = 'none';
-            customFields.style.display = 'none';
             subjectField.required = false;
         }
     });

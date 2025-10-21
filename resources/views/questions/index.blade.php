@@ -724,15 +724,15 @@
                     <form method="POST" action="{{ route('questions.destroy', $question->id) }}">
                         @csrf
                         @method('DELETE')
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Delete Question #{{ $question->id }}</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        <div class="modal-content" style="background-color: var(--bg-secondary);  ">
+                            <div class="modal-header" style="background-color: var(--bg-secondary);  ">
+                                <h5 class="modal-title" style="color: var(--text-primary);">Delete Question #{{ $question->id }}</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                             </div>
-                            <div class="modal-body">
+                            <div class="modal-body" style="color: var(--text-primary);">
                                 Are you sure you want to delete this question?
                             </div>
-                            <div class="modal-footer">
+                            <div class="modal-footer" style="background-color: var(--bg-secondary);  ">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                 <button type="submit" class="btn btn-danger">Delete</button>
                             </div>

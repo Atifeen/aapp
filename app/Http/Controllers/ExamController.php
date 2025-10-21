@@ -51,10 +51,12 @@ class ExamController extends Controller
             
             // For custom exams (contests), show additional stats
             if ($filterType === 'custom') {
-                $stats['active'] = (clone $baseQuery)
-                    ->where('start_time', '<=', now())
-                    ->where('end_time', '>', now())
-                    ->count();
+                // Get all exams and filter based on calculated end_time
+                $allExams = (clone $baseQuery)->whereNotNull('start_time')->get();
+                
+                $stats['active'] = $allExams->filter(function($exam) {
+                    return $exam->start_time <= now() && $exam->end_time > now();
+                })->count();
                     
                 $stats['upcoming'] = (clone $baseQuery)
                     ->where('start_time', '>', now())
@@ -103,10 +105,8 @@ class ExamController extends Controller
             'year' => 'required_unless:exam_type,custom|nullable|integer|min:1900|max:' . (date('Y') + 1),
             'subject_id' => 'required_unless:exam_type,custom|nullable|exists:subjects,id',
             'chapter_id' => 'nullable|exists:chapters,id',
-            'start_time' => 'required_if:is_rated,1|nullable|date',
+            'start_time' => 'nullable|date',
             'duration' => 'required|integer|min:1',
-            'is_rated' => 'boolean',
-            'difficulty_level' => 'required_if:is_rated,1|nullable|integer|min:1|max:4',
             'custom_criteria' => 'nullable|array'
         ]);
 
@@ -119,12 +119,6 @@ class ExamController extends Controller
                 array_filter($keys),
                 array_filter($values)
             );
-        }
-
-        // Cast duration to integer and calculate end time
-        if (!empty($validated['start_time'])) {
-            $startTime = \Carbon\Carbon::parse($validated['start_time']);
-            $validated['end_time'] = $startTime->copy()->addMinutes((int) $validated['duration']);
         }
 
         try {
@@ -344,7 +338,11 @@ class ExamController extends Controller
         $chapters = $exam->subject ? $exam->subject->chapters : collect();
         $selectedClass = $request->input('class', '');
         
-        return view('exams.edit', compact('exam', 'subjects', 'chapters', 'selectedClass'));
+        // Get boards and universities
+        $boards = \App\Models\Board::all();
+        $universities = \App\Models\University::all();
+        
+        return view('exams.edit', compact('exam', 'subjects', 'chapters', 'selectedClass', 'boards', 'universities'));
     }
 
     public function update(Request $request, Exam $exam)
@@ -352,14 +350,14 @@ class ExamController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'exam_type' => ['required', Rule::in(['board', 'university', 'custom'])],
-            'institution_name' => 'required_if:exam_type,university|nullable|string|max:255',
-            'year' => 'required_if:exam_type,university|nullable|integer|min:1900|max:' . (date('Y') + 1),
+            'board_name' => 'required_if:exam_type,board|nullable|string|max:255',
+            'university_name' => 'required_if:exam_type,university|nullable|string|max:255',
+            'institution_name' => 'nullable|string|max:255',
+            'year' => 'required_unless:exam_type,custom|nullable|integer|min:1900|max:' . (date('Y') + 1),
             'subject_id' => 'required_unless:exam_type,custom|nullable|exists:subjects,id',
             'chapter_id' => 'nullable|exists:chapters,id',
-            'start_time' => 'required_if:is_rated,1|nullable|date',
+            'start_time' => 'nullable|date',
             'duration' => 'required|integer|min:1',
-            'is_rated' => 'boolean',
-            'difficulty_level' => 'required_if:is_rated,1|nullable|integer|min:1|max:4',
             'custom_criteria' => 'nullable|array'
         ]);
 
