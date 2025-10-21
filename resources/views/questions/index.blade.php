@@ -109,7 +109,6 @@
     }
     .question-image {
         transition: var(--transition-default);
- 
         padding: 10px;
         border-radius: 8px;
         text-align: center;
@@ -343,7 +342,7 @@
             </div>
             <div class="col-md-4 text-end">
                 <span class="badge badge-custom px-3 py-2 fs-6">
-                    <i class="bi bi-list-check me-2"></i>{{ $questions->count() }} question{{ $questions->count() !== 1 ? 's' : '' }} found
+                    <i class="bi bi-list-check me-2"></i>{{ $questions->total() }} question{{ $questions->total() !== 1 ? 's' : '' }} found
                 </span>
             </div>
         </div>
@@ -561,46 +560,81 @@
 
             <!-- Edit Modal -->
             <div class="modal fade" id="editModal{{ $question->id }}" tabindex="-1">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
                     <form method="POST" action="{{ route('questions.update', $question->id) }}">
                         @csrf
                         @method('PUT')
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Edit Question #{{ $question->id }}</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        <div class="modal-content" style="background-color: var(--bg-secondary); border: 1px solid var(--border-primary);">
+                            <div class="modal-header" style="background-color: var(--bg-tertiary); border-bottom: 1px solid var(--border-primary);">
+                                <h5 class="modal-title" style="color: var(--text-secondary); font-weight: 600;">
+                                    <i class="bi bi-pencil-square me-2"></i>Edit Question #{{ $question->id }}
+                                </h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                             </div>
-                            <div class="modal-body">
+                            <div class="modal-body" style="padding: 1.25rem; max-height: 70vh; overflow-y: auto;">
+                                
+                                <!-- Question Text -->
                                 <div class="mb-3">
-                                    <label>Question Text</label>
-                                    <textarea name="question_text" class="form-control" rows="3" required>{{ $question->question_text }}</textarea>
-                                    <small class="text-muted">Use \( \) for inline math, \[ \] for display math</small>
+                                    <label class="form-label" style="color: var(--text-primary); font-weight: 500;">
+                                        Question Text <span class="text-danger">*</span>
+                                    </label>
+                                    <textarea name="question_text" class="form-control" rows="3" required 
+                                        placeholder="Enter your question here..." 
+                                        style="background-color: var(--bg-tertiary); border: 1px solid var(--border-primary); color: var(--text-primary);">{{ $question->question_text }}</textarea>
                                 </div>
 
+                                <!-- Image URL -->
                                 <div class="mb-3">
-                                    <label>Image URL (optional)</label>
-                                    <input type="text" name="image" class="form-control" value="{{ $question->image }}">
+                                    <label class="form-label" style="color: var(--text-primary); font-weight: 500;">
+                                        Image URL <small style="color: var(--text-muted);">(optional)</small>
+                                    </label>
+                                    <input type="text" name="image" class="form-control" value="{{ $question->image }}"
+                                        placeholder="https://example.com/image.jpg"
+                                        style="background-color: var(--bg-tertiary); border: 1px solid var(--border-primary); color: var(--text-primary);">
                                 </div>
 
+                                <!-- Answer Options -->
                                 <div class="mb-3">
-                                    <label>Option A</label>
-                                    <textarea name="option_a" class="form-control" rows="2" required>{{ $question->option_a }}</textarea>
+                                    <label class="form-label" style="color: var(--text-primary); font-weight: 500;">
+                                        Answer Options <span class="text-danger">*</span>
+                                    </label>
+                                    
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label style="color: var(--text-muted); font-size: 0.9rem;">Option A</label>
+                                            <textarea name="option_a" class="form-control" rows="2" required
+                                                placeholder="Enter option A..."
+                                                style="background-color: var(--bg-tertiary); border: 1px solid var(--border-primary); color: var(--text-primary);">{{ $question->option_a }}</textarea>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label style="color: var(--text-muted); font-size: 0.9rem;">Option B</label>
+                                            <textarea name="option_b" class="form-control" rows="2" required
+                                                placeholder="Enter option B..."
+                                                style="background-color: var(--bg-tertiary); border: 1px solid var(--border-primary); color: var(--text-primary);">{{ $question->option_b }}</textarea>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label style="color: var(--text-muted); font-size: 0.9rem;">Option C</label>
+                                            <textarea name="option_c" class="form-control" rows="2" required
+                                                placeholder="Enter option C..."
+                                                style="background-color: var(--bg-tertiary); border: 1px solid var(--border-primary); color: var(--text-primary);">{{ $question->option_c }}</textarea>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label style="color: var(--text-muted); font-size: 0.9rem;">Option D</label>
+                                            <textarea name="option_d" class="form-control" rows="2" required
+                                                placeholder="Enter option D..."
+                                                style="background-color: var(--bg-tertiary); border: 1px solid var(--border-primary); color: var(--text-primary);">{{ $question->option_d }}</textarea>
+                                        </div>
+                                    </div>
                                 </div>
+
+                                <!-- Correct Answer -->
                                 <div class="mb-3">
-                                    <label>Option B</label>
-                                    <textarea name="option_b" class="form-control" rows="2" required>{{ $question->option_b }}</textarea>
-                                </div>
-                                <div class="mb-3">
-                                    <label>Option C</label>
-                                    <textarea name="option_c" class="form-control" rows="2" required>{{ $question->option_c }}</textarea>
-                                </div>
-                                <div class="mb-3">
-                                    <label>Option D</label>
-                                    <textarea name="option_d" class="form-control" rows="2" required>{{ $question->option_d }}</textarea>
-                                </div>
-                                <div class="mb-3">
-                                    <label>Correct Option</label>
-                                    <select name="correct_option" class="form-control" required>
+                                    <label class="form-label" style="color: var(--text-primary); font-weight: 500;">
+                                        Correct Answer <span class="text-danger">*</span>
+                                    </label>
+                                    <select name="correct_option" class="form-select" required
+                                        style="background-color: var(--bg-tertiary); border: 1px solid var(--border-primary); color: var(--text-primary);">
+                                        <option value="">-- Select Correct Option --</option>
                                         <option value="A" {{ $question->correct_option=='A'?'selected':'' }}>A</option>
                                         <option value="B" {{ $question->correct_option=='B'?'selected':'' }}>B</option>
                                         <option value="C" {{ $question->correct_option=='C'?'selected':'' }}>C</option>
@@ -608,54 +642,76 @@
                                     </select>
                                 </div>
 
-                                <!-- Optional Class -->
+                                <!-- Classification -->
                                 <div class="mb-3">
-                                    <label>Class (Optional)</label>
-                                    <select name="class" class="form-control edit-class">
-                                        <option value="">-- Select Class --</option>
-                                        <option value="SSC" {{ $question->subject && $question->subject->class=='SSC'?'selected':'' }}>SSC</option>
-                                        <option value="HSC" {{ $question->subject && $question->subject->class=='HSC'?'selected':'' }}>HSC</option>
-                                    </select>
+                                    <label class="form-label" style="color: var(--text-primary); font-weight: 500;">
+                                        Classification <small style="color: var(--text-muted);">(optional)</small>
+                                    </label>
+                                    
+                                    <div class="row g-3">
+                                        <div class="col-md-4">
+                                            <select name="class" class="form-select edit-class"
+                                                style="background-color: var(--bg-tertiary); border: 1px solid var(--border-primary); color: var(--text-primary);">
+                                                <option value="">Select Class</option>
+                                                <option value="SSC" {{ $question->subject && $question->subject->class=='SSC'?'selected':'' }}>SSC</option>
+                                                <option value="HSC" {{ $question->subject && $question->subject->class=='HSC'?'selected':'' }}>HSC</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select name="subject_id" class="form-select edit-subject"
+                                                style="background-color: var(--bg-tertiary); border: 1px solid var(--border-primary); color: var(--text-primary);">
+                                                <option value="">Select Subject</option>
+                                                @if($question->subject)
+                                                    <option value="{{ $question->subject->id }}" selected>{{ $question->subject->name }}</option>
+                                                @endif
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select name="chapter_id" class="form-select edit-chapter"
+                                                style="background-color: var(--bg-tertiary); border: 1px solid var(--border-primary); color: var(--text-primary);">
+                                                <option value="">Select Chapter</option>
+                                                @if($question->chapter)
+                                                    <option value="{{ $question->chapter->id }}" selected>{{ $question->chapter->name }}</option>
+                                                @endif
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <!-- Optional Subject -->
+                                <!-- Source Information -->
                                 <div class="mb-3">
-                                    <label>Subject (Optional)</label>
-                                    <select name="subject_id" class="form-control edit-subject">
-                                        <option value="">-- Select Subject --</option>
-                                        @if($question->subject)
-                                            <option value="{{ $question->subject->id }}" selected>{{ $question->subject->name }}</option>
-                                        @endif
-                                    </select>
+                                    <label class="form-label" style="color: var(--text-primary); font-weight: 500;">
+                                        Source Information <small style="color: var(--text-muted);">(optional)</small>
+                                    </label>
+                                    
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <input type="text" name="source_name" class="form-control" value="{{ $question->source_name }}"
+                                                placeholder="Source Name"
+                                                style="background-color: var(--bg-tertiary); border: 1px solid var(--border-primary); color: var(--text-primary);">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <input type="text" name="source_type" class="form-control" value="{{ $question->source_type }}"
+                                                placeholder="Source Type"
+                                                style="background-color: var(--bg-tertiary); border: 1px solid var(--border-primary); color: var(--text-primary);">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <input type="number" name="year" class="form-control" value="{{ $question->year }}"
+                                                placeholder="Year"
+                                                min="2000" max="2099"
+                                                style="background-color: var(--bg-tertiary); border: 1px solid var(--border-primary); color: var(--text-primary);">
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <!-- Optional Chapter -->
-                                <div class="mb-3">
-                                    <label>Chapter (Optional)</label>
-                                    <select name="chapter_id" class="form-control edit-chapter">
-                                        <option value="">-- Select Chapter --</option>
-                                        @if($question->chapter)
-                                            <option value="{{ $question->chapter->id }}" selected>{{ $question->chapter->name }}</option>
-                                        @endif
-                                    </select>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label>Source Name</label>
-                                    <input type="text" name="source_name" class="form-control" value="{{ $question->source_name }}">
-                                </div>
-                                <div class="mb-3">
-                                    <label>Source Type</label>
-                                    <input type="text" name="source_type" class="form-control" value="{{ $question->source_type }}">
-                                </div>
-                                <div class="mb-3">
-                                    <label>Year</label>
-                                    <input type="number" name="year" class="form-control" value="{{ $question->year }}">
-                                </div>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button type="submit" class="btn btn-warning">Update</button>
+                            <div class="modal-footer" style="background-color: var(--bg-tertiary); border-top: 1px solid var(--border-primary);">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    Cancel
+                                </button>
+                                <button type="submit" class="btn" style="background-color: var(--accent-green); color: white;">
+                                    <i class="bi bi-check-circle me-1"></i>Update Question
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -719,45 +775,81 @@
 
 <!-- Add Question Modal -->
 <div class="modal fade" id="addQuestionModal" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
         <form method="POST" action="{{ route('questions.store') }}">
             @csrf
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Add New Question</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            <div class="modal-content" style="background-color: var(--bg-secondary); border: 1px solid var(--border-primary);">
+                <div class="modal-header" style="background-color: var(--bg-tertiary); border-bottom: 1px solid var(--border-primary);">
+                    <h5 class="modal-title" style="color: var(--text-secondary); font-weight: 600;">
+                        <i class="bi bi-plus-circle me-2"></i>Add New Question
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" style="padding: 1.25rem; max-height: 70vh; overflow-y: auto;">
+                    
+                    <!-- Question Text -->
                     <div class="mb-3">
-                        <label>Question Text</label>
-                        <textarea name="question_text" class="form-control" rows="3" required></textarea>
-                        <small class="text-muted">Use \( \) for inline math: \( x^2 \), use \[ \] for display math: \[ \frac{a}{b} \]</small>
+                        <label class="form-label" style="color: var(--text-primary); font-weight: 500;">
+                            Question Text <span class="text-danger">*</span>
+                        </label>
+                        <textarea name="question_text" class="form-control" rows="3" required 
+                            placeholder="Enter your question here..." 
+                            style="background-color: var(--bg-tertiary); border: 1px solid var(--border-primary); color: var(--text-primary);"></textarea>
+                         
                     </div>
 
+                    <!-- Image URL -->
                     <div class="mb-3">
-                        <label>Image URL (optional)</label>
-                        <input type="text" name="image" class="form-control" value="">
+                        <label class="form-label" style="color: var(--text-primary); font-weight: 500;">
+                            Image URL <small style="color: var(--text-muted);">(optional)</small>
+                        </label>
+                        <input type="text" name="image" class="form-control" 
+                            placeholder="https://example.com/image.jpg"
+                            style="background-color: var(--bg-tertiary); border: 1px solid var(--border-primary); color: var(--text-primary);">
                     </div>
 
+                    <!-- Answer Options -->
                     <div class="mb-3">
-                        <label>Option A</label>
-                        <textarea name="option_a" class="form-control" rows="2" required></textarea>
+                        <label class="form-label" style="color: var(--text-primary); font-weight: 500;">
+                            Answer Options <span class="text-danger">*</span>
+                        </label>
+                        
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label style="color: var(--text-muted); font-size: 0.9rem;">Option A</label>
+                                <textarea name="option_a" class="form-control" rows="2" required
+                                    placeholder="Enter option A..."
+                                    style="background-color: var(--bg-tertiary); border: 1px solid var(--border-primary); color: var(--text-primary);"></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <label style="color: var(--text-muted); font-size: 0.9rem;">Option B</label>
+                                <textarea name="option_b" class="form-control" rows="2" required
+                                    placeholder="Enter option B..."
+                                    style="background-color: var(--bg-tertiary); border: 1px solid var(--border-primary); color: var(--text-primary);"></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <label style="color: var(--text-muted); font-size: 0.9rem;">Option C</label>
+                                <textarea name="option_c" class="form-control" rows="2" required
+                                    placeholder="Enter option C..."
+                                    style="background-color: var(--bg-tertiary); border: 1px solid var(--border-primary); color: var(--text-primary);"></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <label style="color: var(--text-muted); font-size: 0.9rem;">Option D</label>
+                                <textarea name="option_d" class="form-control" rows="2" required
+                                    placeholder="Enter option D..."
+                                    style="background-color: var(--bg-tertiary); border: 1px solid var(--border-primary); color: var(--text-primary);"></textarea>
+                            </div>
+                        </div>
                     </div>
+
+                    <!-- Correct Answer -->
                     <div class="mb-3">
-                        <label>Option B</label>
-                        <textarea name="option_b" class="form-control" rows="2" required></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label>Option C</label>
-                        <textarea name="option_c" class="form-control" rows="2" required></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label>Option D</label>
-                        <textarea name="option_d" class="form-control" rows="2" required></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label>Correct Option</label>
-                        <select name="correct_option" class="form-control" required>
+                        <label class="form-label" style="color: var(--text-primary); font-weight: 500;">
+                            Correct Answer <span class="text-danger">*</span>
+                        </label>
+                        <select name="correct_option" class="form-select" required
+                            style="background-color: var(--bg-tertiary); border: 1px solid var(--border-primary); color: var(--text-primary);">
+                            <option value="">-- Select Correct Option --</option>
                             <option value="A">A</option>
                             <option value="B">B</option>
                             <option value="C">C</option>
@@ -765,49 +857,70 @@
                         </select>
                     </div>
 
-                    <!-- Optional Class -->
+                    <!-- Classification -->
                     <div class="mb-3">
-                        <label>Class (Optional)</label>
-                        <select name="class" class="form-control add-class">
-                            <option value="">-- Select Class --</option>
-                            <option value="SSC">SSC</option>
-                            <option value="HSC">HSC</option>
-                        </select>
+                        <label class="form-label" style="color: var(--text-primary); font-weight: 500;">
+                            Classification <small style="color: var(--text-muted);">(optional)</small>
+                        </label>
+                        
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <select name="class" class="form-select add-class"
+                                    style="background-color: var(--bg-tertiary); border: 1px solid var(--border-primary); color: var(--text-primary);">
+                                    <option value="">Select Class</option>
+                                    <option value="SSC">SSC</option>
+                                    <option value="HSC">HSC</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <select name="subject_id" class="form-select add-subject"
+                                    style="background-color: var(--bg-tertiary); border: 1px solid var(--border-primary); color: var(--text-primary);">
+                                    <option value="">Select Subject</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <select name="chapter_id" class="form-select add-chapter"
+                                    style="background-color: var(--bg-tertiary); border: 1px solid var(--border-primary); color: var(--text-primary);">
+                                    <option value="">Select Chapter</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Optional Subject -->
+                    <!-- Source Information -->
                     <div class="mb-3">
-                        <label>Subject (Optional)</label>
-                        <select name="subject_id" class="form-control add-subject">
-                            <option value="">-- Select Subject --</option>
-                        </select>
-                    </div>
-
-                    <!-- Optional Chapter -->
-                    <div class="mb-3">
-                        <label>Chapter (Optional)</label>
-                        <select name="chapter_id" class="form-control add-chapter">
-                            <option value="">-- Select Chapter --</option>
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label>Source Name</label>
-                        <input type="text" name="source_name" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label>Source Type</label>
-                        <input type="text" name="source_type" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label>Year</label>
-                        <input type="number" name="year" class="form-control">
+                        <label class="form-label" style="color: var(--text-primary); font-weight: 500;">
+                            Source Information <small style="color: var(--text-muted);">(optional)</small>
+                        </label>
+                        
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <input type="text" name="source_name" class="form-control"
+                                    placeholder="Source Name"
+                                    style="background-color: var(--bg-tertiary); border: 1px solid var(--border-primary); color: var(--text-primary);">
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" name="source_type" class="form-control"
+                                    placeholder="Source Type"
+                                    style="background-color: var(--bg-tertiary); border: 1px solid var(--border-primary); color: var(--text-primary);">
+                            </div>
+                            <div class="col-md-3">
+                                <input type="number" name="year" class="form-control" 
+                                    placeholder="Year"
+                                    min="2000" max="2099"
+                                    style="background-color: var(--bg-tertiary); border: 1px solid var(--border-primary); color: var(--text-primary);">
+                            </div>
+                        </div>
                     </div>
 
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Add Question</button>
+                <div class="modal-footer" style="background-color: var(--bg-tertiary); border-top: 1px solid var(--border-primary);">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn" style="background-color: var(--accent-green); color: white;">
+                        <i class="bi bi-check-circle me-1"></i>Add Question
+                    </button>
                 </div>
             </div>
         </form>

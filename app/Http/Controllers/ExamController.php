@@ -22,7 +22,7 @@ class ExamController extends Controller
     {
         $query = Exam::with(['subject', 'chapter'])->latest();
 
-        // Allow filtering by exam_type via query string, e.g. ?exam_type=board
+        // Allow filtering by exam_type via query string
         if (request()->filled('exam_type')) {
             $type = request()->get('exam_type');
             if (in_array($type, ['board', 'university', 'custom'])) {
@@ -30,9 +30,17 @@ class ExamController extends Controller
             }
         }
 
+        // Allow filtering by subject
+        if (request()->filled('subject_id')) {
+            $query->where('subject_id', request()->get('subject_id'));
+        }
+
         $exams = $query->paginate(30)->withQueryString();
 
         $filterType = request()->get('exam_type');
+        
+        // Get all subjects for filter dropdown
+        $subjects = \App\Models\Subject::orderBy('name')->get();
         
         // Calculate stats based on filter type
         $stats = [];
@@ -54,7 +62,7 @@ class ExamController extends Controller
             }
         }
         
-        return view('exams.index', compact('exams', 'filterType', 'stats'));
+        return view('exams.index', compact('exams', 'filterType', 'stats', 'subjects'));
     }
 
     public function create(Request $request)
@@ -70,9 +78,13 @@ class ExamController extends Controller
         $subjects = $query->get();
         $selectedClass = $request->input('class', '');
         
+        // Get boards and universities
+        $boards = \App\Models\Board::all();
+        $universities = \App\Models\University::all();
+        
         \Log::info('Total subjects: ' . $subjects->count() . ', Selected class: ' . $selectedClass);
         
-        return view('exams.create', compact('subjects', 'selectedClass'));
+        return view('exams.create', compact('subjects', 'selectedClass', 'boards', 'universities'));
     }
 
     public function getChapters(Subject $subject)
@@ -85,8 +97,10 @@ class ExamController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'exam_type' => ['required', Rule::in(['board', 'university', 'custom'])],
-            'institution_name' => 'required_if:exam_type,university|nullable|string|max:255',
-            'year' => 'required_if:exam_type,university|nullable|integer|min:1900|max:' . (date('Y') + 1),
+            'board_name' => 'required_if:exam_type,board|nullable|string|max:255',
+            'university_name' => 'required_if:exam_type,university|nullable|string|max:255',
+            'institution_name' => 'nullable|string|max:255',
+            'year' => 'required_unless:exam_type,custom|nullable|integer|min:1900|max:' . (date('Y') + 1),
             'subject_id' => 'required_unless:exam_type,custom|nullable|exists:subjects,id',
             'chapter_id' => 'nullable|exists:chapters,id',
             'start_time' => 'required_if:is_rated,1|nullable|date',

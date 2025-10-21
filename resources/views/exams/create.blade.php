@@ -70,17 +70,46 @@
                     </select>
                 </div>
 
-                <div id="institutionFields" style="display: none;">
+                <!-- Board Exam Fields -->
+                <div id="boardFields" style="display: none;">
                     <div class="mb-3">
-                        <label for="institution_name" class="form-label">Institution Name</label>
-                        <input type="text" class="form-control @error('institution_name') is-invalid @enderror" id="institution_name" name="institution_name" value="{{ old('institution_name', request('institution_name')) }}">
-                        @error('institution_name')
+                        <label for="board_name" class="form-label">Board Name</label>
+                        <select class="form-select @error('board_name') is-invalid @enderror" id="board_name" name="board_name">
+                            <option value="">Select Board</option>
+                            @foreach($boards as $board)
+                                <option value="{{ $board->name }}" {{ old('board_name', request('board_name')) == $board->name ? 'selected' : '' }}>{{ $board->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('board_name')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label for="year" class="form-label">Year</label>
-                        <input type="number" class="form-control @error('year') is-invalid @enderror" id="year" name="year" value="{{ old('year', request('year')) }}" min="1900" max="{{ date('Y') + 1 }}">
+                        <label for="board_year" class="form-label">Year</label>
+                        <input type="number" class="form-control @error('year') is-invalid @enderror" id="board_year" name="year" value="{{ old('year', request('year')) }}" min="1900" max="{{ date('Y') + 1 }}">
+                        @error('year')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+
+                <!-- University Exam Fields -->
+                <div id="universityFields" style="display: none;">
+                    <div class="mb-3">
+                        <label for="university_name" class="form-label">University Name</label>
+                        <select class="form-select @error('university_name') is-invalid @enderror" id="university_name" name="university_name">
+                            <option value="">Select University</option>
+                            @foreach($universities as $university)
+                                <option value="{{ $university->name }}" {{ old('university_name', request('university_name')) == $university->name ? 'selected' : '' }}>{{ $university->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('university_name')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="mb-3">
+                        <label for="university_year" class="form-label">Year</label>
+                        <input type="number" class="form-control @error('year') is-invalid @enderror" id="university_year" name="year" value="{{ old('year', request('year')) }}" min="1900" max="{{ date('Y') + 1 }}">
                         @error('year')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -223,30 +252,33 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Handle exam type change
     examType.addEventListener('change', function() {
+        const boardFields = document.getElementById('boardFields');
+        const universityFields = document.getElementById('universityFields');
+        const customFields = document.getElementById('customFields');
         const subjectField = document.getElementById('subject_id');
         const chapterField = document.getElementById('chapter_id');
         
+        // Hide all conditional fields first
+        boardFields.style.display = 'none';
+        universityFields.style.display = 'none';
+        customFields.style.display = 'none';
+        
         if (this.value === 'custom') {
-            institutionFields.style.display = 'none';
             customFields.style.display = 'block';
             // Make subject and chapter optional for custom exams
             subjectField.required = false;
             chapterField.required = false;
         } else if (this.value === 'university') {
-            institutionFields.style.display = 'block';
-            customFields.style.display = 'none';
+            universityFields.style.display = 'block';
             // Make subject and chapter required for university exams
             subjectField.required = true;
             chapterField.required = false;
         } else if (this.value === 'board') {
-            institutionFields.style.display = 'none';
-            customFields.style.display = 'none';
+            boardFields.style.display = 'block';
             // Make subject required for board exams
             subjectField.required = true;
             chapterField.required = false;
         } else {
-            institutionFields.style.display = 'none';
-            customFields.style.display = 'none';
             subjectField.required = false;
             chapterField.required = false;
         }

@@ -4,20 +4,88 @@
 
 @section('content')
 <style>
+    :root {
+        --bg-primary: #0f172a;
+        --bg-secondary: #1e293b;
+        --bg-tertiary: #334155;
+        --bg-hover: #2d3748;
+        --border-primary: #475569;
+        --text-primary: #e2e8f0;
+        --text-secondary: #f1f5f9;
+        --text-muted: #94a3b8;
+        --accent-green: #15803d;
+        --accent-green-hover: #166534;
+        --shadow-md: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    .question-card {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-primary);
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        transition: all 0.3s ease;
+        color: var(--text-primary);
+    }
+    
+    .question-card:hover {
+        box-shadow: var(--shadow-md);
+        border-color: var(--bg-primary);
+    }
+    
     .question-image {
-        margin: 0.5rem 0;
+        margin: 1rem 0;
         text-align: center;
+        background-color: transparent;
+        padding: 10px;
+        border-radius: 8px;
     }
     
     .question-image img {
         max-height: 300px;
         border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        background-color: white;
+        transition: transform 0.3s ease;
     }
     
     .question-image img:hover {
         transform: scale(1.02);
-        transition: transform 0.2s ease-in-out;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+    
+    .options-display {
+        background-color: var(--bg-secondary);
+        padding: 8px;
+        border-radius: 6px;
+        border: 1px solid var(--border-primary);
+    }
+    
+    .option-item {
+        background-color: var(--bg-tertiary);
+        border: 1px solid var(--border-primary);
+        color: var(--text-primary);
+        padding: 0.75rem;
+        border-radius: 6px;
+        margin-bottom: 0.5rem;
+    }
+    
+    .option-item.correct {
+        background-color: var(--accent-green-hover);
+        border-color: var(--accent-green);
+        color: white;
+    }
+    
+    .btn-image-control {
+        border-radius: 20px;
+        font-size: 0.85rem;
+        padding: 0.4rem 0.8rem;
+        margin-right: 0.5rem;
+    }
+    
+    .image-controls {
+        gap: 8px;
+        margin-bottom: 1rem;
     }
 </style>
 <div class="container mt-4">
@@ -312,70 +380,85 @@
                                 <i class="bi bi-list-check me-2"></i>Questions
                             </h5>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body" style="background-color: var(--bg-primary); padding: 2rem;">
                             @foreach($exam->questions as $index => $question)
-                            <div class="card mb-4">
-                                <div class="card-header bg-light">
-                                    <strong>Question {{ $index + 1 }}</strong>
-                                    <span class="badge bg-secondary ms-2">{{ ucfirst($question->type) }}</span>
-                                    <span class="badge bg-info ms-2">Marks: {{ $question->marks }}</span>
-                                    <span class="badge bg-light text-dark ms-2">
-                                        @if($question->board)
-                                            {{ $question->board }} {{ $question->year }}
-                                        @elseif($question->institution)
-                                            {{ $question->institution }} {{ $question->year }}
-                                        @else
-                                            Custom
-                                        @endif
-                                    </span>
-                                </div>
-                                <div class="card-body">
-                                    <div class="question-text mb-3">
-                                        <h6 class="fw-bold">Question:</h6>
-                                        <p class="mb-3">{!! $question->question_text ?? $question->text !!}</p>
+                            <div class="question-card">
+                                <!-- Question Header -->
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div class="question-header">
+                                        <span class="badge me-2" style="background-color: var(--accent-green);">#{{ $question->id }}</span>
+                                        <strong style="color: var(--text-secondary);">Question {{ $index + 1 }}</strong>
                                     </div>
-                                    @if($question->image)
-                                        <div class="mb-3">
-                                            <h6 class="fw-bold">Image:</h6>
-                                            <div class="d-flex align-items-center mb-2">
-                                                <a href="{{ $question->image }}" target="_blank" class="btn btn-sm btn-outline-info me-2">
-                                                    <i class="bi bi-image me-1"></i>View Full Size
-                                                </a>
-                                                <button class="btn btn-sm btn-outline-secondary" onclick="toggleImage('img-{{ $question->id }}')">
-                                                    <i class="bi bi-eye-slash me-1"></i>Hide Image
-                                                </button>
-                                            </div>
-                                            <div id="img-{{ $question->id }}" class="question-image" style="display: block;">
-                                                <img src="{{ $question->image }}" alt="Question Image" 
-                                                     class="img-fluid rounded shadow-sm" style="max-width:400px;">
-                                            </div>
-                                        </div>
-                                    @endif
-                                    @if($question->options && count($question->options))
-                                        <div class="options-container">
-                                            <div class="row">
-                                                @foreach($question->options as $optIndex => $option)
-                                                    <div class="col-md-6 mb-2">
-                                                        <div class="option-item p-3 rounded @if(isset($question->correct_option) && $question->correct_option == chr(65 + $optIndex)) bg-success-subtle border border-success @else bg-light border @endif">
-                                                            <strong>{{ chr(97 + $optIndex) }})</strong> {!! $option !!}
-                                                            @if(isset($question->correct_option) && $question->correct_option == chr(65 + $optIndex))
-                                                                <span class="badge bg-success ms-2">✓ Correct</span>
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                    @endif
-                                    @if($question->type === 'written')
-                                        <div class="mb-2">
-                                            <div class="alert alert-info">
-                                                <i class="bi bi-pencil me-2"></i><strong>Written Answer Required</strong>
-                                                <p class="mb-0 mt-2">This question requires a written response and will be manually evaluated.</p>
-                                            </div>
-                                        </div>
-                                    @endif
+                                    <div class="question-meta d-flex flex-wrap gap-1">
+                                        @if($question->subject)
+                                            <span class="badge" style="background-color: var(--accent-green);">{{ $question->subject->name }}</span>
+                                        @endif
+                                        @if($question->chapter)
+                                            <span class="badge" style="background-color: var(--accent-green);">{{ $question->chapter->name }}</span>
+                                        @endif
+                                        @if($question->source_type)
+                                            <span class="badge" style="background-color: var(--accent-green);">{{ ucfirst($question->source_type) }}</span>
+                                        @endif
+                                        @if($question->year)
+                                            <span class="badge" style="background-color: var(--accent-green);">{{ $question->year }}</span>
+                                        @endif
+                                    </div>
                                 </div>
+                                
+                                <!-- Question Text -->
+                                <div class="question-text mb-3">
+                                    <p class="mb-2" style="color: var(--text-primary);">{!! $question->question_text !!}</p>
+                                </div>
+                                
+                                <!-- Image Section -->
+                                @if($question->image)
+                                    <div class="mb-3">
+                                        <div class="image-controls d-flex align-items-center">
+                                            <a href="{{ $question->image }}" target="_blank" class="btn btn-sm btn-outline-info btn-image-control">
+                                                <i class="bi bi-image me-1"></i>View Full Size
+                                            </a>
+                                            <button class="btn btn-sm btn-outline-secondary btn-image-control" onclick="toggleImage('img-{{ $question->id }}')">
+                                                <i class="bi bi-eye-slash me-1"></i>Hide Image
+                                            </button>
+                                        </div>
+                                        <div id="img-{{ $question->id }}" class="question-image" style="display: block;">
+                                            <img src="{{ $question->image }}" alt="Question Image" 
+                                                 class="img-fluid rounded border shadow-sm" 
+                                                 style="max-width: 100%; max-height: 300px; object-fit: contain; background-color: white !important;"
+                                                 loading="lazy">
+                                        </div>
+                                    </div>
+                                @endif
+                                
+                                <!-- Options with Correct Answer Highlighted -->
+                                <div class="options-display">
+                                    <div class="row g-2">
+                                        @php
+                                            $options = ['a', 'b', 'c', 'd'];
+                                        @endphp
+                                        @foreach($options as $option)
+                                            @if($question->{'option_' . $option})
+                                                <div class="col-md-6">
+                                                    <div class="option-item {{ strtoupper($question->correct_option) === strtoupper($option) ? 'correct' : '' }}">
+                                                        <strong>{{ strtoupper($option) }})</strong> {{ $question->{'option_' . $option} }}
+                                                        @if(strtoupper($question->correct_option) === strtoupper($option))
+                                                            <i class="bi bi-check-circle-fill ms-2"></i>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        @endforeach
+                                    </div>
+                                </div>
+                                
+                                <!-- Additional Info -->
+                                @if($question->source_name)
+                                    <div class="mt-2">
+                                        <small style="color: var(--text-muted);">
+                                            <i class="bi bi-building me-1"></i>Source: {{ $question->source_name }}
+                                        </small>
+                                    </div>
+                                @endif
                             </div>
                             @endforeach
                         </div>

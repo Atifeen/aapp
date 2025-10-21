@@ -36,6 +36,50 @@
         </div>
     @endif
 
+    <!-- Filter Section -->
+    <div class="card shadow-sm mb-4" style="background-color: #1e293b; border: none;">
+        <div class="card-body p-4">
+            <form method="GET" action="{{ route('exams.index') }}" class="row g-3">
+                <div class="col-md-4">
+                    <label for="subject_id" class="form-label text-white mb-2">
+                        <i class="bi bi-book me-1"></i>Subject
+                    </label>
+                    <select name="subject_id" id="subject_id" class="form-select" style="background-color: #334155; color: #e2e8f0; border-color: #475569;">
+                        <option value="">All Subjects</option>
+                        @foreach($subjects as $subject)
+                            <option value="{{ $subject->id }}" {{ request('subject_id') == $subject->id ? 'selected' : '' }}>
+                                {{ $subject->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                
+                <div class="col-md-4">
+                    <label for="exam_type" class="form-label text-white mb-2">
+                        <i class="bi bi-folder me-1"></i>Exam Type
+                    </label>
+                    <select name="exam_type" id="exam_type" class="form-select" style="background-color: #334155; color: #e2e8f0; border-color: #475569;">
+                        <option value="">All Types</option>
+                        <option value="board" {{ request('exam_type') == 'board' ? 'selected' : '' }}>Board Exam</option>
+                        <option value="university" {{ request('exam_type') == 'university' ? 'selected' : '' }}>University Exam</option>
+                        <option value="custom" {{ request('exam_type') == 'custom' ? 'selected' : '' }}>Custom Exam</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-4 d-flex align-items-end gap-2">
+                    <button type="submit" class="btn flex-grow-1" style="background-color: var(--accent-green); color: white; border: none;">
+                        <i class="bi bi-funnel me-1"></i>Apply Filters
+                    </button>
+                    @if(request()->filled('subject_id') || request()->filled('exam_type'))
+                        <a href="{{ route('exams.index') }}" class="btn btn-outline-secondary" style="border-color: #475569; color: #e2e8f0;">
+                            <i class="bi bi-x-circle"></i>
+                        </a>
+                    @endif
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div class="card shadow-sm" style="background-color: #1e293b; border: none;">
         <div class="card-header d-flex justify-content-between align-items-center py-3 px-4" style="background-color: #334155; border: none;">
             <h3 class="card-title text-white mb-0 fw-bold">
