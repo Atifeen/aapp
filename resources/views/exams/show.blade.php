@@ -89,12 +89,6 @@
     }
 </style>
 
-@if(auth()->user()->role === 'student')
-    @include('components.student-nav')
-@else
-    @include('components.admin-nav')
-@endif
-
 <div class="container py-4">
     <div class="row">
         <div class="col-md-12">

@@ -29,17 +29,8 @@
                 </div>
             </div>
         </div>
-
-        <!-- Quick Actions -->
+ 
         <div class="row g-4">
-            <!-- <div class="col-12">
-                <div class="p-3 rounded shadow-sm" style="background-color: #334155;">
-                    <h4 class="fw-bold text-white mb-0">
-                        <i class="bi bi-lightning-charge me-2"></i>Quick Actions
-                    </h4>
-                </div>
-            </div> -->
-            
             <div class="col-md-4">
                 <div class="dashboard-card">
                     <div class="card-body p-4 text-center">
@@ -76,20 +67,11 @@
 
         <!-- View All Exams Section -->
         <div class="row mt-5">
-            <!-- <div class="col-12 mb-4">
-                <div class="p-3 rounded shadow-sm" style="background-color: #334155;">
-                    <h4 class="fw-bold text-white mb-0">
-                        <i class="bi bi-folder2-open me-2"></i>Manage All Exams
-                    </h4>
-                </div>
-            </div> -->
-            
+       
             <!-- Board Exams -->
             <div class="col-md-4">
                 <div class="dashboard-card">
-                    <!-- <div class="card-header text-white py-2 px-3" style="background-color: #334155; border: none;">
-                        <h5 class="mb-0 fw-bold"><i class="bi bi-mortarboard me-2"></i>Board Exams</h5>
-                    </div> -->
+              
                     <div class="card-body text-center p-5">
                         <i class="bi bi-folder2-open mb-3" style="font-size: 3rem; color: #16a34a;"></i>
                         <p class="text-muted mb-4">View and manage all board examination papers</p>

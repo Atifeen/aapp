@@ -1,11 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-@if(auth()->user()->role === 'student')
-    @include('components.student-nav')
-@else
-    @include('components.admin-nav')
-@endif
+ 
 
 <div class="container py-4">
     @if(isset($stats) && !empty($stats))

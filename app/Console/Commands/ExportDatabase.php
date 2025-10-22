@@ -20,6 +20,8 @@ class ExportDatabase extends Command
 
         $tables = [
             'users',
+            'boards',
+            'universities',
             'subjects',
             'chapters',
             'questions',
@@ -27,6 +29,7 @@ class ExportDatabase extends Command
             'exam_question',
             'exam_attempts',
             'exam_answers',
+            'exam_user_assignments',
         ];
 
         $data = [];
