@@ -155,13 +155,13 @@
     }
     
     .btn-success {
-        background-color: #16a34a;
-        border-color: #16a34a;
+        background-color: #15803d;
+        border-color: #15803d;
     }
     
     .btn-success:hover {
-        background-color: #15803d;
-        border-color: #15803d;
+        background-color: #166534;
+        border-color: #166534;
     }
 </style>
 @endsection
